@@ -1,0 +1,12 @@
+# Normaliza fins de linha para LF no repositório, garantindo que os arquivos
+# gerados pela automação (no runner Linux) produzam diffs limpos.
+* text=auto eol=lf
+*.js  text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.py  text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.webmanifest text eol=lf
+*.svg text eol=lf
+*.pdf binary

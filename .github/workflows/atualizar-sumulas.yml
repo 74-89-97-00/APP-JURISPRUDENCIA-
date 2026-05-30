@@ -37,6 +37,9 @@ jobs:
           python scripts/parse_tst.py
           python scripts/parse_stf.py
 
+      - name: Gerar página estática (dados.html)
+        run: perl scripts/gerar_estatico.pl
+
       - name: Gerar resumo do PR
         id: resumo
         run: |
@@ -68,6 +71,7 @@ jobs:
           delete-branch: true
           add-paths: |
             data/*.js
+            dados.html
           commit-message: "Atualiza súmulas automaticamente (TJSP/TJRJ)"
           title: "Atualização automática de súmulas"
           body-path: pr_body.md

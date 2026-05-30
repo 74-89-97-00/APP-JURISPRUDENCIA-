@@ -275,6 +275,8 @@ mark { background: var(--mark-bg); color: var(--gold); border-radius: 3px; paddi
 
 .empty { text-align: center; color: var(--muted); padding: 48px 0; }
 .footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 24px 20px 40px; border-top: 1px solid var(--border); }
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
 
 @media (min-width: 680px) {
   .topbar { flex-direction: row; align-items: center; justify-content: space-between; }

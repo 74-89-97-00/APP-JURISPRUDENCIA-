@@ -33,6 +33,9 @@ jobs:
         run: |
           python scripts/parse_tjsp.py
           python scripts/parse_tjrj.py
+          python scripts/parse_stj.py
+          python scripts/parse_tst.py
+          python scripts/parse_stf.py
 
       - name: Gerar resumo do PR
         id: resumo

@@ -8,6 +8,7 @@ const state = {
   query: "",
   tribunais: new Set(),   // vazio = todos
   tipos: new Set(),       // vazio = todos
+  materias: new Set(),    // vazio = todas
   onlyFav: false,
   favoritos: new Set(loadFavoritos()),
 };
@@ -18,6 +19,7 @@ const TIPOS = [
   { id: "Súmula", label: "Súmula" },
   { id: "Julgado", label: "Julgado" },
 ];
+const MATERIAS = ["Consumidor", "Trabalhista", "Outras"];
 
 // ---- Util ----
 function loadFavoritos() {
@@ -52,11 +54,33 @@ function highlight(text, q) {
   return out;
 }
 
+// ---- Classificação por matéria ----
+// Só três grupos: Consumidor, Trabalhista, Outras. As palavras-chave abaixo são
+// lógica interna (não viram chips). Regra: TST é sempre trabalhista; quando há
+// `tema` curado (caso do STJ) ele manda; senão, heurística por texto.
+const RE_CONSUMIDOR = /consumidor|consumo|defesa do consumidor|relacao de consumo|\bcdc\b/;
+const RE_TRABALHISTA = /trabalhista|empregad|\bclt\b|justica do trabalho|reclamat|sindicat|fgts|salario|aviso previo|hora extra|verbas rescis/;
+
+function materiaDe(e) {
+  if (e.tribunal === "TST") return "Trabalhista";
+  const tema = norm(e.tema);
+  if (tema) {
+    if (/consum/.test(tema)) return "Consumidor";
+    if (/trabalh/.test(tema)) return "Trabalhista";
+    return "Outras"; // tema curado e não é nenhuma das duas
+  }
+  const txt = norm(e.texto);
+  if (RE_CONSUMIDOR.test(txt)) return "Consumidor";
+  if (RE_TRABALHISTA.test(txt)) return "Trabalhista";
+  return "Outras";
+}
+
 // ---- Filtro ----
 function matches(e) {
   if (state.onlyFav && !state.favoritos.has(e.id)) return false;
   if (state.tribunais.size && !state.tribunais.has(e.tribunal)) return false;
   if (state.tipos.size && !state.tipos.has(e.tipo)) return false;
+  if (state.materias.size && !state.materias.has(materiaDe(e))) return false;
   const q = norm(state.query).trim();
   if (q) {
     const hay = norm([e.numero, e.titulo, e.texto, e.tema, e.tribunal].join(" "));
@@ -141,6 +165,10 @@ function buildChips() {
   const tipoGroup = document.getElementById("filter-tipo");
   for (const t of TIPOS) {
     tipoGroup.appendChild(makeChip(t.label, () => toggleSet(state.tipos, t.id)));
+  }
+  const materiaGroup = document.getElementById("filter-materia");
+  for (const m of MATERIAS) {
+    materiaGroup.appendChild(makeChip(m, () => toggleSet(state.materias, m)));
   }
 }
 function makeChip(label, onClick) {

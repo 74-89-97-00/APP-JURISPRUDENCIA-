@@ -1,0 +1,70 @@
+name: Atualizar súmulas
+
+# Roda no dia 1 de cada mês (09:00 UTC ~ 06:00 BRT) e também pode ser
+# disparado manualmente pelo botão "Run workflow".
+on:
+  schedule:
+    - cron: "0 9 1 * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          pip install -r scripts/requirements.txt
+
+      - name: Rodar parsers (PDF)
+        run: |
+          python scripts/parse_tjsp.py
+          python scripts/parse_tjrj.py
+
+      - name: Gerar resumo do PR
+        id: resumo
+        run: |
+          {
+            echo "## Atualização automática de súmulas"
+            echo
+            echo "Gerado em $(date -u '+%Y-%m-%d %H:%M UTC') pela automação mensal."
+            echo
+            if git diff --quiet -- data/; then
+              echo "_Nenhuma mudança detectada nas fontes._"
+            else
+              echo "### Mudanças por arquivo"
+              git diff --numstat -- data/ | while read add del file; do
+                echo "- \`$file\`: +$add / -$del linhas"
+              done
+            fi
+            echo
+            echo "> Revise o diff antes de mesclar. As súmulas vêm de fontes"
+            echo "> públicas — confira sempre o texto oficial no portal do tribunal."
+          } > pr_body.md
+          cat pr_body.md
+
+      - name: Abrir Pull Request (se houver mudanças)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: auto/atualizar-sumulas
+          delete-branch: true
+          add-paths: |
+            data/*.js
+          commit-message: "Atualiza súmulas automaticamente (TJSP/TJRJ)"
+          title: "Atualização automática de súmulas"
+          body-path: pr_body.md

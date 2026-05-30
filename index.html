@@ -11,6 +11,7 @@
   <link rel="apple-touch-icon" href="icon.svg" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Jurisprudência" />
+  <script>(function(){try{var t=localStorage.getItem("juris.tema")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -19,25 +20,50 @@
       <span class="brand-mark">§</span>
       <div>
         <h1>Jurisprudência</h1>
-        <p class="subtitle">Súmulas e julgados — STF · STJ · TST</p>
+        <p class="subtitle">Súmulas e julgados — STF · STJ · TST · TJSP · TJRJ</p>
       </div>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Alternar tema" title="Alternar tema claro/escuro">☀</button>
     </div>
     <div class="search-wrap">
       <input id="search" type="search" placeholder="Buscar por número, tema ou texto…" autocomplete="off" />
     </div>
   </header>
 
-  <nav class="filters">
-    <div class="filter-group" id="filter-tribunal" aria-label="Filtrar por tribunal"></div>
-    <div class="filter-group" id="filter-tipo" aria-label="Filtrar por tipo"></div>
-    <div class="filter-group" id="filter-materia" aria-label="Filtrar por matéria"></div>
-    <button id="fav-toggle" class="chip chip-fav" type="button" aria-pressed="false">★ Favoritos</button>
+  <button id="filters-toggle" class="filters-toggle" type="button" aria-expanded="false" aria-controls="filters">Filtros</button>
+
+  <nav class="filters" id="filters">
+    <div class="filter-block">
+      <span class="filter-label">Tribunal</span>
+      <div class="filter-group" id="filter-tribunal" aria-label="Filtrar por tribunal"></div>
+    </div>
+    <div class="filter-block">
+      <span class="filter-label">Tipo</span>
+      <div class="filter-group" id="filter-tipo" aria-label="Filtrar por tipo"></div>
+    </div>
+    <div class="filter-block">
+      <span class="filter-label">Matéria</span>
+      <div class="filter-group" id="filter-materia" aria-label="Filtrar por matéria"></div>
+    </div>
+    <div class="filter-block filter-block-actions">
+      <button id="fav-toggle" class="chip chip-fav" type="button" aria-pressed="false">★ Favoritos</button>
+      <button id="clear-filters" class="chip chip-clear" type="button" hidden>✕ Limpar</button>
+    </div>
   </nav>
 
   <main>
     <div class="results-meta">
       <span id="count">—</span>
-      <span id="updated" class="updated"></span>
+      <div class="meta-right">
+        <label class="sort-wrap">
+          <span>Ordenar</span>
+          <select id="sort">
+            <option value="tribunal">Tribunal</option>
+            <option value="numero">Número</option>
+            <option value="fav">Favoritos primeiro</option>
+          </select>
+        </label>
+        <span id="updated" class="updated"></span>
+      </div>
     </div>
     <ul id="results" class="results"></ul>
     <div id="empty" class="empty" hidden>Nenhum resultado. Ajuste a busca ou os filtros.</div>

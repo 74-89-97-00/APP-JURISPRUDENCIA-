@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jurisprudência — Súmulas e Julgados</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">§</span>
+      <div>
+        <h1>Jurisprudência</h1>
+        <p class="subtitle">Súmulas e julgados — STF · STJ · TST</p>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Buscar por número, tema ou texto…" autocomplete="off" />
+    </div>
+  </header>
+
+  <nav class="filters">
+    <div class="filter-group" id="filter-tribunal" aria-label="Filtrar por tribunal"></div>
+    <div class="filter-group" id="filter-tipo" aria-label="Filtrar por tipo"></div>
+    <button id="fav-toggle" class="chip chip-fav" type="button" aria-pressed="false">★ Favoritos</button>
+  </nav>
+
+  <main>
+    <div class="results-meta">
+      <span id="count">—</span>
+      <span id="updated" class="updated"></span>
+    </div>
+    <ul id="results" class="results"></ul>
+    <div id="empty" class="empty" hidden>Nenhum resultado. Ajuste a busca ou os filtros.</div>
+  </main>
+
+  <footer class="footer">
+    <p>Dados de fontes públicas. Confira sempre o texto oficial no portal do tribunal antes de usar em peça.</p>
+  </footer>
+
+  <!-- Dados (carregados como scripts para funcionar offline, sem servidor) -->
+  <script src="data/stf-vinculantes.js"></script>
+  <script src="data/stf-sumulas.js"></script>
+  <script src="data/stj-sumulas.js"></script>
+  <script src="data/tst-sumulas.js"></script>
+  <script src="data/tjsp-sumulas.js"></script>
+  <script src="data/tjrj-sumulas.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

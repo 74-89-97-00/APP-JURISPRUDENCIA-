@@ -1,12 +1,14 @@
 #!/usr/bin/perl
-# Gera data/stf-rg-novos.js — Temas de Repercussão Geral do STF posteriores à
-# planilha oficial de 2020 (tema > 1100), raspados um a um do portal do STF
-# (listarProcesso.asp?numeroTemaInicial=N), que é a única forma confiável.
+# Gera data/stf-rg-novos.js — Temas de Repercussão Geral do STF que NÃO estão na
+# planilha oficial (gap de temas <=1100 julgados após 2020 + temas recentes
+# >1100), raspados um a um do portal (listarProcesso.asp?numeroTemaInicial=N),
+# que é a única forma confiável (o portal capa buscas em lote).
 #
-# Uso: o arquivo de entrada é a concatenação das respostas (uma por tema):
-#   for n in $(seq 1101 1260); do
-#     curl ... "listarProcesso.asp?numeroTemaInicial=$n" >> stf-novos.html; done
-#   perl scripts/gerar_stf_rg_novos.pl stf-novos.html
+# Uso: arg1 = HTML concatenado das respostas; arg2 = data/stf-rg.js (p/ excluir
+# os temas que a planilha já cobre, preservando o ramo do direito daqueles).
+#   for n in $(seq 1 1550); do
+#     curl ... "listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html; done
+#   perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js
 #
 # Best-effort. Só inclui temas com tese. Confira no portal do STF.
 use strict;
@@ -14,8 +16,16 @@ use warnings;
 use utf8;
 binmode STDOUT, ":encoding(UTF-8)";
 
-my $HTML = $ARGV[0] or die "uso: perl gerar_stf_rg_novos.pl <stf-novos.html>\n";
+my $HTML = $ARGV[0] or die "uso: perl gerar_stf_rg_novos.pl <html> [stf-rg.js]\n";
+my $BASE = $ARGV[1];   # opcional: stf-rg.js para excluir temas já cobertos
 my $SAIDA = "data/stf-rg-novos.js";
+
+my %exclui;
+if ($BASE && -e $BASE) {
+  open my $b, "<:encoding(UTF-8)", $BASE or die;
+  while (my $l = <$b>) { $exclui{$1} = 1 while $l =~ /stf-rg-(\d+)"/g; }
+  close $b;
+}
 
 open my $fh, "<:encoding(UTF-8)", $HTML or die "não abriu $HTML: $!";
 local $/; my $t = <$fh>; close $fh;
@@ -36,7 +46,8 @@ while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
   my @td = ($row =~ /<td[^>]*>(.*?)<\/td>/gs);
   next unless @td >= 6;
   my ($num) = $row =~ /numeroTema=(\d+)/;
-  next unless defined $num && $num > 1100;
+  next unless defined $num;
+  next if $exclui{$num};            # já está na planilha (preserva o ramo de lá)
   next if $visto{$num}++;
 
   my $titulo = limpa_html($td[1]);
@@ -52,8 +63,8 @@ while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
 @out = sort { $a->{num} <=> $b->{num} } @out;
 
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
-print $o "// Temas de Repercussão Geral do STF posteriores a 2020 (tema > 1100), com tese.\n";
-print $o "// Raspados do portal do STF (listarProcesso.asp). Best-effort; confira no portal.\n";
+print $o "// Temas de Repercussão Geral do STF não cobertos pela planilha de 2020\n";
+print $o "// (julgados após 2020), raspados do portal do STF. Best-effort; confira no portal.\n";
 print $o "window.ENTRIES = (window.ENTRIES || []).concat([\n";
 for my $e (@out) {
   my $fonte = "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=$e->{num}";
@@ -62,4 +73,4 @@ for my $e (@out) {
 }
 print $o "]);\n";
 close $o;
-print "[RG-novos] $SAIDA: ", scalar(@out), " temas (>1100) com tese.\n";
+print "[RG-novos] $SAIDA: ", scalar(@out), " temas de complemento (não cobertos pela planilha).\n";

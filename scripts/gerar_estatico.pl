@@ -26,7 +26,7 @@ my @FONTES = (
     secao => "Repercussão Geral do STF (temas com tese firmada)", anchor => "stf-rg",
     sigla => "STF", rotulo => "Tema" },
   { path => "stf-rg-novos.js", mode => "obj",
-    secao => "Repercussão Geral do STF — temas recentes (> 1100)", anchor => "stf-rg2",
+    secao => "Repercussão Geral do STF — complemento (julgados após 2020)", anchor => "stf-rg2",
     sigla => "STF", rotulo => "Tema" },
   { path => "stj-sumulas.js", mode => "arr",
     secao => "Súmulas do STJ", anchor => "stj", sigla => "STJ", rotulo => "Súmula",

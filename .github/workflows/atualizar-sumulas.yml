@@ -50,17 +50,17 @@ jobs:
           curl -sL -A "Mozilla/5.0" -o temasrg.xlsx "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
 
-      - name: Atualizar RG recentes do STF (raspagem tema a tema, > 1100)
+      - name: Atualizar RG do STF não coberto pela planilha (raspagem tema a tema)
         continue-on-error: true
         run: |
           REF="https://portal.stf.jus.br/jurisprudenciaRepercussao/pesquisarProcesso.asp"
-          : > stf-novos.html
-          for n in $(seq 1101 1550); do
-            echo "===TEMA $n===" >> stf-novos.html
-            curl -s -A "Mozilla/5.0" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-novos.html
+          : > stf-portal.html
+          for n in $(seq 1 1550); do
+            echo "===TEMA $n===" >> stf-portal.html
+            curl -s -A "Mozilla/5.0" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html
             sleep 0.08
           done
-          perl scripts/gerar_stf_rg_novos.pl stf-novos.html
+          perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js
 
       - name: Atualizar Recursos Repetitivos do STJ (Dados Abertos)
         run: |

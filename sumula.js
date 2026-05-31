@@ -44,6 +44,7 @@ function citaLabel(e) {
   if (e.tipo === "Súmula Vinculante") return `Súmula Vinculante ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Súmula") return `Súmula ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Orientação Jurisprudencial") return `Orientação Jurisprudencial nº ${e.numero} do ${e.tribunal}${e.secao ? ` (${e.secao})` : ""}`;
+  if (e.tipo === "Precedente Normativo") return `Precedente Normativo nº ${e.numero} do ${e.tribunal}`;
   return `${e.tribunal} ${e.numero}`;
 }
 
@@ -100,12 +101,14 @@ function tipoExtenso(e) {
   if (e.tipo === "Súmula Vinculante") return "Súmula Vinculante";
   if (e.tipo === "Súmula") return "Súmula";
   if (e.tipo === "Orientação Jurisprudencial") return "Orientação Jurisprudencial";
+  if (e.tipo === "Precedente Normativo") return "Precedente Normativo";
   return e.tipo || "—";
 }
 function tipoCurto(e) {
   if (e.tipo === "Súmula Vinculante") return "Vinculante";
   if (e.tipo === "Súmula") return "Súmula";
   if (e.tipo === "Orientação Jurisprudencial") return "OJ";
+  if (e.tipo === "Precedente Normativo") return "PN";
   return e.tipo || "";
 }
 

@@ -19,6 +19,7 @@ const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },
   { id: "Orientação Jurisprudencial", label: "OJ" },
+  { id: "Precedente Normativo", label: "PN" },
   { id: "Julgado", label: "Julgado" },
 ];
 const MATERIAS = ["Consumidor", "Trabalhista", "Outras"];
@@ -123,12 +124,14 @@ function citaLabel(e) {
   if (e.tipo === "Súmula Vinculante") return `Súmula Vinculante ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Súmula") return `Súmula ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Orientação Jurisprudencial") return `Orientação Jurisprudencial nº ${e.numero} do ${e.tribunal}${e.secao ? ` (${e.secao})` : ""}`;
+  if (e.tipo === "Precedente Normativo") return `Precedente Normativo nº ${e.numero} do ${e.tribunal}`;
   return `${e.tribunal} ${e.numero}`;
 }
 
 // Rótulo curto exibido no card (ex.: "OJ SDI-1 17", "Súmula 123").
 function rotuloCard(e) {
   if (e.tipo === "Orientação Jurisprudencial") return `OJ ${e.secao ? e.secao + " " : ""}${e.numero}`;
+  if (e.tipo === "Precedente Normativo") return `PN ${e.numero}`;
   return `${tipoLabel(e.tipo)} ${e.numero}`;
 }
 

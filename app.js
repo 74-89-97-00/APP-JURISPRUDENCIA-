@@ -19,6 +19,7 @@ const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },
   { id: "Repercussão Geral", label: "Rep. Geral" },
+  { id: "Recurso Repetitivo", label: "Repetitivo" },
   { id: "Orientação Jurisprudencial", label: "OJ" },
   { id: "Precedente Normativo", label: "PN" },
   { id: "Julgado", label: "Julgado" },
@@ -127,6 +128,7 @@ function citaLabel(e) {
   if (e.tipo === "Orientação Jurisprudencial") return `Orientação Jurisprudencial nº ${e.numero} do ${e.tribunal}${e.secao ? ` (${e.secao})` : ""}`;
   if (e.tipo === "Precedente Normativo") return `Precedente Normativo nº ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Repercussão Geral") return `Tema ${e.numero} da Repercussão Geral do ${e.tribunal}`;
+  if (e.tipo === "Recurso Repetitivo") return `Tema ${e.numero} dos Recursos Repetitivos do ${e.tribunal}`;
   return `${e.tribunal} ${e.numero}`;
 }
 
@@ -134,7 +136,7 @@ function citaLabel(e) {
 function rotuloCard(e) {
   if (e.tipo === "Orientação Jurisprudencial") return `OJ ${e.secao ? e.secao + " " : ""}${e.numero}`;
   if (e.tipo === "Precedente Normativo") return `PN ${e.numero}`;
-  if (e.tipo === "Repercussão Geral") return `Tema ${e.numero}`;
+  if (e.tipo === "Repercussão Geral" || e.tipo === "Recurso Repetitivo") return `Tema ${e.numero}`;
   return `${tipoLabel(e.tipo)} ${e.numero}`;
 }
 

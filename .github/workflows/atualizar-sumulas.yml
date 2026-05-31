@@ -50,6 +50,14 @@ jobs:
           curl -sL -A "Mozilla/5.0" -o temasrg.xlsx "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
 
+      - name: Atualizar Recursos Repetitivos do STJ (Dados Abertos)
+        run: |
+          B="https://dadosabertos.web.stj.jus.br/dataset/4238da2f-c07b-4c1a-b345-4402accacdcf"
+          R="df29da13-7d6b-41ba-ad96-cd1a5bbd191c"
+          curl -s -A "Mozilla/5.0" -c jar "$B" -o /dev/null
+          curl -s -A "Mozilla/5.0" -b jar -e "$B" "$B/resource/$R/download/temas.csv" -o stj-temas.csv
+          perl scripts/gerar_stj_rep.pl stj-temas.csv
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

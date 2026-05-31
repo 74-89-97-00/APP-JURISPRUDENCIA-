@@ -69,10 +69,13 @@ jobs:
           # COMPLETA que o local antigo (capta 709 OJs reais vs 703) — é a fonte
           # autoritativa. O parser dedupa por (seção,número) e descarta refs
           # cruzadas (guard de ordem), mantendo o resultado consistente.
+          # Ambos usam -layout (ordem de leitura estável entre versões do
+          # poppler). O modo raw embaralhava a ordem dos PNs no runner (parava
+          # em 24); o parser de PN agora lida com -layout (de-hifeniza, remove
+          # cabeçalho/numeração de página, guard de ordem) e dá 120.
           pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
-          pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
           perl scripts/gerar_tst_ojs.pl tst-livro.txt
-          perl scripts/gerar_tst_pn.pl tst-livro-raw.txt
+          perl scripts/gerar_tst_pn.pl tst-livro.txt
 
       - name: Atualizar Repercussão Geral do STF (planilha oficial)
         continue-on-error: true

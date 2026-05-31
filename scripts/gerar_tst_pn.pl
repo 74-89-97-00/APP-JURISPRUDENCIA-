@@ -19,7 +19,7 @@ my $FONTE = "https://www.tst.jus.br/precedentes-normativos";
 open my $fh, '<:encoding(UTF-8)', $TXT or die "não abriu $TXT: $!";
 my @lines = <$fh>; close $fh;
 
-my $MARK = qr{^PN-(\d+)\s*(.*)$};   # título às vezes vem colado: "PN-100FÉRIAS..."
+my $MARK = qr{^[ \t\f]*PN-(\d+)\s*(.*)$};   # tolera indentação (-layout) e título colado: "PN-100FÉRIAS..."
 
 sub limpa {
   my ($t) = @_;
@@ -27,12 +27,27 @@ sub limpa {
   $t =~ s/[-–—]?\s*Res\.?\s*\d+\/\d+[\s,;]*(?:(?:DJ|DEJT)\b[\d.,\seEº°]*?\d{4})?[.\s]*//gi;
   $t =~ s/[-–—]?\s*(?:DJ|DEJT)\s+divulgad[ao]\s+em\s+[\d.,\seEº°]*?\d{4}//gi;
   $t =~ s/\bPrecedentes\s+Normativos\b//gi;
+  # No -layout, o cabeçalho de página "PRECEDENTES NORMATIVOS" (centralizado)
+  # vaza no meio do texto, inteiro ou partido. Remove as palavras em CAIXA ALTA
+  # (nenhum enunciado/título de PN as contém isoladamente em maiúsculas).
+  $t =~ s/\bPRECEDENTES\b//g;
+  $t =~ s/\bNORMATIVOS\b//g;
   $t =~ s/\s+/ /g;
   $t =~ s/\s+([.,;:])/$1/g;
   $t =~ s/\(\s*\)//g;
   $t =~ s/\s*[-–—]\s*$//;
   $t =~ s/^\s+|\s+$//g;
   return $t;
+}
+sub dehyph {
+  # junta palavras quebradas por hífen no fim da linha (necessário no -layout):
+  # "(can-\ncelado" -> "(cancelado"; mantém hífen em composto minúscula→Maiúscula.
+  my ($s) = @_;
+  $s =~ s{(\p{L})-[ \t]*\n[ \t\f]*(\p{L})}{
+    my ($a,$b)=($1,$2);
+    ($a =~ /\p{Ll}/ && $b =~ /\p{Lu}/) ? "$a-$b" : "$a$b"
+  }ge;
+  return $s;
 }
 sub js_str { my ($s)=@_; $s//=""; $s =~ s/\\/\\\\/g; $s =~ s/"/\\"/g; return $s; }
 
@@ -41,22 +56,32 @@ $max = 0;
 for my $ln (@lines) {
   $ln =~ s/\r?\n$//;
   $ln =~ s/^\f+//;                       # form-feed (quebra de página) antes do marcador
-  # marcador colado ao cabeçalho: "Precedentes Normativos PN-109 ..."
-  $ln =~ s/^\s*(?:Precedentes\s+Normativos|PRECEDENTES\s+NORMATIVOS)\s+(?=PN-\d)//i;
+  # cabeçalho de página colado ao marcador. Em -layout o cabeçalho "PRECEDENTES
+  # NORMATIVOS" às vezes vem PARTIDO entre colunas ("PRECEDENTES  PN-15 ...",
+  # "NORMATIVOS  PN-87 ..."), então removemos qualquer combinação das duas
+  # palavras antes do marcador (não só a frase completa).
+  $ln =~ s/^\s*(?:Precedentes|Normativos)(?:\s+(?:Precedentes|Normativos))*\s+(?=PN-\d)//i;
+  # cabeçalho de página vazando à DIREITA de uma linha de corpo (-layout):
+  # "...nas res-     NORMATIVOS" -> "...nas res-". Removido ANTES de bufferizar
+  # para não atrapalhar a de-hifenização nem sujar o texto.
+  $ln =~ s/\s{2,}(?:PRECEDENTES|NORMATIVOS)\b\s*$//;
+  last if $started && $ln =~ /ÍNDICE\s+REMISSIVO/i;   # fim dos PNs: começa o índice
   if ($ln =~ $MARK) {
     my ($num, $rest) = ($1, $2);
-    last if $started && $num < $max;     # números voltam a cair => índice
+    # marcador que não avança o máximo = referência cruzada/entrada de índice
+    # (robustez entre versões do pdftotext): vira texto da PN atual, não PN nova.
+    if ($started && $num <= $max) { push @{$cur->{buf}}, $ln if $cur; next; }
     push @itens, $cur if $cur;
     $cur = { num => $num, buf => [ $rest ] };
     $started = 1;
-    $max = $num if $num > $max;
+    $max = $num;
     next;
   }
   next unless $started && $cur;
   next if $ln =~ /^\s*$/;
   next if $ln =~ /^PRECEDENTES\s+NORMATIVOS\s*$/i;
   next if $ln =~ /^Precedentes\s+Normativos\s*$/i;
-  next if $ln =~ /^[A-Z]-\d+\s*$/;       # número de página (G-1, H-1)
+  next if $ln =~ /^\s*[A-Z]-\d+\s*$/;    # número de página (G-1, H-1), mesmo indentado
   next if $ln =~ /^\d+\s*$/;
   push @{$cur->{buf}}, $ln;
 }
@@ -64,7 +89,7 @@ push @itens, $cur if $cur;
 
 my @out; my %visto;
 for my $i (@itens) {
-  my $raw = join(" ", @{$i->{buf}});
+  my $raw = dehyph(join("\n", @{$i->{buf}}));
   my $situ = lc(substr($raw, 0, 200)) =~ /cancelad/ ? "Cancelada" : "Vigente";
   my $texto = limpa($raw);
   next if $texto eq "";

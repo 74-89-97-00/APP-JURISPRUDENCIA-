@@ -1,7 +1,7 @@
 "use strict";
 
 // Troque a versão sempre que atualizar os dados/arquivos para forçar atualização.
-const CACHE = "juris-v21";
+const CACHE = "juris-v22";
 
 // Caminhos relativos ao escopo do service worker (funciona em subdiretório no GitHub Pages).
 const ASSETS = [
@@ -16,6 +16,7 @@ const ASSETS = [
   "icon-512.png",
   "data/stf-vinculantes.js",
   "data/stf-sumulas.js",
+  "data/stf-rg.js",
   "data/stj-sumulas.js",
   "data/tst-sumulas.js",
   "data/tst-ojs.js",

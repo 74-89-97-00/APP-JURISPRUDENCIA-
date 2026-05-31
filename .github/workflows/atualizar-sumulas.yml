@@ -45,6 +45,11 @@ jobs:
           perl scripts/gerar_tst_ojs.pl tst-livro.txt
           perl scripts/gerar_tst_pn.pl tst-livro-raw.txt
 
+      - name: Atualizar Repercussão Geral do STF (planilha oficial)
+        run: |
+          curl -sL -A "Mozilla/5.0" -o temasrg.xlsx "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
+          perl scripts/gerar_stf_rg.pl temasrg.xlsx
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

@@ -67,6 +67,7 @@ my (@itens,$cur,$started,$hist);
 for my $ln (@lines) {
   $ln =~ s/\r?\n$//;
   last if $ln =~ /^\s*ÍNDICE REMISSIVO/;
+  last if $ln =~ /^[ \t\f]*PN-\d/;   # fim das OJs: começam os Precedentes Normativos
   if ($ln =~ $MARK) {
     push @itens, $cur if $cur;
     $cur = { sec=>$SEC{$1}, slug=>$SLUG{$1}, num=>$2, buf=>[ $3 ] };

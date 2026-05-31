@@ -105,6 +105,7 @@ function tipoExtenso(e) {
 function tipoCurto(e) {
   if (e.tipo === "Súmula Vinculante") return "Vinculante";
   if (e.tipo === "Súmula") return "Súmula";
+  if (e.tipo === "Orientação Jurisprudencial") return "OJ";
   return e.tipo || "";
 }
 

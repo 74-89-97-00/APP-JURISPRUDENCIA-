@@ -37,7 +37,11 @@ jobs:
           python scripts/parse_tjrj.py || echo "::warning::parse_tjrj falhou (mantido o dado anterior)"
           python scripts/parse_stj.py  || echo "::warning::parse_stj falhou (mantido o dado anterior)"
           python scripts/parse_tst.py  || echo "::warning::parse_tst falhou (mantido o dado anterior)"
-          python scripts/parse_stf.py  || echo "::warning::parse_stf falhou (mantido o dado anterior)"
+          # STF súmulas COMUNS (1–736): fonte tem WAF que barra curl/proxies
+          # (403 esperado). É um conjunto CONGELADO e já completo no repo, então
+          # a falha aqui é esperada e inofensiva. As VINCULANTES (que crescem)
+          # são atualizadas em passo próprio, via Wikipédia (mais abaixo).
+          python scripts/parse_stf.py  || echo "STF comuns: fonte com WAF (esperado) — 1–736 já completas no repositório."
 
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
         continue-on-error: true
@@ -80,6 +84,26 @@ jobs:
             sleep 0.08
           done
           perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js
+
+      - name: Atualizar Súmulas Vinculantes do STF (Wikipédia, sem WAF)
+        continue-on-error: true
+        run: |
+          # O portal e o /arquivo/cms/jurisprudenciaSumula/ do STF têm WAF que
+          # barra curl/proxies até de IP residencial (403). A lista de SVs na
+          # Wikipédia (API MediaWiki) é estruturada e SEM WAF. O parser é
+          # incremental: preserva as entradas já curadas (com tema/área) e só
+          # acrescenta SVs novas. As súmulas COMUNS (1–736) estão congeladas e
+          # já vêm completas no repositório, por isso não dependem de coleta.
+          TITLE="Lista de súmulas vinculantes editadas pelo Supremo Tribunal Federal do Brasil"
+          curl -sSL --fail -m 60 -A "Mozilla/5.0 (app-jurisprudencia)" \
+            -G "https://pt.wikipedia.org/w/api.php" \
+            --data-urlencode "action=parse" \
+            --data-urlencode "page=$TITLE" \
+            --data-urlencode "prop=wikitext" \
+            --data-urlencode "format=json" \
+            --data-urlencode "formatversion=2" \
+            -o stf-sv-wiki.json
+          perl scripts/gerar_stf_sv.pl stf-sv-wiki.json data/stf-vinculantes.js
 
       - name: Atualizar Recursos Repetitivos do STJ (Dados Abertos)
         continue-on-error: true

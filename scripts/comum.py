@@ -28,14 +28,18 @@ def baixar(url, destino):
     o curl passar. O curl também lida melhor com cadeias de certificado
     incompletas no runner do CI.
     """
-    subprocess.run(
-        ["curl", "-sSL", "--fail", "--retry", "2", "--retry-delay", "3",
-         "-m", "180",
-         "-A", UA,
-         "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
-         "-o", destino, url],
-        check=True,
-    )
+    cmd = ["curl", "-sSL", "--fail", "--retry", "2", "--retry-delay", "3",
+           "-m", "180",
+           "-A", UA,
+           "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
+           "-o", destino, url]
+    r = subprocess.run(cmd)
+    if r.returncode == 60:
+        # curl 60 = cadeia de certificado incompleta no runner (caso do STF).
+        # Repete sem verificar o certificado — PDF público, somente leitura.
+        r = subprocess.run(cmd + ["-k"])
+    if r.returncode != 0:
+        raise RuntimeError("curl falhou (codigo %d) ao baixar %s" % (r.returncode, url))
     return destino
 
 

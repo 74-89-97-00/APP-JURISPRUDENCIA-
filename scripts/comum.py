@@ -21,25 +21,21 @@ def tmp(nome):
 
 
 def baixar(url, destino):
-    """Baixa um arquivo (segue redirecionamentos). Erro vira exceção."""
-    headers = {
-        "User-Agent": UA,
-        "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
-                   "application/pdf,image/avif,image/webp,*/*;q=0.8"),
-        "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
-    }
-    try:
-        r = requests.get(url, headers=headers, timeout=120, allow_redirects=True)
-    except requests.exceptions.SSLError:
-        # Alguns servidores (ex.: STF) têm cadeia de certificado incompleta no
-        # runner do CI. Repete sem verificação — é um PDF público, só leitura.
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        r = requests.get(url, headers=headers, timeout=120,
-                         allow_redirects=True, verify=False)
-    r.raise_for_status()
-    with open(destino, "wb") as f:
-        f.write(r.content)
+    """Baixa um arquivo via curl (segue redirecionamentos). Erro vira exceção.
+
+    Usamos curl, e não requests, de propósito: alguns servidores (STF) têm
+    WAF que bloqueia o `requests` pela impressão digital TLS (403), mas deixam
+    o curl passar. O curl também lida melhor com cadeias de certificado
+    incompletas no runner do CI.
+    """
+    subprocess.run(
+        ["curl", "-sSL", "--fail", "--retry", "2", "--retry-delay", "3",
+         "-m", "180",
+         "-A", UA,
+         "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
+         "-o", destino, url],
+        check=True,
+    )
     return destino
 
 

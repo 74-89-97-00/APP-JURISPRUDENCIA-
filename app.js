@@ -120,64 +120,106 @@ function citaLabel(e) {
   return `${e.tribunal} ${e.numero}`;
 }
 
-// ---- Render ----
-function render() {
-  const list = ENTRIES.filter(matches).sort(sortFn);
+// ---- Render (paginado: mantém a rolagem/cliques fluidos com milhares de itens) ----
+const CHUNK = 60;
+let currentList = [];
+let renderedCount = 0;
 
+function applyFilters(opts) {
+  currentList = ENTRIES.filter(matches).sort(sortFn);
+  renderedCount = 0;
   const ul = document.getElementById("results");
-  const empty = document.getElementById("empty");
   ul.innerHTML = "";
-  empty.hidden = list.length > 0;
+  document.getElementById("empty").hidden = currentList.length > 0;
 
   const clearBtn = document.getElementById("clear-filters");
   if (clearBtn) clearBtn.hidden = !anyFilterActive();
+  updateFiltersBadge();
 
+  const n = currentList.length;
   document.getElementById("count").textContent =
-    `${list.length} ${list.length === 1 ? "resultado" : "resultados"}` +
+    `${n} ${n === 1 ? "resultado" : "resultados"}` +
     (ENTRIES.length ? ` de ${ENTRIES.length}` : "");
 
+  appendChunk();
+  if (!opts || opts.scroll !== false) window.scrollTo({ top: 0 });
+}
+
+function appendChunk() {
+  const ul = document.getElementById("results");
+  const frag = document.createDocumentFragment();
+  const next = currentList.slice(renderedCount, renderedCount + CHUNK);
+  for (const e of next) frag.appendChild(buildCard(e));
+  ul.appendChild(frag);
+  renderedCount += next.length;
+  updateLoadMore();
+}
+
+function updateLoadMore() {
+  const btn = document.getElementById("load-more");
+  if (!btn) return;
+  const restantes = currentList.length - renderedCount;
+  btn.hidden = restantes <= 0;
+  if (restantes > 0) btn.textContent = `Carregar mais (${restantes})`;
+}
+
+function updateFiltersBadge() {
+  const t = document.getElementById("filters-toggle");
+  if (!t) return;
+  const n = state.tribunais.size + state.tipos.size + state.materias.size + (state.onlyFav ? 1 : 0);
+  t.firstChild ? (t.firstChild.nodeValue = n ? `Filtros (${n})` : "Filtros")
+               : (t.textContent = n ? `Filtros (${n})` : "Filtros");
+}
+
+function toggleExpand(li) {
+  const txt = li.querySelector(".card-text");
+  const moreBtn = li.querySelector(".more-btn");
+  txt.classList.toggle("clamp");
+  const clamped = txt.classList.contains("clamp");
+  moreBtn.textContent = clamped ? "ver mais" : "ver menos";
+  li.classList.toggle("expanded", !clamped);
+}
+
+function buildCard(e) {
   const q = state.query;
-  for (const e of list) {
-    const li = document.createElement("li");
-    li.className = "card";
-    li.dataset.tribunal = e.tribunal;
-    const fav = state.favoritos.has(e.id);
-    const cancelada = /cancel/i.test(e.situacao || "");
-    const superada = /superad/i.test(e.situacao || "");
-    const materia = materiaDe(e);
+  const li = document.createElement("li");
+  li.className = "card";
+  li.dataset.tribunal = e.tribunal;
+  const fav = state.favoritos.has(e.id);
+  const cancelada = /cancel/i.test(e.situacao || "");
+  const superada = /superad/i.test(e.situacao || "");
+  const materia = materiaDe(e);
 
-    li.innerHTML = `
-      <div class="card-head">
-        <div class="card-id">
-          <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
-          <span class="card-num">${escapeHtml(tipoLabel(e.tipo))} ${escapeHtml(e.numero)}</span>
-          <span class="tag tag-materia" data-m="${materia}">${materia}</span>
-          ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
-          ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
-        </div>
-        <button class="star ${fav ? "on" : ""}" title="Favoritar" aria-label="Favoritar">${fav ? "★" : "☆"}</button>
+  li.innerHTML = `
+    <div class="card-head">
+      <div class="card-id">
+        <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
+        <span class="card-num">${escapeHtml(tipoLabel(e.tipo))} ${escapeHtml(e.numero)}</span>
+        <span class="tag tag-materia" data-m="${materia}">${materia}</span>
+        ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
+        ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
       </div>
-      ${e.titulo ? `<p class="card-title">${highlight(e.titulo, q)}</p>` : ""}
-      <p class="card-text clamp">${highlight(e.texto, q)}</p>
-      <div class="card-foot">
-        ${e.tema ? `<span class="foot-tema">${escapeHtml(e.tema)}</span>` : ""}
-        ${e.data ? `<span>${escapeHtml(e.data)}</span>` : ""}
-        <button class="more-btn" type="button">ver mais</button>
-        <button class="copy-btn" type="button" title="Copiar citação e texto">copiar</button>
-        ${e.fonte ? `<a href="${escapeHtml(e.fonte)}" target="_blank" rel="noopener">fonte</a>` : ""}
-      </div>`;
+      <button class="star ${fav ? "on" : ""}" title="Favoritar" aria-label="Favoritar">${fav ? "★" : "☆"}</button>
+    </div>
+    ${e.titulo ? `<p class="card-title">${highlight(e.titulo, q)}</p>` : ""}
+    <p class="card-text clamp">${highlight(e.texto, q)}</p>
+    <div class="card-foot">
+      ${e.tema ? `<span class="foot-tema">${escapeHtml(e.tema)}</span>` : ""}
+      ${e.data ? `<span>${escapeHtml(e.data)}</span>` : ""}
+      <button class="more-btn" type="button">ver mais</button>
+      <button class="copy-btn" type="button" title="Copiar citação e texto">copiar</button>
+      ${e.fonte ? `<a href="${escapeHtml(e.fonte)}" target="_blank" rel="noopener">fonte</a>` : ""}
+    </div>`;
 
-    li.querySelector(".star").addEventListener("click", () => toggleFav(e.id));
-    const txt = li.querySelector(".card-text");
-    const moreBtn = li.querySelector(".more-btn");
-    moreBtn.addEventListener("click", () => {
-      txt.classList.toggle("clamp");
-      moreBtn.textContent = txt.classList.contains("clamp") ? "ver mais" : "ver menos";
-    });
-    const copyBtn = li.querySelector(".copy-btn");
-    copyBtn.addEventListener("click", () => copiar(e, copyBtn));
-    ul.appendChild(li);
-  }
+  li.querySelector(".star").addEventListener("click", (ev) => { ev.stopPropagation(); toggleFav(e.id, li); });
+  li.querySelector(".more-btn").addEventListener("click", (ev) => { ev.stopPropagation(); toggleExpand(li); });
+  li.querySelector(".copy-btn").addEventListener("click", (ev) => { ev.stopPropagation(); copiar(e, ev.currentTarget); });
+  // Clicar em qualquer lugar do card (menos botões/links) expande o texto.
+  li.addEventListener("click", (ev) => {
+    if (ev.target.closest("button, a")) return;
+    toggleExpand(li);
+  });
+  return li;
 }
 
 function tipoLabel(tipo) {
@@ -185,11 +227,18 @@ function tipoLabel(tipo) {
   return t ? t.label : (tipo || "");
 }
 
-function toggleFav(id) {
+function toggleFav(id, li) {
   if (state.favoritos.has(id)) state.favoritos.delete(id);
   else state.favoritos.add(id);
   saveFavoritos();
-  render();
+  const on = state.favoritos.has(id);
+  if (li) {
+    const star = li.querySelector(".star");
+    star.classList.toggle("on", on);
+    star.textContent = on ? "★" : "☆";
+  }
+  // Só re-filtra quando a mudança afeta o que aparece/ordem.
+  if (state.onlyFav || state.sort === "fav") applyFilters({ scroll: false });
 }
 
 // ---- Copiar citação ----
@@ -249,7 +298,9 @@ function clearFilters() {
   document.querySelectorAll(".chip.active").forEach(c => c.classList.remove("active"));
   const favBtn = document.getElementById("fav-toggle");
   if (favBtn) { favBtn.classList.remove("active"); favBtn.setAttribute("aria-pressed", "false"); }
-  render();
+  const sc = document.getElementById("search-clear");
+  if (sc) sc.hidden = true;
+  applyFilters();
 }
 
 // ---- Chips ----
@@ -272,7 +323,7 @@ function makeChip(label, onClick) {
   b.type = "button";
   b.className = "chip";
   b.textContent = label;
-  b.addEventListener("click", () => { b.classList.toggle("active"); onClick(); render(); });
+  b.addEventListener("click", () => { b.classList.toggle("active"); onClick(); applyFilters(); });
   return b;
 }
 function toggleSet(set, v) { set.has(v) ? set.delete(v) : set.add(v); }
@@ -282,10 +333,27 @@ function init() {
   buildChips();
 
   const search = document.getElementById("search");
+  const clearSearch = document.getElementById("search-clear");
+  const syncClearSearch = () => { if (clearSearch) clearSearch.hidden = !search.value; };
   let deb;
   search.addEventListener("input", () => {
+    syncClearSearch();
     clearTimeout(deb);
-    deb = setTimeout(() => { state.query = search.value; render(); }, 120);
+    deb = setTimeout(() => { state.query = search.value; applyFilters(); }, 120);
+  });
+  search.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && search.value) {
+      search.value = ""; state.query = ""; syncClearSearch(); applyFilters();
+    }
+  });
+  if (clearSearch) clearSearch.addEventListener("click", () => {
+    search.value = ""; state.query = ""; syncClearSearch(); applyFilters(); search.focus();
+  });
+  // Atalho "/" foca a busca.
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")) {
+      ev.preventDefault(); search.focus();
+    }
   });
 
   const favBtn = document.getElementById("fav-toggle");
@@ -293,14 +361,14 @@ function init() {
     state.onlyFav = !state.onlyFav;
     favBtn.classList.toggle("active", state.onlyFav);
     favBtn.setAttribute("aria-pressed", String(state.onlyFav));
-    render();
+    applyFilters();
   });
 
   const clearBtn = document.getElementById("clear-filters");
   if (clearBtn) clearBtn.addEventListener("click", clearFilters);
 
   const sortSel = document.getElementById("sort");
-  if (sortSel) sortSel.addEventListener("change", () => { state.sort = sortSel.value; render(); });
+  if (sortSel) sortSel.addEventListener("change", () => { state.sort = sortSel.value; applyFilters(); });
 
   const themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
@@ -315,11 +383,32 @@ function init() {
     });
   }
 
+  // Carregar mais: botão manual + auto-carregamento ao rolar (scroll infinito).
+  const loadMore = document.getElementById("load-more");
+  if (loadMore) {
+    loadMore.addEventListener("click", appendChunk);
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some(en => en.isIntersecting) && renderedCount < currentList.length) {
+          appendChunk();
+        }
+      }, { rootMargin: "800px" });
+      io.observe(loadMore);
+    }
+  }
+
+  // Voltar ao topo.
+  const toTop = document.getElementById("to-top");
+  if (toTop) {
+    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    window.addEventListener("scroll", () => { toTop.hidden = window.scrollY < 600; }, { passive: true });
+  }
+
   if (window.DATA_UPDATED) {
     document.getElementById("updated").textContent = "Atualizado: " + window.DATA_UPDATED;
   }
 
-  render();
+  applyFilters({ scroll: false });
 }
 
 document.addEventListener("DOMContentLoaded", init);

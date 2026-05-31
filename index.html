@@ -25,7 +25,8 @@
       <button id="theme-toggle" class="icon-btn" type="button" aria-label="Alternar tema" title="Alternar tema claro/escuro">☀</button>
     </div>
     <div class="search-wrap">
-      <input id="search" type="search" placeholder="Buscar por número, tema ou texto…" autocomplete="off" />
+      <input id="search" type="search" placeholder="Buscar por número, tema ou texto…  ( / )" autocomplete="off" />
+      <button id="search-clear" class="search-clear" type="button" aria-label="Limpar busca" hidden>✕</button>
     </div>
   </header>
 
@@ -66,8 +67,11 @@
       </div>
     </div>
     <ul id="results" class="results"></ul>
+    <button id="load-more" class="load-more" type="button" hidden>Carregar mais</button>
     <div id="empty" class="empty" hidden>Nenhum resultado. Ajuste a busca ou os filtros.</div>
   </main>
+
+  <button id="to-top" class="to-top" type="button" aria-label="Voltar ao topo" title="Voltar ao topo" hidden>↑</button>
 
   <footer class="footer">
     <p>Dados de fontes públicas. Confira sempre o texto oficial no portal do tribunal antes de usar em peça.</p>

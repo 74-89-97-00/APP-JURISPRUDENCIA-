@@ -74,6 +74,7 @@ html[data-theme="dark"] {
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -359,6 +360,50 @@ mark { background: var(--mark-bg); color: var(--mark-fg); border-radius: 3px; pa
 .footer { text-align: center; color: var(--muted); font-size: 0.78rem; padding: 28px 22px 44px; border-top: 1px solid var(--border); }
 .footer a { color: var(--accent); text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
+
+/* ---- Busca: botão limpar (×) ---- */
+.search-wrap { position: relative; }
+.search-wrap #search { padding-right: 44px; }
+.search-clear {
+  position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  border: none; background: var(--surface-2); color: var(--muted);
+  cursor: pointer; font-size: 0.8rem;
+  display: grid; place-items: center;
+}
+.search-clear:hover { background: var(--border); color: var(--text); }
+
+/* ---- Carregar mais ---- */
+.load-more {
+  display: block; width: 100%; margin: 16px auto 0; padding: 14px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--accent);
+  border-radius: var(--radius); font-size: 0.92rem; font-weight: 600;
+  font-family: var(--sans); cursor: pointer; box-shadow: var(--shadow);
+  transition: border-color 0.15s ease;
+}
+.load-more:hover { border-color: var(--accent); }
+
+/* ---- Voltar ao topo ---- */
+.to-top {
+  position: fixed; right: 18px; bottom: 18px; z-index: 20;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: none; background: var(--accent); color: #fff;
+  font-size: 1.35rem; cursor: pointer; box-shadow: var(--shadow-hover);
+  display: grid; place-items: center;
+}
+html[data-theme="dark"] .to-top { color: #0f1115; }
+.to-top:hover { background: var(--accent-strong); }
+
+/* ---- Interação: card clicável + alvos de toque maiores ---- */
+.card-text { cursor: pointer; }
+.card-foot { gap: 6px 8px; }
+.more-btn, .copy-btn, .card-foot a {
+  padding: 7px 10px; margin: -3px 0; border-radius: 8px;
+}
+.more-btn:hover, .copy-btn:hover, .card-foot a:hover {
+  background: var(--surface-2); text-decoration: none;
+}
+.star { padding: 5px 8px; margin: -5px -6px -5px 0; }
 
 @media (min-width: 680px) {
   .topbar { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; }

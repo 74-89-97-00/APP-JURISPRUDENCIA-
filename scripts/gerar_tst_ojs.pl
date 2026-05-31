@@ -36,16 +36,28 @@ sub dehyph {
 }
 sub limpa {
   my ($t) = @_;
-  # parênteses editoriais (palavras-chave em minúsculas -> /i ok)
-  $t =~ s/\((?:inserid[ao]|cancelad[ao]|revogad[ao]|alterad[ao]|republicad[ao]|nova\s+redação|redação|convertid[ao]|incorporad[ao]|ex-OJs?|DJ|DEJT)[^)]*\)//gi;
-  # citação de resolução: para no primeiro caractere MAIÚSCULO (sem /i!)
-  $t =~ s/[-–—]?\s*Res\.?\s*\d+\/\d+[^A-ZÀ-Ý]*?(?:DJ|DEJT)\b[^A-ZÀ-Ý]*?\d{4}[^A-ZÀ-Ý]*//g;
-  # notas editoriais sem parênteses: "inserida em 27.03.1998", "cancelada em ..."
-  $t =~ s/\b(?:inserid[ao]|cancelad[ao]|alterad[ao]|republicad[ao]|revogad[ao])\s+em\s+\d{1,2}\.\d{1,2}\.\d{4}//gi;
-  # citações soltas de publicação: "- DJ 22.06.2004", "– DEJT 01.06.2016"
-  $t =~ s/[-–—]\s*(?:DJ|DEJT)\b[^A-ZÀ-Ý]*?\d{4}[^A-ZÀ-Ý]*//g;
+  # Parênteses editoriais: por palavra-chave inicial...
+  $t =~ s/\((?:inserid[ao]|cancelad[ao]|revogad[ao]|alterad[ao]|republicad[ao]|nova\s+redação|redação|convertid[ao]|incorporad[ao]|ex-OJs?|ex-Súmula|DJ|DEJT)[^)]*\)//gi;
+  # ...ou contendo proveniência (ex-OJ / "inserida em") em qualquer posição.
+  $t =~ s/\([^)]*(?:ex-OJs?|ex-Súmula|inserid[ao]\s+em)[^)]*\)//gi;
+  # Parêntese editorial NÃO fechado (o ")" caiu numa linha de cabeçalho removida):
+  # "(redação alterada na sessão do ... divulgado em 25, 26 e 27.09.2012".
+  $t =~ s/\((?:redação|nova\s+redação|mantid[ao]|alterad[ao]|inserid[ao]|cancelad[ao]|convertid[ao])[^)]*?divulgad[ao]\s+em\s+[\d.,\seEº°]*?\d{4}//gi;
+  # Citações de resolução em qualquer caixa: "Res. 129/2005, DJ 20, 22 e 25.04.2005".
+  $t =~ s/[-–—]?\s*Res\.?\s*\d+\/\d+[\s,;]*(?:(?:DJ|DEJT)\b[\d.,\seEº°]*?\d{4})?[.\s]*//gi;
+  # "Republicada DJ 08, 09 e 10.07.2008".
+  $t =~ s/\bRepublicad[ao]\b(?:[\s,;]*(?:DJ|DEJT)\b[\d.,\seEº°]*?\d{4})?[.\s]*//gi;
+  # Notas "inserida/cancelada/alterada em 27.03.1998".
+  $t =~ s/\b(?:inserid[ao]|cancelad[ao]|alterad[ao]|republicad[ao]|revogad[ao])\s+em\s+\d{1,2}\.\d{1,2}\.\d{2,4}//gi;
+  # "DEJT/DJ divulgado em 27, 30 e 31.05.2011" (às vezes colado: "...INSTRUMENTODEJT").
+  $t =~ s/[-–—]?\s*(?:DJ|DEJT)\s+divulgad[ao]\s+em\s+[\d.,\seEº°]*?\d{4}//gi;
+  # Publicação solta "DJ 13.10.2000" / "- DEJT 01.06.2016".
+  $t =~ s/[-–—]?\s*\b(?:DJ|DEJT)\b\s+\d[\d.,\seEº°]*?\d{4}\b//gi;
+  # Parêntese editorial aberto e não fechado até o fim do texto: "(ex-OJ nº 231 da".
+  $t =~ s/\(\s*(?:ex-OJs?|ex-Súmula|inserid[ao]|redação|nova\s+redação|mantid[ao]|alterad[ao]|cancelad[ao]|convertid[ao])[^)]*$//i;
   $t =~ s/\s+/ /g;
   $t =~ s/\s+([.,;:])/$1/g;
+  $t =~ s/\s*[-–—]\s*$//;     # hífen/traço solto no fim
   $t =~ s/^\s+|\s+$//g;
   return $t;
 }

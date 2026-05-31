@@ -20,26 +20,37 @@ def tmp(nome):
     return os.path.join(tempfile.gettempdir(), nome)
 
 
-def baixar(url, destino):
-    """Baixa um arquivo via curl (segue redirecionamentos). Erro vira exceção.
+# Proxy público (fetch server-side por IP não bloqueado). Usado como recurso
+# quando a fonte bloqueia IPs de datacenter — caso do TST no GitHub Actions.
+PROXY = "https://api.codetabs.com/v1/proxy/?quest="
 
-    Usamos curl, e não requests, de propósito: alguns servidores (STF) têm
-    WAF que bloqueia o `requests` pela impressão digital TLS (403), mas deixam
-    o curl passar. O curl também lida melhor com cadeias de certificado
-    incompletas no runner do CI.
-    """
+
+def _curl(url, destino):
     cmd = ["curl", "-sSL", "--fail", "--retry", "2", "--retry-delay", "3",
-           "-m", "180",
+           "-m", "300",
            "-A", UA,
            "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
            "-o", destino, url]
     r = subprocess.run(cmd)
     if r.returncode == 60:
-        # curl 60 = cadeia de certificado incompleta no runner (caso do STF).
-        # Repete sem verificar o certificado — PDF público, somente leitura.
+        # curl 60 = cadeia de certificado incompleta no runner. Repete sem
+        # verificar o certificado (arquivo público, somente leitura).
         r = subprocess.run(cmd + ["-k"])
-    if r.returncode != 0:
-        raise RuntimeError("curl falhou (codigo %d) ao baixar %s" % (r.returncode, url))
+    return r.returncode
+
+
+def baixar(url, destino):
+    """Baixa um arquivo. Tenta direto (curl); se a fonte bloquear (ex.: o TST
+    barra IPs do GitHub Actions), repete via proxy público. Erro vira exceção.
+
+    Usamos curl e não requests de propósito: alguns WAFs (STF) bloqueiam o
+    requests pela impressão digital TLS mas deixam o curl passar.
+    """
+    rc = _curl(url, destino)
+    if rc != 0:
+        rc = _curl(PROXY + url, destino)
+    if rc != 0:
+        raise RuntimeError("falha ao baixar %s (curl codigo %d)" % (url, rc))
     return destino
 
 

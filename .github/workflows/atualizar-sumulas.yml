@@ -42,7 +42,8 @@ jobs:
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
         continue-on-error: true
         run: |
-          curl -sL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36" -H "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8" "http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
+          # O TST bloqueia IPs do GitHub Actions; baixa via proxy público.
+          curl -sSL --fail -m 300 "https://api.codetabs.com/v1/proxy/?quest=http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
           pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
           pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
           perl scripts/gerar_tst_ojs.pl tst-livro.txt

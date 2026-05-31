@@ -42,8 +42,22 @@ jobs:
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
         continue-on-error: true
         run: |
-          # O TST bloqueia IPs do GitHub Actions; baixa via proxy público.
-          curl -sSL --fail -m 300 "https://api.codetabs.com/v1/proxy/?quest=http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
+          URL="http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf"
+          # O TST bloqueia IPs de datacenter: tenta direto e, se barrar, via
+          # proxy público (fetch server-side por IP não bloqueado).
+          curl -sSL --fail -m 300 -A "Mozilla/5.0" "$URL" -o tst-livro.pdf \
+            || curl -sSL --fail -m 300 "https://api.codetabs.com/v1/proxy/?quest=$URL" -o tst-livro.pdf \
+            || true
+          # TRAVA DE INTEGRIDADE: o proxy é instável — às vezes trunca o PDF ou
+          # devolve uma página HTML de erro. Como OJ/PN são REGERADOS por
+          # inteiro, um arquivo parcial corromperia os dados. Só prossegue se
+          # for um PDF COMPLETO (header %PDF e >= 3,4 MB, o livro tem ~3,5 MB).
+          # Senão, sai sem tocar nada (o dado commitado, autoritativo, fica).
+          BYTES=$(stat -c%s tst-livro.pdf 2>/dev/null || echo 0)
+          if ! head -c4 tst-livro.pdf 2>/dev/null | grep -q '%PDF' || [ "$BYTES" -lt 3400000 ]; then
+            echo "::warning::TST: download incompleto/bloqueado ($BYTES bytes) — OJ/PN mantidos no estado commitado."
+            exit 0
+          fi
           pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
           pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
           perl scripts/gerar_tst_ojs.pl tst-livro.txt

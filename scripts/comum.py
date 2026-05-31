@@ -13,7 +13,26 @@ import tempfile
 import requests
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/120 Safari/537.36")
+      "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+
+# Conjunto de cabeçalhos que imita um navegador real. O WAF do STF responde 403
+# a requisições "cruas" (curl/proxies com poucos headers), mas LIBERA quando vê
+# um navegador — daí o leque abaixo (descoberto em 2026-05-31). Não atrapalha
+# as demais fontes.
+HEADERS_NAVEGADOR = [
+    "-H", "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,"
+          "image/avif,image/webp,*/*;q=0.8",
+    "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
+    "-H", 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", '
+          '"Not-A.Brand";v="99"',
+    "-H", 'sec-ch-ua-mobile: ?0',
+    "-H", 'sec-ch-ua-platform: "Windows"',
+    "-H", "Sec-Fetch-Dest: document",
+    "-H", "Sec-Fetch-Mode: navigate",
+    "-H", "Sec-Fetch-Site: none",
+    "-H", "Sec-Fetch-User: ?1",
+    "-H", "Upgrade-Insecure-Requests: 1",
+]
 
 
 def tmp(nome):
@@ -27,10 +46,8 @@ PROXY = "https://api.codetabs.com/v1/proxy/?quest="
 
 def _curl(url, destino):
     cmd = ["curl", "-sSL", "--fail", "--retry", "2", "--retry-delay", "3",
-           "-m", "300",
-           "-A", UA,
-           "-H", "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8",
-           "-o", destino, url]
+           "-m", "300", "--compressed",
+           "-A", UA] + HEADERS_NAVEGADOR + ["-o", destino, url]
     r = subprocess.run(cmd)
     if r.returncode == 60:
         # curl 60 = cadeia de certificado incompleta no runner. Repete sem

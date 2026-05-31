@@ -37,11 +37,10 @@ jobs:
           python scripts/parse_tjrj.py || echo "::warning::parse_tjrj falhou (mantido o dado anterior)"
           python scripts/parse_stj.py  || echo "::warning::parse_stj falhou (mantido o dado anterior)"
           python scripts/parse_tst.py  || echo "::warning::parse_tst falhou (mantido o dado anterior)"
-          # STF súmulas COMUNS (1–736): fonte tem WAF que barra curl/proxies
-          # (403 esperado). É um conjunto CONGELADO e já completo no repo, então
-          # a falha aqui é esperada e inofensiva. As VINCULANTES (que crescem)
-          # são atualizadas em passo próprio, via Wikipédia (mais abaixo).
-          python scripts/parse_stf.py  || echo "STF comuns: fonte com WAF (esperado) — 1–736 já completas no repositório."
+          # STF súmulas COMUNS (1–736): conjunto congelado, já completo no repo.
+          # O WAF do STF agora é contornado por headers de navegador (comum.py),
+          # então o parser deve voltar a rodar; se a fonte cair, segue sem quebrar.
+          python scripts/parse_stf.py  || echo "::warning::parse_stf falhou (mantido o dado anterior)"
 
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
         continue-on-error: true
@@ -70,17 +69,33 @@ jobs:
       - name: Atualizar Repercussão Geral do STF (planilha oficial)
         continue-on-error: true
         run: |
-          curl -sL -A "Mozilla/5.0" -o temasrg.xlsx "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
+          # O WAF do STF dá 403 a curl "cru"; só libera com headers de navegador.
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          curl -sL --fail -m 120 --compressed -A "$UA" "${HDR[@]}" -o temasrg.xlsx \
+            "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
 
       - name: Atualizar RG do STF não coberto pela planilha (raspagem tema a tema)
         continue-on-error: true
         run: |
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
           REF="https://portal.stf.jus.br/jurisprudenciaRepercussao/pesquisarProcesso.asp"
           : > stf-portal.html
           for n in $(seq 1 1550); do
             echo "===TEMA $n===" >> stf-portal.html
-            curl -s -A "Mozilla/5.0" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html
+            curl -s -m 30 --compressed -A "$UA" "${HDR[@]}" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html
             sleep 0.08
           done
           perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js

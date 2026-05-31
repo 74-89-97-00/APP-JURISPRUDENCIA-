@@ -1,14 +1,16 @@
 "use strict";
 
 // Troque a versão sempre que atualizar os dados/arquivos para forçar atualização.
-const CACHE = "juris-v8";
+const CACHE = "juris-v9";
 
 // Caminhos relativos ao escopo do service worker (funciona em subdiretório no GitHub Pages).
 const ASSETS = [
   "./",
   "index.html",
+  "sumula.html",
   "styles.css",
   "app.js",
+  "sumula.js",
   "manifest.webmanifest",
   "icon.svg",
   "data/stf-vinculantes.js",

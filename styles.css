@@ -457,6 +457,39 @@ html[data-theme="dark"] .to-top { color: #0f1115; }
 .detail-btn.ok { color: var(--stj); border-color: var(--stj); }
 body.no-scroll { overflow: hidden; }
 
+/* ---- Página de detalhe (sumula.html) ---- */
+.brand-link { text-decoration: none; color: inherit; }
+.sumula-main { max-width: 720px; margin: 0 auto; padding: 22px 22px 56px; }
+.voltar {
+  display: inline-block; margin-bottom: 16px;
+  color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+}
+.voltar:hover { text-decoration: underline; }
+.sumula-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 30px;
+}
+.sumula-tags { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.sumula-num {
+  font-family: var(--serif); font-size: 1.7rem; font-weight: 600;
+  margin: 0; color: var(--text); line-height: 1.22;
+}
+.sumula-title { font-weight: 600; margin: 12px 0 0; color: var(--text); }
+.sumula-text { margin: 18px 0 0; font-size: 1.1rem; line-height: 1.8; color: var(--card-text); }
+.sumula-info {
+  margin: 24px 0 0; border-top: 1px solid var(--border); padding-top: 18px;
+  display: grid; grid-template-columns: auto 1fr; gap: 9px 18px; font-size: 0.9rem;
+}
+.sumula-info dt { color: var(--muted); font-weight: 600; }
+.sumula-info dd { margin: 0; color: var(--text); }
+.sumula-actions {
+  margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.sumula-actions .star { font-size: 1.5rem; }
+.sumula-notfound { text-align: center; color: var(--muted); padding: 40px 0; }
+.sumula-notfound a { color: var(--accent); }
+
 @media (min-width: 680px) {
   .topbar-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }
   .topbar-right { flex: 0 1 480px; }

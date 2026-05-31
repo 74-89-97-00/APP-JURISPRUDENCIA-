@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Súmula — Jurisprudência</title>
+  <meta name="theme-color" content="#284b78" />
+  <meta name="description" content="Detalhe da súmula com texto integral e informações." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <script>(function(){try{var t=localStorage.getItem("juris.tema")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","light");}})();</script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand brand-link" href="index.html">
+        <span class="brand-mark">§</span>
+        <div>
+          <h1>Jurisprudência</h1>
+          <p class="subtitle">Súmulas e julgados — STF · STJ · TST · TJSP · TJRJ</p>
+        </div>
+      </a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Alternar tema" title="Alternar tema claro/escuro">☀</button>
+    </div>
+  </header>
+
+  <main class="sumula-main">
+    <a class="voltar" id="voltar" href="index.html">← Voltar para a lista</a>
+    <article id="sumula" class="sumula-card"></article>
+  </main>
+
+  <footer class="footer">
+    <p>Dados de fontes públicas. Confira sempre o texto oficial no portal do tribunal antes de usar em peça.</p>
+  </footer>
+
+  <script src="data/stf-vinculantes.js"></script>
+  <script src="data/stf-sumulas.js"></script>
+  <script src="data/stj-sumulas.js"></script>
+  <script src="data/tst-sumulas.js"></script>
+  <script src="data/tjsp-sumulas.js"></script>
+  <script src="data/tjrj-sumulas.js"></script>
+  <script src="sumula.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

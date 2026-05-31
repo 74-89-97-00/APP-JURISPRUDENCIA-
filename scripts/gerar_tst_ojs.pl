@@ -40,6 +40,10 @@ sub limpa {
   $t =~ s/\((?:inserid[ao]|cancelad[ao]|revogad[ao]|alterad[ao]|republicad[ao]|nova\s+redação|redação|convertid[ao]|incorporad[ao]|ex-OJs?|DJ|DEJT)[^)]*\)//gi;
   # citação de resolução: para no primeiro caractere MAIÚSCULO (sem /i!)
   $t =~ s/[-–—]?\s*Res\.?\s*\d+\/\d+[^A-ZÀ-Ý]*?(?:DJ|DEJT)\b[^A-ZÀ-Ý]*?\d{4}[^A-ZÀ-Ý]*//g;
+  # notas editoriais sem parênteses: "inserida em 27.03.1998", "cancelada em ..."
+  $t =~ s/\b(?:inserid[ao]|cancelad[ao]|alterad[ao]|republicad[ao]|revogad[ao])\s+em\s+\d{1,2}\.\d{1,2}\.\d{4}//gi;
+  # citações soltas de publicação: "- DJ 22.06.2004", "– DEJT 01.06.2016"
+  $t =~ s/[-–—]\s*(?:DJ|DEJT)\b[^A-ZÀ-Ý]*?\d{4}[^A-ZÀ-Ý]*//g;
   $t =~ s/\s+/ /g;
   $t =~ s/\s+([.,;:])/$1/g;
   $t =~ s/^\s+|\s+$//g;

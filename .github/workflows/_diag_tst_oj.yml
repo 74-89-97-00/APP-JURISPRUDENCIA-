@@ -1,0 +1,48 @@
+name: DIAG TST OJ (temporário)
+
+# Diagnóstico descartável: descobre QUAIS marcadores de OJ o pdftotext do runner
+# Ubuntu extrai a mais/a menos vs. a referência local (scripts/_oj_ref.txt), com
+# o contexto de cada um, para decidir se os ~6 extras (709 vs 703) são OJs reais
+# ou referências cruzadas. NÃO mexe em dados nem abre PR. Apagar após o uso.
+on:
+  workflow_dispatch: {}
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Versão do poppler
+        run: pdftotext -v 2>&1 | head -1
+      - name: Baixar livro e extrair marcadores de OJ
+        run: |
+          URL="http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf"
+          ok=""
+          for t in 1 2 3 4 5; do
+            for src in "$URL" "https://api.codetabs.com/v1/proxy/?quest=$URL"; do
+              curl -sSL --fail -m 300 -A "Mozilla/5.0" "$src" -o tst.pdf || continue
+              B=$(stat -c%s tst.pdf 2>/dev/null || echo 0)
+              if head -c4 tst.pdf | grep -q '%PDF' && [ "$B" -ge 3490000 ]; then ok=1; break 2; fi
+            done
+            sleep 5
+          done
+          [ -z "$ok" ] && { echo "não obtive PDF íntegro"; exit 1; }
+          echo "PDF bytes: $(stat -c%s tst.pdf)"
+          pdftotext -layout -enc UTF-8 tst.pdf tst.txt
+          # marcadores de OJ que o runner enxerga (só até começar PN/índice)
+          awk '/^[[:space:]]*ÍNDICE REMISSIVO/{exit} /^[[:space:]]*PN-[0-9]/{exit} {print}' tst.txt > tst_ojs.txt
+          grep -oE '^[[:space:]]*OJ-(SDI1T|SDI2|SDI1|SDC|TP/OE|TP)-[0-9]+' tst_ojs.txt \
+            | sed -E 's/^[[:space:]]*OJ-//' | LC_ALL=C sort -u > ci_oj.txt
+          LC_ALL=C sort -u scripts/_oj_ref.txt > ref.txt
+          echo "=== contagem CI: $(wc -l < ci_oj.txt) | referência local: $(wc -l < ref.txt) ==="
+          echo "===EXTRAS_NO_CI (runner vê, local não)==="
+          comm -13 ref.txt ci_oj.txt | tee ci_only.txt
+          echo "===FALTANDO_NO_CI (local vê, runner não)==="
+          comm -23 ref.txt ci_oj.txt
+          echo "===CONTEXTO de cada extra==="
+          for key in $(cat ci_only.txt); do
+            tag="${key%-*}"; n="${key##*-}"
+            echo "----- OJ-$key -----"
+            grep -nE "OJ-$tag-$n\b" tst_ojs.txt | head -4
+          done

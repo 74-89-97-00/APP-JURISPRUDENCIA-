@@ -176,11 +176,10 @@ function updateLoadMore() {
 }
 
 function updateFiltersBadge() {
-  const t = document.getElementById("filters-toggle");
-  if (!t) return;
+  const el = document.getElementById("filters-count");
+  if (!el) return;
   const n = state.tribunais.size + state.tipos.size + state.materias.size + (state.onlyFav ? 1 : 0);
-  t.firstChild ? (t.firstChild.nodeValue = n ? `Filtros (${n})` : "Filtros")
-               : (t.textContent = n ? `Filtros (${n})` : "Filtros");
+  el.textContent = n ? `Filtros (${n})` : "Filtros";
 }
 
 function buildCard(e) {

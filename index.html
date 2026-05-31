@@ -35,29 +35,17 @@
     </div>
   </header>
 
-  <button id="filters-toggle" class="filters-toggle" type="button" aria-expanded="false" aria-controls="filters">Filtros</button>
-
-  <nav class="filters" id="filters">
-    <div class="filter-block">
-      <span class="filter-label">Tribunal</span>
-      <div class="filter-group" id="filter-tribunal" aria-label="Filtrar por tribunal"></div>
-    </div>
-    <div class="filter-block">
-      <span class="filter-label">Tipo</span>
-      <div class="filter-group" id="filter-tipo" aria-label="Filtrar por tipo"></div>
-    </div>
-    <div class="filter-block">
-      <span class="filter-label">Matéria</span>
-      <div class="filter-group" id="filter-materia" aria-label="Filtrar por matéria"></div>
-      <button id="fav-toggle" class="chip chip-fav" type="button" aria-pressed="false">★ Favoritos</button>
-    </div>
-  </nav>
-
   <main>
     <div class="results-meta">
-      <span id="count">—</span>
+      <div class="meta-left">
+        <button id="filters-toggle" class="filters-toggle" type="button" aria-expanded="false" aria-controls="filters">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
+          <span id="filters-count">Filtros</span>
+        </button>
+        <span id="count">—</span>
+      </div>
       <div class="meta-right">
-        <button id="clear-filters" class="meta-clear" type="button" hidden>✕ Limpar filtros</button>
+        <button id="clear-filters" class="meta-clear" type="button" hidden>✕ Limpar</button>
         <label class="sort-wrap">
           <span>Ordenar</span>
           <select id="sort">
@@ -69,6 +57,22 @@
         <span id="updated" class="updated"></span>
       </div>
     </div>
+
+    <nav class="filters" id="filters">
+      <div class="filter-block">
+        <span class="filter-label">Tribunal</span>
+        <div class="filter-group" id="filter-tribunal" aria-label="Filtrar por tribunal"></div>
+      </div>
+      <div class="filter-block">
+        <span class="filter-label">Tipo</span>
+        <div class="filter-group" id="filter-tipo" aria-label="Filtrar por tipo"></div>
+      </div>
+      <div class="filter-block">
+        <span class="filter-label">Matéria</span>
+        <div class="filter-group" id="filter-materia" aria-label="Filtrar por matéria"></div>
+        <button id="fav-toggle" class="chip chip-fav" type="button" aria-pressed="false">★ Favoritos</button>
+      </div>
+    </nav>
     <ul id="results" class="results"></ul>
     <button id="load-more" class="load-more" type="button" hidden>Carregar mais</button>
     <div id="empty" class="empty" hidden>Nenhum resultado. Ajuste a busca ou os filtros.</div>

@@ -185,29 +185,27 @@ html[data-theme="dark"] .install-btn { color: #0f1115; }
 
 /* ---- Filtros ---- */
 .filters-toggle {
-  display: none;
-  margin: 14px 22px 0;
-  padding: 9px 15px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px;
   border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  font-weight: 600;
+  background: var(--surface); color: var(--text);
+  border-radius: 999px;
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow);
 }
-.filters-toggle::after { content: " ▾"; color: var(--muted); }
-.filters-toggle[aria-expanded="true"]::after { content: " ▴"; }
+.filters-toggle:hover { border-color: var(--accent); }
+.filters-toggle[aria-expanded="true"] {
+  background: var(--accent-soft); border-color: var(--accent); color: var(--accent-strong);
+}
+.filters-toggle svg { opacity: 0.85; }
 
 .filters {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 10px;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 18px 22px 8px;
+  padding: 4px 0 12px;
 }
+.filters.open { display: flex; }
 .filter-block { display: flex; flex-direction: row; align-items: center; gap: 12px; }
 .filter-label {
   flex-shrink: 0;
@@ -257,11 +255,13 @@ main { max-width: 760px; margin: 0 auto; padding: 10px 22px 56px; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   color: var(--muted);
   font-size: 0.82rem;
-  padding: 10px 2px 16px;
+  padding: 6px 2px 14px;
 }
+.meta-left { display: flex; align-items: center; gap: 14px; }
 .meta-right { display: flex; align-items: center; gap: 16px; }
 .meta-clear {
   background: none; border: none; color: var(--danger);
@@ -532,9 +532,3 @@ body.no-scroll { overflow: hidden; }
   .topbar-right { flex: 0 1 480px; }
 }
 
-@media (max-width: 679px) {
-  .filters-toggle { display: inline-flex; }
-  .filters { display: none; }
-  .filters.open { display: flex; }
-  .filter-block-actions { margin-left: 0; }
-}

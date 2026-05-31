@@ -151,7 +151,7 @@ function applyFilters(opts) {
   const n = currentList.length;
   document.getElementById("count").textContent =
     `${n} ${n === 1 ? "resultado" : "resultados"}` +
-    (ENTRIES.length ? ` de ${ENTRIES.length}` : "");
+    (anyFilterActive() ? ` de ${ENTRIES.length}` : "");
 
   appendChunk();
   if (!opts || opts.scroll !== false) window.scrollTo({ top: 0 });
@@ -199,7 +199,7 @@ function buildCard(e) {
       <div class="card-id">
         <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
         <span class="card-num">${escapeHtml(rotuloCard(e))}</span>
-        <span class="tag tag-materia" data-m="${materia}">${materia}</span>
+        ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
         ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
         ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
       </div>

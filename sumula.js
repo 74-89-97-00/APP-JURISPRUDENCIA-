@@ -155,7 +155,7 @@ function render() {
   root.innerHTML = `
     <div class="sumula-tags">
       <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
-      <span class="tag tag-materia" data-m="${materia}">${materia}</span>
+      ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
       ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
       ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
     </div>

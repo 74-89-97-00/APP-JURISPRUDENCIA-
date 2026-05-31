@@ -62,6 +62,9 @@ while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
 }
 @out = sort { $a->{num} <=> $b->{num} } @out;
 
+# Trava: a raspagem pode falhar/vir parcial. Não sobrescreve o complemento bom.
+die "[RG-novos] poucos temas (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 200;
+
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Temas de Repercussão Geral do STF não cobertos pela planilha de 2020\n";
 print $o "// (julgados após 2020), raspados do portal do STF. Best-effort; confira no portal.\n";

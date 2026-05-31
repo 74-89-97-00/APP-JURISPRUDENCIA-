@@ -69,6 +69,9 @@ for my $r (@rows) {
 }
 @out = sort { $a->{num} <=> $b->{num} } @out;
 
+# Trava: fonte em rede pode vir vazia/erro (WAF). Não sobrescreve dados bons.
+die "[REP] poucos temas (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 500;
+
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Recursos Repetitivos do STJ (temas com tese firmada).\n";
 print $o "// Fonte: Dados Abertos do STJ (temas.csv). Best-effort; confira no portal do STJ.\n";

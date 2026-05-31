@@ -74,6 +74,8 @@ for my $i (@itens) {
 }
 @out = sort { $a->{num} <=> $b->{num} } @out;
 
+die "[PN] poucos precedentes (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 80;
+
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Precedentes Normativos do TST (dissídio coletivo).\n";
 print $o "// Extraídos do livro oficial (Livro-Internet.pdf) — texto best-effort; confira no portal do TST.\n";

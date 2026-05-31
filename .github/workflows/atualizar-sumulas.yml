@@ -1,4 +1,4 @@
-name: Atualizar súmulas
+name: Atualizar jurisprudência
 
 # Roda no dia 1 de cada mês (09:00 UTC ~ 06:00 BRT) e também pode ser
 # disparado manualmente pelo botão "Run workflow".
@@ -38,6 +38,7 @@ jobs:
           python scripts/parse_stf.py
 
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
+        continue-on-error: true
         run: |
           curl -sL "http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
           pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
@@ -46,6 +47,7 @@ jobs:
           perl scripts/gerar_tst_pn.pl tst-livro-raw.txt
 
       - name: Atualizar Repercussão Geral do STF (planilha oficial)
+        continue-on-error: true
         run: |
           curl -sL -A "Mozilla/5.0" -o temasrg.xlsx "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
@@ -63,6 +65,7 @@ jobs:
           perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js
 
       - name: Atualizar Recursos Repetitivos do STJ (Dados Abertos)
+        continue-on-error: true
         run: |
           B="https://dadosabertos.web.stj.jus.br/dataset/4238da2f-c07b-4c1a-b345-4402accacdcf"
           R="df29da13-7d6b-41ba-ad96-cd1a5bbd191c"
@@ -72,6 +75,16 @@ jobs:
 
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
+
+      - name: Bump do cache do service worker (se os dados mudaram)
+        run: |
+          if ! git diff --quiet -- data/ dados.html; then
+            STAMP=$(date -u '+%Y%m%d%H%M')
+            sed -i "s/const CACHE = \"[^\"]*\";/const CACHE = \"juris-auto-$STAMP\";/" sw.js
+            echo "Cache do SW atualizado para juris-auto-$STAMP (PWAs instalados recebem os novos dados)."
+          else
+            echo "Sem mudanças nos dados; cache do SW mantido."
+          fi
 
       - name: Gerar resumo do PR
         id: resumo
@@ -105,6 +118,7 @@ jobs:
           add-paths: |
             data/*.js
             dados.html
-          commit-message: "Atualiza súmulas automaticamente (TJSP/TJRJ)"
-          title: "Atualização automática de súmulas"
+            sw.js
+          commit-message: "Atualiza jurisprudência automaticamente (súmulas, OJs, PNs, RG, repetitivos)"
+          title: "Atualização automática de jurisprudência"
           body-path: pr_body.md

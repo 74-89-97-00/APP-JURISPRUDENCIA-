@@ -72,6 +72,8 @@ for my $rn (2 .. $#rows) {
 }
 @out = sort { $a->{num} <=> $b->{num} } @out;
 
+die "[RG] poucos temas (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 500;
+
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Temas de Repercussão Geral do STF (com tese firmada).\n";
 print $o "// Fonte: planilha oficial temasrg.xlsx do STF. Best-effort; confira no portal do STF.\n";

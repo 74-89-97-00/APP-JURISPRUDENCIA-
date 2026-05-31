@@ -99,6 +99,8 @@ for my $i (@itens) {
   push @out, { id=>$id, sec=>$i->{sec}, num=>$i->{num}, situ=>$situ, texto=>$texto };
 }
 
+die "[OJ] poucas OJs (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 300;
+
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Orientações Jurisprudenciais do TST (SDI-1, SDI-2, SDI-1 Transitória, SDC, Tribunal Pleno/OE).\n";
 print $o "// Extraídas do livro oficial (Livro-Internet.pdf) — texto best-effort; confira no portal do TST.\n";

@@ -42,29 +42,12 @@ jobs:
           # então o parser deve voltar a rodar; se a fonte cair, segue sem quebrar.
           python scripts/parse_stf.py  || echo "::warning::parse_stf falhou (mantido o dado anterior)"
 
-      - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
-        continue-on-error: true
-        run: |
-          URL="http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf"
-          # O TST bloqueia IPs de datacenter: tenta direto e, se barrar, via
-          # proxy público (fetch server-side por IP não bloqueado).
-          curl -sSL --fail -m 300 -A "Mozilla/5.0" "$URL" -o tst-livro.pdf \
-            || curl -sSL --fail -m 300 "https://api.codetabs.com/v1/proxy/?quest=$URL" -o tst-livro.pdf \
-            || true
-          # TRAVA DE INTEGRIDADE: o proxy é instável — às vezes trunca o PDF ou
-          # devolve uma página HTML de erro. Como OJ/PN são REGERADOS por
-          # inteiro, um arquivo parcial corromperia os dados. Só prossegue se
-          # for um PDF COMPLETO (header %PDF e >= 3,4 MB, o livro tem ~3,5 MB).
-          # Senão, sai sem tocar nada (o dado commitado, autoritativo, fica).
-          BYTES=$(stat -c%s tst-livro.pdf 2>/dev/null || echo 0)
-          if ! head -c4 tst-livro.pdf 2>/dev/null | grep -q '%PDF' || [ "$BYTES" -lt 3400000 ]; then
-            echo "::warning::TST: download incompleto/bloqueado ($BYTES bytes) — OJ/PN mantidos no estado commitado."
-            exit 0
-          fi
-          pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
-          pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
-          perl scripts/gerar_tst_ojs.pl tst-livro.txt
-          perl scripts/gerar_tst_pn.pl tst-livro-raw.txt
+      # OBS.: OJs e PNs do TST NÃO são regerados no CI. O TST bloqueia o IP de
+      # datacenter do GitHub (só o proxy público alcança, de forma instável) e o
+      # poppler do runner extrai o layout de modo diferente do local (gera 709
+      # OJs em vez dos 703 reais). Por isso OJ/PN/súmulas do TST são mantidos
+      # AUTORITATIVOS a partir de uma máquina não bloqueada (vide README/memória)
+      # — dados estáveis, regerados sob demanda com os geradores perl.
 
       - name: Atualizar Repercussão Geral do STF (planilha oficial)
         continue-on-error: true
@@ -77,7 +60,9 @@ jobs:
                -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
                -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          curl -sL --fail -m 120 --compressed -A "$UA" "${HDR[@]}" -o temasrg.xlsx \
+          # -k: a cadeia de certificado do STF é incompleta no runner (curl 60);
+          # arquivo público, só leitura. ${HDR[@]} + UA driblam o WAF (403).
+          curl -sL --fail -k -m 120 --compressed -A "$UA" "${HDR[@]}" -o temasrg.xlsx \
             "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
 
@@ -95,7 +80,7 @@ jobs:
           : > stf-portal.html
           for n in $(seq 1 1550); do
             echo "===TEMA $n===" >> stf-portal.html
-            curl -s -m 30 --compressed -A "$UA" "${HDR[@]}" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html
+            curl -s -k -m 30 --compressed -A "$UA" "${HDR[@]}" -e "$REF" "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html
             sleep 0.08
           done
           perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js

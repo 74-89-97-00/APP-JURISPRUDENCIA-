@@ -22,7 +22,13 @@ def tmp(nome):
 
 def baixar(url, destino):
     """Baixa um arquivo (segue redirecionamentos). Erro vira exceção."""
-    r = requests.get(url, headers={"User-Agent": UA}, timeout=120, allow_redirects=True)
+    headers = {
+        "User-Agent": UA,
+        "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,"
+                   "application/pdf,image/avif,image/webp,*/*;q=0.8"),
+        "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
+    }
+    r = requests.get(url, headers=headers, timeout=120, allow_redirects=True)
     r.raise_for_status()
     with open(destino, "wb") as f:
         f.write(r.content)

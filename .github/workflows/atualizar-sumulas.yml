@@ -31,16 +31,18 @@ jobs:
 
       - name: Rodar parsers (PDF)
         run: |
-          python scripts/parse_tjsp.py
-          python scripts/parse_tjrj.py
-          python scripts/parse_stj.py
-          python scripts/parse_tst.py
-          python scripts/parse_stf.py
+          # Cada parser é independente: se uma fonte estiver fora/bloquear, registra
+          # aviso e segue (mantém o dado antigo daquele tribunal) sem derrubar o resto.
+          python scripts/parse_tjsp.py || echo "::warning::parse_tjsp falhou (mantido o dado anterior)"
+          python scripts/parse_tjrj.py || echo "::warning::parse_tjrj falhou (mantido o dado anterior)"
+          python scripts/parse_stj.py  || echo "::warning::parse_stj falhou (mantido o dado anterior)"
+          python scripts/parse_tst.py  || echo "::warning::parse_tst falhou (mantido o dado anterior)"
+          python scripts/parse_stf.py  || echo "::warning::parse_stf falhou (mantido o dado anterior)"
 
       - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
         continue-on-error: true
         run: |
-          curl -sL "http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
+          curl -sL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36" -H "Accept-Language: pt-BR,pt;q=0.9,en;q=0.8" "http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
           pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
           pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
           perl scripts/gerar_tst_ojs.pl tst-livro.txt

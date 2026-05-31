@@ -28,6 +28,9 @@ my @FONTES = (
   { path => "tst-sumulas.js", mode => "arr",
     secao => "Súmulas do TST", anchor => "tst", sigla => "TST", rotulo => "Súmula",
     cols => [qw(numero situacao texto)] },
+  { path => "tst-ojs.js", mode => "obj",
+    secao => "Orientações Jurisprudenciais do TST", anchor => "tst-oj", sigla => "TST",
+    rotulo => "Orientação Jurisprudencial" },
   { path => "tjsp-sumulas.js", mode => "arr",
     secao => "Súmulas do TJSP", anchor => "tjsp", sigla => "TJSP", rotulo => "Súmula",
     cols => [qw(numero situacao texto)] },
@@ -96,7 +99,7 @@ sub parse_obj {
     my $b = $1;
     next unless $b =~ /numero\s*:/;
     my %e = (tribunal => $conf->{sigla}, tipo => $conf->{rotulo});
-    for my $campo (qw(numero situacao texto data tema fonte tipo)) {
+    for my $campo (qw(numero situacao texto data tema fonte tipo secao)) {
       if ($b =~ /\b$campo\s*:\s*"((?:[^"\\]|\\.)*)"/) { $e{$campo} = unesc($1); }
     }
     next unless defined $e{numero} && length $e{numero};
@@ -116,7 +119,11 @@ my @secoes;
 my $total = 0;
 for my $conf (@FONTES) {
   my @itens = $conf->{mode} eq "obj" ? parse_obj($conf) : parse_arr($conf);
-  @itens = sort { ($a->{numero} || 0) <=> ($b->{numero} || 0) } @itens;
+  # Ordena por seção (quando houver, caso das OJs) e depois por número.
+  @itens = sort {
+    ($a->{secao} || "") cmp ($b->{secao} || "")
+      || (($a->{numero} || 0) <=> ($b->{numero} || 0))
+  } @itens;
   $total += scalar @itens;
   push @secoes, { conf => $conf, itens => \@itens };
 }
@@ -133,7 +140,9 @@ for my $s (@secoes) {
   $corpo .= sprintf("\n    <section id=\"%s\">\n      <h2>%s</h2>\n",
     $conf->{anchor}, h($conf->{secao}));
   for my $e (@{ $s->{itens} }) {
-    my $cab = sprintf("%s %s do %s", $conf->{rotulo}, $e->{numero}, $e->{tribunal});
+    my $cab = $e->{secao}
+      ? sprintf("%s nº %s (%s) do %s", $conf->{rotulo}, $e->{numero}, $e->{secao}, $e->{tribunal})
+      : sprintf("%s %s do %s", $conf->{rotulo}, $e->{numero}, $e->{tribunal});
     my $situ = $e->{situacao} && $e->{situacao} ne "Vigente"
       ? sprintf(' <span class="situ">(%s)</span>', h($e->{situacao})) : "";
     my @meta;

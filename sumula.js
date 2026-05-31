@@ -43,6 +43,7 @@ function materiaDe(e) {
 function citaLabel(e) {
   if (e.tipo === "Súmula Vinculante") return `Súmula Vinculante ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Súmula") return `Súmula ${e.numero} do ${e.tribunal}`;
+  if (e.tipo === "Orientação Jurisprudencial") return `Orientação Jurisprudencial nº ${e.numero} do ${e.tribunal}${e.secao ? ` (${e.secao})` : ""}`;
   return `${e.tribunal} ${e.numero}`;
 }
 
@@ -98,6 +99,7 @@ function getId() {
 function tipoExtenso(e) {
   if (e.tipo === "Súmula Vinculante") return "Súmula Vinculante";
   if (e.tipo === "Súmula") return "Súmula";
+  if (e.tipo === "Orientação Jurisprudencial") return "Orientação Jurisprudencial";
   return e.tipo || "—";
 }
 function tipoCurto(e) {
@@ -112,7 +114,7 @@ let vizinhos = { prev: null, next: null };
 function renderNav(e) {
   const nav = document.getElementById("sumula-nav");
   const irmas = ENTRIES
-    .filter(x => x.tribunal === e.tribunal)
+    .filter(x => x.tribunal === e.tribunal && x.tipo === e.tipo && (x.secao || "") === (e.secao || ""))
     .sort((a, b) => (parseInt(a.numero, 10) || 0) - (parseInt(b.numero, 10) || 0));
   const idx = irmas.findIndex(x => x.id === e.id);
   const prev = idx > 0 ? irmas[idx - 1] : null;
@@ -162,6 +164,7 @@ function render() {
     <dl class="sumula-info">
       ${linha("Tribunal", escapeHtml(TRIBUNAL_NOME[e.tribunal] || e.tribunal))}
       ${linha("Tipo", escapeHtml(tipoExtenso(e)))}
+      ${linha("Seção", escapeHtml(e.secao))}
       ${linha("Número", escapeHtml(e.numero))}
       ${linha("Situação", escapeHtml(e.situacao))}
       ${linha("Matéria", escapeHtml(materia))}

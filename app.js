@@ -18,6 +18,7 @@ const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ"];
 const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },
+  { id: "Orientação Jurisprudencial", label: "OJ" },
   { id: "Julgado", label: "Julgado" },
 ];
 const MATERIAS = ["Consumidor", "Trabalhista", "Outras"];
@@ -93,6 +94,10 @@ function matches(e) {
 // ---- Ordenação ----
 function porTribunalNumero(a, b) {
   if (a.tribunal !== b.tribunal) return a.tribunal.localeCompare(b.tribunal);
+  // Agrupa por tipo e, dentro de OJ, por seção (SDI-1, SDI-2…) antes do número.
+  if ((a.tipo || "") !== (b.tipo || "")) return (a.tipo || "").localeCompare(b.tipo || "");
+  const sa = a.secao || "", sb = b.secao || "";
+  if (sa !== sb) return sa.localeCompare(sb);
   return (parseInt(a.numero, 10) || 0) - (parseInt(b.numero, 10) || 0);
 }
 function sortFn(a, b) {
@@ -117,7 +122,14 @@ function anyFilterActive() {
 function citaLabel(e) {
   if (e.tipo === "Súmula Vinculante") return `Súmula Vinculante ${e.numero} do ${e.tribunal}`;
   if (e.tipo === "Súmula") return `Súmula ${e.numero} do ${e.tribunal}`;
+  if (e.tipo === "Orientação Jurisprudencial") return `Orientação Jurisprudencial nº ${e.numero} do ${e.tribunal}${e.secao ? ` (${e.secao})` : ""}`;
   return `${e.tribunal} ${e.numero}`;
+}
+
+// Rótulo curto exibido no card (ex.: "OJ SDI-1 17", "Súmula 123").
+function rotuloCard(e) {
+  if (e.tipo === "Orientação Jurisprudencial") return `OJ ${e.secao ? e.secao + " " : ""}${e.numero}`;
+  return `${tipoLabel(e.tipo)} ${e.numero}`;
 }
 
 // ---- Render (paginado: mantém a rolagem/cliques fluidos com milhares de itens) ----
@@ -186,7 +198,7 @@ function buildCard(e) {
     <div class="card-head">
       <div class="card-id">
         <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
-        <span class="card-num">${escapeHtml(tipoLabel(e.tipo))} ${escapeHtml(e.numero)}</span>
+        <span class="card-num">${escapeHtml(rotuloCard(e))}</span>
         <span class="tag tag-materia" data-m="${materia}">${materia}</span>
         ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
         ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}

@@ -37,6 +37,12 @@ jobs:
           python scripts/parse_tst.py
           python scripts/parse_stf.py
 
+      - name: Atualizar OJs do TST (regenera do livro oficial)
+        run: |
+          curl -sL "http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf" -o tst-livro.pdf
+          pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
+          perl scripts/gerar_tst_ojs.pl tst-livro.txt
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

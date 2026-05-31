@@ -28,7 +28,15 @@ def baixar(url, destino):
                    "application/pdf,image/avif,image/webp,*/*;q=0.8"),
         "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
     }
-    r = requests.get(url, headers=headers, timeout=120, allow_redirects=True)
+    try:
+        r = requests.get(url, headers=headers, timeout=120, allow_redirects=True)
+    except requests.exceptions.SSLError:
+        # Alguns servidores (ex.: STF) têm cadeia de certificado incompleta no
+        # runner do CI. Repete sem verificação — é um PDF público, só leitura.
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        r = requests.get(url, headers=headers, timeout=120,
+                         allow_redirects=True, verify=False)
     r.raise_for_status()
     with open(destino, "wb") as f:
         f.write(r.content)

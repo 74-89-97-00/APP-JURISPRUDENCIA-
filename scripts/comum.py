@@ -56,19 +56,41 @@ def _curl(url, destino):
     return r.returncode
 
 
-def baixar(url, destino):
-    """Baixa um arquivo. Tenta direto (curl); se a fonte bloquear (ex.: o TST
-    barra IPs do GitHub Actions), repete via proxy público. Erro vira exceção.
+def _integro(caminho, min_bytes=0, tipo=None):
+    """Valida o arquivo baixado: existe, tem tamanho mínimo e, se for PDF, traz
+    o header %PDF (proxies às vezes truncam ou devolvem uma página HTML)."""
+    if not os.path.exists(caminho) or os.path.getsize(caminho) < min_bytes:
+        return False
+    if tipo == "pdf":
+        try:
+            with open(caminho, "rb") as f:
+                if f.read(4) != b"%PDF":
+                    return False
+        except OSError:
+            return False
+    return True
 
-    Usamos curl e não requests de propósito: alguns WAFs (STF) bloqueiam o
-    requests pela impressão digital TLS mas deixam o curl passar.
+
+def baixar(url, destino, min_bytes=0, tipo=None, tentativas=3):
+    """Baixa um arquivo de forma resiliente. Tenta direto (curl) e, se a fonte
+    bloquear o IP do runner (caso do TST), via proxy público (codetabs) — com
+    algumas TENTATIVAS por fonte e VALIDAÇÃO de integridade (tamanho mínimo e,
+    para PDF, o header %PDF). Isso cobre o proxy que esporadicamente trunca ou
+    devolve HTML. Esgotadas as tentativas sem um arquivo íntegro, lança exceção.
+
+    Usamos curl e não requests de propósito: alguns WAFs (STF) barram o requests
+    pela impressão digital TLS mas deixam o curl passar.
     """
-    rc = _curl(url, destino)
-    if rc != 0:
-        rc = _curl(PROXY + url, destino)
-    if rc != 0:
-        raise RuntimeError("falha ao baixar %s (curl codigo %d)" % (url, rc))
-    return destino
+    ultimo = -1
+    for fonte in (url, PROXY + url):
+        for _ in range(max(1, tentativas)):
+            ultimo = _curl(fonte, destino)
+            if ultimo == 0 and _integro(destino, min_bytes, tipo):
+                return destino
+            if ultimo != 0:
+                break  # fonte indisponível/bloqueada: não insiste, vai ao proxy
+    raise RuntimeError(
+        "falha ao baixar %s (curl %d / integridade)" % (url, ultimo))
 
 
 def pdf_para_texto(pdf, txt):

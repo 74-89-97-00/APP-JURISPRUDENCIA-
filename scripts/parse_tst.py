@@ -106,7 +106,9 @@ def parsear(texto):
 def main():
     pdf = comum.tmp("tst.pdf")
     txt = comum.tmp("tst.txt")
-    comum.baixar(URL, pdf)
+    # min_bytes alto + tipo="pdf": o TST barra o IP do runner (só o proxy
+    # alcança) e o proxy às vezes trunca; só aceita o livro COMPLETO (~3,5 MB).
+    comum.baixar(URL, pdf, min_bytes=3_400_000, tipo="pdf")
     texto = comum.pdf_para_texto(pdf, txt)
     sumulas = parsear(texto)
     if not sumulas:

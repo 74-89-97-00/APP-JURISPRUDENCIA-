@@ -76,7 +76,7 @@ def parsear(texto):
 def main():
     pdf = comum.tmp("stf.pdf")
     txt = comum.tmp("stf.txt")
-    comum.baixar(URL, pdf)
+    comum.baixar(URL, pdf, min_bytes=400_000, tipo="pdf")
     texto = comum.pdf_para_texto(pdf, txt)
     sumulas = parsear(texto)
     if not sumulas:

@@ -63,14 +63,26 @@ sub limpa {
 }
 sub js_str { my ($s)=@_; $s//=""; $s =~ s/\\/\\\\/g; $s =~ s/"/\\"/g; return $s; }
 
-my (@itens,$cur,$started,$hist);
+my (@itens,$cur,$started,$hist,%secmax);
 for my $ln (@lines) {
   $ln =~ s/\r?\n$//;
   last if $ln =~ /^\s*ÍNDICE REMISSIVO/;
   last if $ln =~ /^[ \t\f]*PN-\d/;   # fim das OJs: começam os Precedentes Normativos
   if ($ln =~ $MARK) {
+    my ($tag,$num,$rest) = ($1,$2,$3);
+    # Robustez a versões diferentes do pdftotext: marcadores de OJ também
+    # aparecem em REFERÊNCIAS CRUZADAS no meio do texto (ex.: "OJ-SDI1-123 da
+    # SBDI-I ..."). As OJs REAIS surgem em ordem CRESCENTE por seção; um número
+    # que não avança o máximo da seção é referência cruzada — vira texto da OJ
+    # atual, não uma OJ nova. (Sem isso, o poppler do runner do CI inventava
+    # ~6 OJs falsas: 709 em vez de 703.)
+    if ($started && $cur && defined $secmax{$tag} && $num <= $secmax{$tag}) {
+      push @{$cur->{buf}}, $ln unless $hist;
+      next;
+    }
     push @itens, $cur if $cur;
-    $cur = { sec=>$SEC{$1}, slug=>$SLUG{$1}, num=>$2, buf=>[ $3 ] };
+    $cur = { sec=>$SEC{$tag}, slug=>$SLUG{$tag}, num=>$num, buf=>[ $rest ] };
+    $secmax{$tag} = $num;
     $started=1; $hist=0; next;
   }
   next unless $started && $cur;

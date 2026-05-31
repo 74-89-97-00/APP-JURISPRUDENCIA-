@@ -42,12 +42,34 @@ jobs:
           # então o parser deve voltar a rodar; se a fonte cair, segue sem quebrar.
           python scripts/parse_stf.py  || echo "::warning::parse_stf falhou (mantido o dado anterior)"
 
-      # OBS.: OJs e PNs do TST NÃO são regerados no CI. O TST bloqueia o IP de
-      # datacenter do GitHub (só o proxy público alcança, de forma instável) e o
-      # poppler do runner extrai o layout de modo diferente do local (gera 709
-      # OJs em vez dos 703 reais). Por isso OJ/PN/súmulas do TST são mantidos
-      # AUTORITATIVOS a partir de uma máquina não bloqueada (vide README/memória)
-      # — dados estáveis, regerados sob demanda com os geradores perl.
+      - name: Atualizar OJs e PNs do TST (regenera do livro oficial)
+        continue-on-error: true
+        run: |
+          URL="http://www.tst.jus.br/documents/10157/63003/Livro-Internet.pdf"
+          # O TST barra o IP do runner: tenta direto e, se falhar, via proxy
+          # público (codetabs), repetindo até vir um PDF íntegro.
+          ok=""
+          for tentativa in 1 2 3 4; do
+            for src in "$URL" "https://api.codetabs.com/v1/proxy/?quest=$URL"; do
+              curl -sSL --fail -m 300 -A "Mozilla/5.0" "$src" -o tst-livro.pdf || continue
+              BYTES=$(stat -c%s tst-livro.pdf 2>/dev/null || echo 0)
+              if head -c4 tst-livro.pdf 2>/dev/null | grep -q '%PDF' && [ "$BYTES" -ge 3400000 ]; then
+                ok=1; break 2
+              fi
+            done
+            sleep 5
+          done
+          if [ -z "$ok" ]; then
+            echo "::warning::TST: não obtive o livro COMPLETO (proxy fora/limitado) — OJ/PN mantidos."
+            exit 0
+          fi
+          # O parser de OJ é robusto à versão do pdftotext (guard de ordem
+          # crescente descarta marcadores de referência cruzada), então o
+          # resultado é determinístico (703) independente do poppler do runner.
+          pdftotext -layout -enc UTF-8 tst-livro.pdf tst-livro.txt
+          pdftotext -enc UTF-8 tst-livro.pdf tst-livro-raw.txt
+          perl scripts/gerar_tst_ojs.pl tst-livro.txt
+          perl scripts/gerar_tst_pn.pl tst-livro-raw.txt
 
       - name: Atualizar Repercussão Geral do STF (planilha oficial)
         continue-on-error: true

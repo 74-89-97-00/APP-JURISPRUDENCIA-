@@ -100,6 +100,33 @@ function tipoExtenso(e) {
   if (e.tipo === "Súmula") return "Súmula";
   return e.tipo || "—";
 }
+function tipoCurto(e) {
+  if (e.tipo === "Súmula Vinculante") return "Vinculante";
+  if (e.tipo === "Súmula") return "Súmula";
+  return e.tipo || "";
+}
+
+// Vizinhos (anterior/próxima) dentro do mesmo tribunal, por número.
+let vizinhos = { prev: null, next: null };
+
+function renderNav(e) {
+  const nav = document.getElementById("sumula-nav");
+  const irmas = ENTRIES
+    .filter(x => x.tribunal === e.tribunal)
+    .sort((a, b) => (parseInt(a.numero, 10) || 0) - (parseInt(b.numero, 10) || 0));
+  const idx = irmas.findIndex(x => x.id === e.id);
+  const prev = idx > 0 ? irmas[idx - 1] : null;
+  const next = idx >= 0 && idx < irmas.length - 1 ? irmas[idx + 1] : null;
+  vizinhos = { prev: prev ? prev.id : null, next: next ? next.id : null };
+
+  const btn = (it, dir) => {
+    if (!it) return '<span class="nav-btn nav-empty" aria-hidden="true"></span>';
+    const rotulo = `${tipoCurto(it)} ${it.numero}`;
+    const txt = dir === "prev" ? `‹ ${rotulo}` : `${rotulo} ›`;
+    return `<a class="nav-btn nav-${dir}" href="sumula.html?id=${encodeURIComponent(it.id)}">${escapeHtml(txt)}</a>`;
+  };
+  nav.innerHTML = btn(prev, "prev") + btn(next, "next");
+}
 
 function linha(dt, dd) {
   return dd ? `<dt>${dt}</dt><dd>${dd}</dd>` : "";
@@ -160,6 +187,8 @@ function render() {
 
   document.getElementById("copy").addEventListener("click", (ev) => copiar(e, ev.currentTarget));
 
+  renderNav(e);
+
   const shareBtn = document.getElementById("share");
   shareBtn.addEventListener("click", async () => {
     const url = location.href;
@@ -184,6 +213,13 @@ function wireVoltar() {
     }
   });
 }
+
+// Setas ← → navegam entre súmulas (fora de campos de texto).
+document.addEventListener("keydown", (ev) => {
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")) return;
+  if (ev.key === "ArrowLeft" && vizinhos.prev) location.href = "sumula.html?id=" + encodeURIComponent(vizinhos.prev);
+  if (ev.key === "ArrowRight" && vizinhos.next) location.href = "sumula.html?id=" + encodeURIComponent(vizinhos.next);
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   const themeBtn = document.getElementById("theme-toggle");

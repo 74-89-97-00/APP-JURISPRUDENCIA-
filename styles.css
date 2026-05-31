@@ -410,6 +410,52 @@ html[data-theme="dark"] .to-top { color: #0f1115; }
   background: var(--surface-2); text-decoration: none;
 }
 .star { padding: 5px 8px; margin: -5px -6px -5px 0; }
+.card { cursor: pointer; }
+.abrir-hint { margin-left: auto; color: var(--muted); font-weight: 500; }
+.card:hover .abrir-hint { color: var(--accent); }
+
+/* ---- Leitura ampliada (modal) ---- */
+.detail {
+  position: fixed; inset: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.detail-backdrop { position: absolute; inset: 0; background: rgba(12, 16, 22, 0.55); }
+.detail-panel {
+  position: relative; z-index: 1; width: 100%; max-width: 640px; max-height: 88vh; overflow: auto;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); padding: 26px 28px;
+}
+.detail-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; background: var(--surface-2); color: var(--muted);
+  font-size: 0.85rem; cursor: pointer; display: grid; place-items: center;
+}
+.detail-close:hover { background: var(--border); color: var(--text); }
+.detail-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; padding-right: 40px;
+}
+.detail-tags { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.detail-num {
+  font-family: var(--serif); font-size: 1.5rem; font-weight: 600;
+  color: var(--text); margin: 14px 0 0; line-height: 1.25;
+}
+.detail-title { margin: 12px 0 0; font-weight: 600; color: var(--text); }
+.detail-text { margin: 16px 0 0; font-size: 1.05rem; line-height: 1.75; color: var(--card-text); }
+.detail-meta { margin: 18px 0 0; color: var(--muted); font-size: 0.85rem; }
+.detail-actions {
+  margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border);
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.detail-btn {
+  padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--accent); font-weight: 600; font-size: 0.9rem;
+  cursor: pointer; text-decoration: none; font-family: var(--sans);
+}
+.detail-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+.detail-btn.ok { color: var(--stj); border-color: var(--stj); }
+body.no-scroll { overflow: hidden; }
 
 @media (min-width: 680px) {
   .topbar-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }

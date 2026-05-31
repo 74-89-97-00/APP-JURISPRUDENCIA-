@@ -171,20 +171,12 @@ function updateFiltersBadge() {
                : (t.textContent = n ? `Filtros (${n})` : "Filtros");
 }
 
-function toggleExpand(li) {
-  const txt = li.querySelector(".card-text");
-  const moreBtn = li.querySelector(".more-btn");
-  txt.classList.toggle("clamp");
-  const clamped = txt.classList.contains("clamp");
-  moreBtn.textContent = clamped ? "ver mais" : "ver menos";
-  li.classList.toggle("expanded", !clamped);
-}
-
 function buildCard(e) {
   const q = state.query;
   const li = document.createElement("li");
   li.className = "card";
   li.dataset.tribunal = e.tribunal;
+  li.dataset.id = e.id;
   const fav = state.favoritos.has(e.id);
   const cancelada = /cancel/i.test(e.situacao || "");
   const superada = /superad/i.test(e.situacao || "");
@@ -206,18 +198,17 @@ function buildCard(e) {
     <div class="card-foot">
       ${e.tema ? `<span class="foot-tema">${escapeHtml(e.tema)}</span>` : ""}
       ${e.data ? `<span>${escapeHtml(e.data)}</span>` : ""}
-      <button class="more-btn" type="button">ver mais</button>
+      <span class="abrir-hint">abrir ›</span>
       <button class="copy-btn" type="button" title="Copiar citação e texto">copiar</button>
       ${e.fonte ? `<a href="${escapeHtml(e.fonte)}" target="_blank" rel="noopener">fonte</a>` : ""}
     </div>`;
 
-  li.querySelector(".star").addEventListener("click", (ev) => { ev.stopPropagation(); toggleFav(e.id, li); });
-  li.querySelector(".more-btn").addEventListener("click", (ev) => { ev.stopPropagation(); toggleExpand(li); });
+  li.querySelector(".star").addEventListener("click", (ev) => { ev.stopPropagation(); toggleFav(e); });
   li.querySelector(".copy-btn").addEventListener("click", (ev) => { ev.stopPropagation(); copiar(e, ev.currentTarget); });
-  // Clicar em qualquer lugar do card (menos botões/links) expande o texto.
+  // Clicar em qualquer lugar do card (menos botões/links) abre a leitura ampliada.
   li.addEventListener("click", (ev) => {
     if (ev.target.closest("button, a")) return;
-    toggleExpand(li);
+    openDetail(e);
   });
   return li;
 }
@@ -227,18 +218,82 @@ function tipoLabel(tipo) {
   return t ? t.label : (tipo || "");
 }
 
-function toggleFav(id, li) {
+function toggleFav(e) {
+  const id = e.id;
   if (state.favoritos.has(id)) state.favoritos.delete(id);
   else state.favoritos.add(id);
   saveFavoritos();
   const on = state.favoritos.has(id);
+  const sel = (typeof CSS !== "undefined" && CSS.escape) ? CSS.escape(id) : id;
+  const li = document.querySelector(`.card[data-id="${sel}"]`);
   if (li) {
-    const star = li.querySelector(".star");
-    star.classList.toggle("on", on);
-    star.textContent = on ? "★" : "☆";
+    const s = li.querySelector(".star");
+    s.classList.toggle("on", on);
+    s.textContent = on ? "★" : "☆";
+  }
+  if (detailEntry && detailEntry.id === id) {
+    const ms = document.getElementById("detail-star");
+    if (ms) { ms.classList.toggle("on", on); ms.textContent = on ? "★" : "☆"; }
   }
   // Só re-filtra quando a mudança afeta o que aparece/ordem.
   if (state.onlyFav || state.sort === "fav") applyFilters({ scroll: false });
+}
+
+// ---- Leitura ampliada (modal) ----
+let detailEntry = null;
+
+function openDetail(e) {
+  detailEntry = e;
+  const cancelada = /cancel/i.test(e.situacao || "");
+  const superada = /superad/i.test(e.situacao || "");
+  const materia = materiaDe(e);
+  const fav = state.favoritos.has(e.id);
+
+  document.getElementById("detail-tags").innerHTML =
+    `<span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>` +
+    `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` +
+    (cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : "") +
+    (superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : "");
+
+  document.getElementById("detail-num").textContent = citaLabel(e);
+
+  const titleEl = document.getElementById("detail-title");
+  if (e.titulo) { titleEl.textContent = e.titulo; titleEl.hidden = false; }
+  else titleEl.hidden = true;
+
+  document.getElementById("detail-text").textContent = e.texto || "";
+
+  const meta = [];
+  if (e.tema) meta.push(e.tema);
+  if (e.data) meta.push(e.data);
+  if (e.situacao) meta.push("Situação: " + e.situacao);
+  document.getElementById("detail-meta").textContent = meta.join(" · ");
+
+  const star = document.getElementById("detail-star");
+  star.classList.toggle("on", fav);
+  star.textContent = fav ? "★" : "☆";
+
+  const fonte = document.getElementById("detail-fonte");
+  if (e.fonte) { fonte.href = e.fonte; fonte.hidden = false; } else fonte.hidden = true;
+
+  const copy = document.getElementById("detail-copy");
+  copy.textContent = "Copiar citação";
+  copy.classList.remove("ok", "err");
+
+  const d = document.getElementById("detail");
+  d.hidden = false;
+  d.setAttribute("aria-hidden", "false");
+  document.body.classList.add("no-scroll");
+  d.querySelector(".detail-panel").scrollTop = 0;
+  d.querySelector(".detail-close").focus();
+}
+
+function closeDetail() {
+  const d = document.getElementById("detail");
+  d.hidden = true;
+  d.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("no-scroll");
+  detailEntry = null;
 }
 
 // ---- Copiar citação ----
@@ -349,12 +404,27 @@ function init() {
   if (clearSearch) clearSearch.addEventListener("click", () => {
     search.value = ""; state.query = ""; syncClearSearch(); applyFilters(); search.focus();
   });
-  // Atalho "/" foca a busca.
+  // Atalhos de teclado: "/" foca a busca; Esc fecha a leitura ampliada.
   document.addEventListener("keydown", (ev) => {
-    if (ev.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")) {
+    const detail = document.getElementById("detail");
+    if (ev.key === "Escape" && detail && !detail.hidden) { closeDetail(); return; }
+    if (ev.key === "/" && (!detail || detail.hidden) &&
+        !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || "")) {
       ev.preventDefault(); search.focus();
     }
   });
+
+  // Leitura ampliada (modal): fechar ao clicar no fundo/✕; copiar; favoritar.
+  const detail = document.getElementById("detail");
+  if (detail) {
+    detail.addEventListener("click", (ev) => { if (ev.target.closest("[data-close]")) closeDetail(); });
+    document.getElementById("detail-copy").addEventListener("click", (ev) => {
+      if (detailEntry) copiar(detailEntry, ev.currentTarget);
+    });
+    document.getElementById("detail-star").addEventListener("click", () => {
+      if (detailEntry) toggleFav(detailEntry);
+    });
+  }
 
   const favBtn = document.getElementById("fav-toggle");
   favBtn.addEventListener("click", () => {

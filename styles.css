@@ -140,6 +140,32 @@ html[data-theme="dark"] .brand-mark { color: #0f1115; }
 }
 .icon-btn:hover { border-color: var(--accent); }
 
+.install-btn {
+  flex-shrink: 0;
+  background: var(--accent); color: #fff; border: none;
+  padding: 9px 14px; border-radius: var(--radius-sm);
+  font-family: var(--sans); font-weight: 600; font-size: 0.85rem;
+  cursor: pointer; white-space: nowrap;
+}
+html[data-theme="dark"] .install-btn { color: #0f1115; }
+.install-btn:hover { background: var(--accent-strong); }
+
+.ios-install {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 60; width: calc(100% - 32px); max-width: 460px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-hover);
+  padding: 16px 42px 16px 18px; color: var(--text); font-size: 0.9rem; line-height: 1.5;
+}
+.ios-install p { margin: 0; }
+.ios-install-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: none; background: var(--surface-2); color: var(--muted);
+  cursor: pointer; font-size: 0.8rem; display: grid; place-items: center;
+}
+.ios-install-close:hover { background: var(--border); color: var(--text); }
+
 .search-wrap { width: 100%; }
 #search {
   width: 100%;

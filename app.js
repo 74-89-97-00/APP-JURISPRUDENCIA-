@@ -334,6 +334,53 @@ function makeChip(label, onClick) {
 }
 function toggleSet(set, v) { set.has(v) ? set.delete(v) : set.add(v); }
 
+// ---- Instalar (PWA) ----
+let promptInstalar = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  promptInstalar = e;
+  const b = document.getElementById("install-btn");
+  if (b) b.hidden = false;
+});
+window.addEventListener("appinstalled", () => {
+  promptInstalar = null;
+  const b = document.getElementById("install-btn");
+  if (b) b.hidden = true;
+  const ios = document.getElementById("ios-install");
+  if (ios) ios.hidden = true;
+});
+
+function ehIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+function jaInstalado() {
+  return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+}
+function initInstall() {
+  const btn = document.getElementById("install-btn");
+  if (!btn) return;
+  if (jaInstalado()) { btn.hidden = true; return; }
+  // iOS não dispara beforeinstallprompt: mostra o botão com instruções.
+  if (ehIOS()) btn.hidden = false;
+  btn.addEventListener("click", async () => {
+    if (promptInstalar) {
+      promptInstalar.prompt();
+      await promptInstalar.userChoice;
+      promptInstalar = null;
+      btn.hidden = true;
+    } else {
+      const ios = document.getElementById("ios-install");
+      if (ios) ios.hidden = false;
+    }
+  });
+  const close = document.getElementById("ios-install-close");
+  if (close) close.addEventListener("click", () => {
+    const ios = document.getElementById("ios-install");
+    if (ios) ios.hidden = true;
+  });
+}
+
 // ---- Init ----
 function init() {
   buildChips();
@@ -380,6 +427,8 @@ function init() {
   const themeBtn = document.getElementById("theme-toggle");
   if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
   syncThemeBtn();
+
+  initInstall();
 
   const filtersToggle = document.getElementById("filters-toggle");
   const filtersNav = document.getElementById("filters");

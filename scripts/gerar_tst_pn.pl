@@ -26,17 +26,17 @@ sub limpa {
   $t =~ s/\((?:inserid[ao]|cancelad[ao]|revogad[ao]|alterad[ao]|republicad[ao]|nova\s+redação|redação|convertid[ao]|incorporad[ao]|mantid[ao]|homolog[^)]*|ex-OJs?|ex-Súmula|DJ|DEJT)[^)]*\)//gi;
   $t =~ s/[-–—]?\s*Res\.?\s*\d+\/\d+[\s,;]*(?:(?:DJ|DEJT)\b[\d.,\seEº°]*?\d{4})?[.\s]*//gi;
   $t =~ s/[-–—]?\s*(?:DJ|DEJT)\s+divulgad[ao]\s+em\s+[\d.,\seEº°]*?\d{4}//gi;
-  # hifenização que o -layout deixou no MEIO da linha (coluna mesclada, sem
-  # quebra real): "trabalha- dor" -> "trabalhador", "(positi- vo)" ->
-  # "(positivo)". Só minúscula-hífen-espaço-minúscula (traços de verdade vêm
-  # com espaço dos DOIS lados, "x - y", então não casam aqui).
-  $t =~ s/(\p{Ll})-\s+(\p{Ll})/$1$2/g;
   $t =~ s/\bPrecedentes\s+Normativos\b//gi;
   # No -layout, o cabeçalho de página "PRECEDENTES NORMATIVOS" (centralizado)
   # vaza no meio do texto, inteiro ou partido. Remove as palavras em CAIXA ALTA
   # (nenhum enunciado/título de PN as contém isoladamente em maiúsculas).
   $t =~ s/\bPRECEDENTES\b//g;
   $t =~ s/\bNORMATIVOS\b//g;
+  # SÓ AGORA (após remover o cabeçalho de página, que podia estar ENTRE o hífen
+  # e a continuação) junta a hifenização de meio de linha do -layout:
+  # "trabalha-  dor" -> "trabalhador". Só minúscula-hífen-espaços-minúscula
+  # (traços de verdade vêm com espaço dos DOIS lados, "x - y").
+  $t =~ s/(\p{Ll})-\s+(\p{Ll})/$1$2/g;
   $t =~ s/\s+/ /g;
   $t =~ s/\s+([.,;:])/$1/g;
   $t =~ s/\(\s*\)//g;

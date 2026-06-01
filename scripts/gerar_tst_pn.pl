@@ -30,7 +30,7 @@ sub limpa {
   # quebra real): "trabalha- dor" -> "trabalhador", "(positi- vo)" ->
   # "(positivo)". Só minúscula-hífen-espaço-minúscula (traços de verdade vêm
   # com espaço dos DOIS lados, "x - y", então não casam aqui).
-  $t =~ s/(\p{Ll})- (\p{Ll})/$1$2/g;
+  $t =~ s/(\p{Ll})-\s+(\p{Ll})/$1$2/g;
   $t =~ s/\bPrecedentes\s+Normativos\b//gi;
   # No -layout, o cabeçalho de página "PRECEDENTES NORMATIVOS" (centralizado)
   # vaza no meio do texto, inteiro ou partido. Remove as palavras em CAIXA ALTA

@@ -182,8 +182,14 @@ jobs:
           REL=$(grep -oiE 'href="[^"]*enunciado[^"]*\.pdf[^"]*"' tjmg-lista.html | head -1 | sed -E 's/.*href="//; s/"$//; s/&amp;/\&/g')
           PDFURL=$(printf '%s' "$REL" | sed -E 's#^https://www\.tjmg\.jus\.br/#https://www-tjmg-jus-br.translate.goog/#; s#^(\.\./)+#https://www-tjmg-jus-br.translate.goog/#')
           echo "PDF TJMG: $PDFURL"
-          [ -n "$PDFURL" ] && curl -sL -m 180 --compressed -A "$UA" "$PDFURL" -o tjmg.pdf || true
-          if ! head -c4 tjmg.pdf 2>/dev/null | grep -q '%PDF'; then
+          ok=""
+          for try in 1 2 3; do
+            [ -n "$PDFURL" ] && curl -sL -m 180 -A "$UA" -H 'Accept: application/pdf,*/*' "$PDFURL" -o tjmg.pdf || true
+            if head -c4 tjmg.pdf 2>/dev/null | grep -q '%PDF'; then ok=1; break; fi
+            echo "tentativa $try: tjmg.pdf = $(stat -c%s tjmg.pdf 2>/dev/null || echo 0) bytes; início: $(head -c 90 tjmg.pdf 2>/dev/null | tr -d '\000' | tr '\n' ' ')"
+            sleep 4
+          done
+          if [ -z "$ok" ]; then
             echo "::warning::TJMG: PDF não obtido (proxy fora/URL mudou) — súmulas mantidas."; exit 0
           fi
           pdftotext -layout -enc UTF-8 tjmg.pdf tjmg.txt

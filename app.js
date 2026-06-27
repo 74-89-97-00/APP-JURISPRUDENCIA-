@@ -14,7 +14,7 @@ const state = {
   favoritos: new Set(loadFavoritos()),
 };
 
-const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ"];
+const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES"];
 const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },

@@ -59,8 +59,28 @@ for my $p (@$arr) {
   $sum{$num} = [$situ, $texto];
 }
 
+my $novas = scalar keys %sum;
+
+# INCREMENTAL: preserva as súmulas já gravadas que não vieram nesta coleta
+# (o proxy do Google às vezes derruba um post). Assim nunca encolhe.
+my $antes = 0;
+if (-e $SAIDA) {
+  open my $ex, "<:encoding(UTF-8)", $SAIDA or die "abrir $SAIDA: $!";
+  local $/ = "\n";   # o JSON acima deixou $/ em modo slurp; volta a ler por linha
+  while (my $l = <$ex>) {
+    next unless $l =~ /^\s*\["(\d+)","([^"]*)","((?:[^"\\]|\\.)*)"\]/;
+    my ($n, $s, $t) = ($1, $2, $3);
+    $antes++;
+    next if $sum{$n};            # já veio (atualizada) nesta coleta
+    $t =~ s/\\(.)/$1/g;           # desescapa para reescrever com js_str
+    $sum{$n} = [$s, $t];
+  }
+  close $ex;
+}
+
 my @nums = sort { $a <=> $b } keys %sum;
 die "[TJES] poucas súmulas (" . scalar(@nums) . "); abortando para não sobrescrever.\n" if @nums < 10;
+die "[TJES] encolheu ($antes -> " . scalar(@nums) . "); abortando.\n" if $antes && @nums < $antes;
 
 open my $o, ">:encoding(UTF-8)", $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Súmulas do TJES. Situação conforme fonte; conferir no portal do TJES antes de citar.\n";
@@ -79,4 +99,4 @@ print $o "})();\n";
 close $o;
 
 my %c; $c{$sum{$_}[0]}++ for @nums;
-print "[TJES] $SAIDA: ", scalar(@nums), " súmulas (", join(", ", map {"$_: $c{$_}"} sort keys %c), ").\n";
+print "[TJES] $SAIDA: ", scalar(@nums), " súmulas ($novas nesta coleta, $antes no arquivo) (", join(", ", map {"$_: $c{$_}"} sort keys %c), ").\n";

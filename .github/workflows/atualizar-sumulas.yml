@@ -167,50 +167,54 @@ jobs:
           curl -s -A "Mozilla/5.0" -b jar -e "$B" "$B/resource/$R/download/temas.csv" -o stj-temas.csv
           perl scripts/gerar_stj_rep.pl stj-temas.csv
 
-      - name: Atualizar Súmulas do TJMG (PDF oficial de enunciados)
+      - name: Atualizar Súmulas do TJMG (PDF oficial via proxy do Google)
         continue-on-error: true
         run: |
-          # Leque completo de headers de navegador + -k: o que destravou o WAF
-          # do STF do IP de datacenter. tjmg.jus.br barra curl "cru".
+          # tjmg.jus.br bloqueia IPs de nuvem (até de proxies). O proxy do Google
+          # Tradutor (translate.goog) busca a página do IP do Google (liberado) e
+          # passa o PDF BINÁRIO sem traduzir. Descoberto em 2026-06-07.
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
-               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
-               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
-               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
-               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
-          LISTA="https://www.tjmg.jus.br/portal-tjmg/jurisprudencia/consulta-de-jurisprudencia/lista-de-sumulas.htm"
-          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "$LISTA" -o tjmg-lista.html || true
-          echo "lista do TJMG: $(stat -c%s tjmg-lista.html 2>/dev/null || echo 0) bytes"
-          # acha o PDF "Todos os enunciados" e resolve a URL (href é relativo ../../../)
-          REL=$(grep -oiE 'href="[^"]*enunciado[^"]*\.pdf"' tjmg-lista.html | head -1 | sed -E 's/.*href="//; s/"$//')
-          PDFURL=$(printf '%s' "$REL" | sed -E 's#^(\.\./)+#https://www.tjmg.jus.br/#')
-          echo "PDF do TJMG: $PDFURL"
-          [ -n "$PDFURL" ] && curl -sL -k -m 120 --compressed -A "$UA" "${HDR[@]}" "$PDFURL" -o tjmg.pdf || true
+          TR='https://www-tjmg-jus-br.translate.goog'
+          LISTA="$TR/portal-tjmg/jurisprudencia/consulta-de-jurisprudencia/lista-de-sumulas.htm?_x_tr_sl=pt&_x_tr_tl=en&_x_tr_hl=en"
+          curl -sL -m 90 --compressed -A "$UA" "$LISTA" -o tjmg-lista.html || true
+          echo "lista TJMG (translate): $(stat -c%s tjmg-lista.html 2>/dev/null || echo 0) bytes"
+          # href do PDF (já reescrito p/ translate.goog na página); decodifica &amp;
+          REL=$(grep -oiE 'href="[^"]*enunciado[^"]*\.pdf[^"]*"' tjmg-lista.html | head -1 | sed -E 's/.*href="//; s/"$//; s/&amp;/\&/g')
+          PDFURL=$(printf '%s' "$REL" | sed -E 's#^https://www\.tjmg\.jus\.br/#https://www-tjmg-jus-br.translate.goog/#; s#^(\.\./)+#https://www-tjmg-jus-br.translate.goog/#')
+          echo "PDF TJMG: $PDFURL"
+          [ -n "$PDFURL" ] && curl -sL -m 180 --compressed -A "$UA" "$PDFURL" -o tjmg.pdf || true
           if ! head -c4 tjmg.pdf 2>/dev/null | grep -q '%PDF'; then
-            echo "::warning::TJMG: não obtive o PDF (bloqueio/URL mudou) — súmulas mantidas."; exit 0
+            echo "::warning::TJMG: PDF não obtido (proxy fora/URL mudou) — súmulas mantidas."; exit 0
           fi
           pdftotext -layout -enc UTF-8 tjmg.pdf tjmg.txt
           perl scripts/gerar_tjmg.pl tjmg.txt
 
-      - name: Atualizar Súmulas do TJES (posts wp-json)
+      - name: Atualizar Súmulas do TJES (wp-json via proxy do Google)
         continue-on-error: true
         run: |
+          # tjes.jus.br também bloqueia nuvem. Via translate.goog, o wp-json
+          # (JSON) volta VERBATIM em português (Google não traduz JSON). Busca
+          # cada post por path simples (a query ?include= confunde o proxy).
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
-               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
-               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
-               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
-               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
-          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "https://www.tjes.jus.br/sumulas/" -o tjes-idx.html || true
-          echo "índice do TJES: $(stat -c%s tjes-idx.html 2>/dev/null || echo 0) bytes"
-          # IDs dos posts de súmula (links ?post_type=post&p=NNNN no índice)
-          IDS=$(grep -oE 'post_type=post&p=[0-9]+' tjes-idx.html | grep -oE '[0-9]+$' | awk '!seen[$0]++' | paste -sd,)
-          if [ -z "$IDS" ]; then echo "::warning::TJES: nenhum post de súmula no índice — mantidas."; exit 0; fi
-          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" \
-            "https://www.tjes.jus.br/wp-json/wp/v2/posts?include=$IDS&per_page=50&_fields=id,title,content" \
-            -o tjes-posts.json || true
+          TR='https://www-tjes-jus-br.translate.goog'
+          curl -sL -m 90 --compressed -A "$UA" "$TR/sumulas/?_x_tr_sl=pt&_x_tr_tl=en&_x_tr_hl=en" -o tjes-idx.html || true
+          echo "índice TJES (translate): $(stat -c%s tjes-idx.html 2>/dev/null || echo 0) bytes"
+          IDS=$(grep -oE 'p=[0-9]{4,}|p%3D[0-9]{4,}' tjes-idx.html | grep -oE '[0-9]+' | sort -un)
+          if [ -z "$IDS" ]; then echo "::warning::TJES: sem IDs de post no índice — mantidas."; exit 0; fi
+          echo "[" > tjes-posts.json; first=1
+          for id in $IDS; do
+            for try in 1 2 3; do
+              J=$(curl -sL -m 30 --compressed -A "$UA" "$TR/wp-json/wp/v2/posts/$id?_x_tr_sl=pt&_x_tr_tl=en")
+              if printf '%s' "$J" | head -c1 | grep -q '{'; then
+                [ $first -eq 0 ] && echo "," >> tjes-posts.json
+                printf '%s' "$J" >> tjes-posts.json; first=0; break
+              fi
+              sleep 1
+            done
+            sleep 0.2
+          done
+          echo "]" >> tjes-posts.json
+          # parser é INCREMENTAL: se o proxy derrubar um post, preserva o que já existe.
           perl scripts/gerar_tjes.pl tjes-posts.json
 
       - name: Gerar página estática (dados.html)

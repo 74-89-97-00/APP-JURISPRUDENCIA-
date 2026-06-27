@@ -824,5 +824,5 @@ window.ENTRIES = (window.ENTRIES || []).concat([
   { id: "stf-rg-1452", tribunal: "STF", tipo: "Repercussão Geral", numero: "1452", situacao: "Vigente", titulo: "Possibilidade de penhora do único bem residencial da família, alugado a terceiros, ante à alegação de que a renda se destina para subsistência ou moradia.", fonte: "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=1452",
     texto: "É infraconstitucional e fática, a ela aplicando-se os efeitos da ausência de repercussão geral, a co..." },
   { id: "stf-rg-1456", tribunal: "STF", tipo: "Repercussão Geral", numero: "1456", situacao: "Vigente", titulo: "Prazo prescricional para ações indenizatórias contra a União decorrentes da política de isolamento compulsório de pessoas com hanseníase.", fonte: "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=1456",
-    texto: "Prescrevem em 5 anos, a contar da publicação da ata de julgamento da ADPF 1.060, as pretensões de in..." },
+    texto: "Prescrevem em 5 anos, a contar da publicação da ata de julgamento da ADPF 1.060, as pretensões de in..." }
 ]);

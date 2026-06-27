@@ -170,15 +170,23 @@ jobs:
       - name: Atualizar Súmulas do TJMG (PDF oficial de enunciados)
         continue-on-error: true
         run: |
+          # Leque completo de headers de navegador + -k: o que destravou o WAF
+          # do STF do IP de datacenter. tjmg.jus.br barra curl "cru".
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          HDR=(-H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8' -H 'Sec-Fetch-Mode: navigate')
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
           LISTA="https://www.tjmg.jus.br/portal-tjmg/jurisprudencia/consulta-de-jurisprudencia/lista-de-sumulas.htm"
           curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "$LISTA" -o tjmg-lista.html || true
+          echo "lista do TJMG: $(stat -c%s tjmg-lista.html 2>/dev/null || echo 0) bytes"
           # acha o PDF "Todos os enunciados" e resolve a URL (href é relativo ../../../)
           REL=$(grep -oiE 'href="[^"]*enunciado[^"]*\.pdf"' tjmg-lista.html | head -1 | sed -E 's/.*href="//; s/"$//')
           PDFURL=$(printf '%s' "$REL" | sed -E 's#^(\.\./)+#https://www.tjmg.jus.br/#')
           echo "PDF do TJMG: $PDFURL"
-          curl -sL -k -m 120 --compressed -A "$UA" "${HDR[@]}" "$PDFURL" -o tjmg.pdf || true
+          [ -n "$PDFURL" ] && curl -sL -k -m 120 --compressed -A "$UA" "${HDR[@]}" "$PDFURL" -o tjmg.pdf || true
           if ! head -c4 tjmg.pdf 2>/dev/null | grep -q '%PDF'; then
             echo "::warning::TJMG: não obtive o PDF (bloqueio/URL mudou) — súmulas mantidas."; exit 0
           fi
@@ -189,11 +197,18 @@ jobs:
         continue-on-error: true
         run: |
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          curl -sL -m 60 --compressed -A "$UA" "https://www.tjes.jus.br/sumulas/" -o tjes-idx.html || true
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
+          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "https://www.tjes.jus.br/sumulas/" -o tjes-idx.html || true
+          echo "índice do TJES: $(stat -c%s tjes-idx.html 2>/dev/null || echo 0) bytes"
           # IDs dos posts de súmula (links ?post_type=post&p=NNNN no índice)
           IDS=$(grep -oE 'post_type=post&p=[0-9]+' tjes-idx.html | grep -oE '[0-9]+$' | awk '!seen[$0]++' | paste -sd,)
           if [ -z "$IDS" ]; then echo "::warning::TJES: nenhum post de súmula no índice — mantidas."; exit 0; fi
-          curl -sL -m 60 --compressed -A "$UA" \
+          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" \
             "https://www.tjes.jus.br/wp-json/wp/v2/posts?include=$IDS&per_page=50&_fields=id,title,content" \
             -o tjes-posts.json || true
           perl scripts/gerar_tjes.pl tjes-posts.json

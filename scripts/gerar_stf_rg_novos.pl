@@ -1,12 +1,16 @@
 #!/usr/bin/perl
-# Gera data/stf-rg-novos.js — Temas de Repercussão Geral do STF que NÃO estão na
-# planilha oficial (gap de temas <=1100 julgados após 2020 + temas recentes
-# >1100), raspados um a um do portal (listarProcesso.asp?numeroTemaInicial=N),
-# que é a única forma confiável (o portal capa buscas em lote).
+# Gera/atualiza data/stf-rg-novos.js — Temas de Repercussão Geral do STF que NÃO
+# estão na planilha oficial (gap de temas <=1100 julgados após 2020 + temas
+# recentes >1100), raspados um a um do portal (listarProcesso.asp?numeroTemaInicial=N).
+#
+# INCREMENTAL: preserva os temas já gravados e só MESCLA os que vierem no HTML
+# desta vez (acrescenta novos da fronteira e atualiza os raspados). Assim o
+# workflow só precisa raspar a JANELA recente (~últimas centenas), não 1..1550.
+# Temas antigos (<=~1456) já estão firmados e não mudam.
 #
 # Uso: arg1 = HTML concatenado das respostas; arg2 = data/stf-rg.js (p/ excluir
 # os temas que a planilha já cobre, preservando o ramo do direito daqueles).
-#   for n in $(seq 1 1550); do
+#   MAX=$(maior tema conhecido); for n in $(seq $((MAX-40)) $((MAX+120))); do
 #     curl ... "listarProcesso.asp?numeroTemaInicial=$n" >> stf-portal.html; done
 #   perl scripts/gerar_stf_rg_novos.pl stf-portal.html data/stf-rg.js
 #
@@ -16,8 +20,8 @@ use warnings;
 use utf8;
 binmode STDOUT, ":encoding(UTF-8)";
 
-my $HTML = $ARGV[0] or die "uso: perl gerar_stf_rg_novos.pl <html> [stf-rg.js]\n";
-my $BASE = $ARGV[1];   # opcional: stf-rg.js para excluir temas já cobertos
+my $HTML  = $ARGV[0] or die "uso: perl gerar_stf_rg_novos.pl <html> [stf-rg.js]\n";
+my $BASE  = $ARGV[1];   # opcional: stf-rg.js para excluir temas já cobertos
 my $SAIDA = "data/stf-rg-novos.js";
 
 my %exclui;
@@ -26,9 +30,6 @@ if ($BASE && -e $BASE) {
   while (my $l = <$b>) { $exclui{$1} = 1 while $l =~ /stf-rg-(\d+)"/g; }
   close $b;
 }
-
-open my $fh, "<:encoding(UTF-8)", $HTML or die "não abriu $HTML: $!";
-local $/; my $t = <$fh>; close $fh;
 
 sub limpa_html {
   my ($s) = @_; $s //= "";
@@ -40,7 +41,30 @@ sub limpa_html {
 }
 sub js_str { my ($s)=@_; $s//=""; $s =~ s/\\/\\\\/g; $s =~ s/"/\\"/g; $s =~ s/\s+/ /g; $s =~ s/^\s+|\s+$//g; return $s; }
 
-my @out; my %visto;
+sub bloco {
+  my ($num, $situ, $titulo, $tese) = @_;
+  my $fonte = "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=$num";
+  return sprintf(
+    "  { id: \"stf-rg-%s\", tribunal: \"STF\", tipo: \"Repercussão Geral\", numero: \"%s\", situacao: \"%s\", titulo: \"%s\", fonte: \"%s\",\n    texto: \"%s\" }",
+    $num, $num, $situ, $titulo, $fonte, $tese);
+}
+
+# 1) Preserva o que já existe (incremental). Guarda o bloco bruto por número.
+my %entries;   # num => bloco (sem vírgula final)
+if (-e $SAIDA) {
+  open my $s, "<:encoding(UTF-8)", $SAIDA or die "não abriu $SAIDA: $!";
+  local $/; my $cont = <$s>; close $s;
+  while ($cont =~ /(  \{ id: "stf-rg-(\d+)",.*?\n    texto: "(?:[^"\\]|\\.)*" \})/gs) {
+    $entries{$2} = $1;
+  }
+}
+my $antes = scalar keys %entries;
+
+# 2) Mescla os temas vindos no HTML desta raspagem (acrescenta/atualiza).
+open my $fh, "<:encoding(UTF-8)", $HTML or die "não abriu $HTML: $!";
+local $/; my $t = <$fh>; close $fh;
+
+my $mesclados = 0;
 while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
   my $row = $1;
   my @td = ($row =~ /<td[^>]*>(.*?)<\/td>/gs);
@@ -48,7 +72,6 @@ while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
   my ($num) = $row =~ /numeroTema=(\d+)/;
   next unless defined $num;
   next if $exclui{$num};            # já está na planilha (preserva o ramo de lá)
-  next if $visto{$num}++;
 
   my $titulo = limpa_html($td[1]);
   $titulo =~ s/\s*Ver Descrição.*$//s;        # tira o "Ver Descrição" + descrição
@@ -58,22 +81,25 @@ while ($t =~ /<tr[^>]*>(.*?)<\/tr>/gs) {
   next unless length($tese) > 40;             # só com tese
 
   my $situ = $sit =~ /cancelad/i ? "Cancelada" : "Vigente";
-  push @out, { num => $num, titulo => js_str($titulo), tese => js_str($tese), situ => $situ };
+  $entries{$num} = bloco($num, $situ, js_str($titulo), js_str($tese));
+  $mesclados++;
 }
-@out = sort { $a->{num} <=> $b->{num} } @out;
 
-# Trava: a raspagem pode falhar/vir parcial. Não sobrescreve o complemento bom.
-die "[RG-novos] poucos temas (" . scalar(@out) . "); abortando para não sobrescrever.\n" if @out < 200;
+my $total = scalar keys %entries;
 
+# Travas: nunca encolher (a mescla só acrescenta/atualiza), e sanidade mínima.
+die "[RG-novos] ERRO: total $total < $antes — encolheu? Abortando.\n" if $antes && $total < $antes;
+die "[RG-novos] poucos temas ($total < 200); raspagem falhou e não há base. Abortando.\n" if $total < 200;
+
+# 3) Reemite tudo, ordenado.
 open my $o, '>:encoding(UTF-8)', $SAIDA or die "não escreveu $SAIDA: $!";
 print $o "// Temas de Repercussão Geral do STF não cobertos pela planilha de 2020\n";
 print $o "// (julgados após 2020), raspados do portal do STF. Best-effort; confira no portal.\n";
 print $o "window.ENTRIES = (window.ENTRIES || []).concat([\n";
-for my $e (@out) {
-  my $fonte = "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=$e->{num}";
-  printf $o "  { id: \"stf-rg-%s\", tribunal: \"STF\", tipo: \"Repercussão Geral\", numero: \"%s\", situacao: \"%s\", titulo: \"%s\", fonte: \"%s\",\n    texto: \"%s\" },\n",
-    $e->{num}, $e->{num}, $e->{situ}, $e->{titulo}, $fonte, $e->{tese};
+my @nums = sort { $a <=> $b } keys %entries;
+for my $i (0 .. $#nums) {
+  print $o $entries{$nums[$i]} . ($i < $#nums ? ",\n" : "\n");
 }
 print $o "]);\n";
 close $o;
-print "[RG-novos] $SAIDA: ", scalar(@out), " temas de complemento (não cobertos pela planilha).\n";
+print "[RG-novos] $SAIDA: $total temas ($antes preservados, $mesclados vistos nesta raspagem).\n";

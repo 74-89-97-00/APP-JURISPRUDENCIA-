@@ -94,9 +94,9 @@ jobs:
             "https://www.stf.jus.br/arquivo/cms/publicacaoBOInternet/anexo/temasrg.xlsx"
           perl scripts/gerar_stf_rg.pl temasrg.xlsx
 
-      - name: Atualizar RG do STF não coberto pela planilha (raspagem tema a tema)
+      - name: Atualizar RG do STF não coberto pela planilha (só a fronteira)
         continue-on-error: true
-        timeout-minutes: 7          # teto rígido: a raspagem nunca mais trava o job
+        timeout-minutes: 5          # teto rígido: a raspagem nunca trava o job
         run: |
           HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
                -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
@@ -106,19 +106,29 @@ jobs:
                -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
           REF="https://portal.stf.jus.br/jurisprudenciaRepercussao/pesquisarProcesso.asp"
+          # O parser de complemento é INCREMENTAL: os temas antigos já estão no
+          # repo e não mudam. Então só raspamos a JANELA da fronteira — do maior
+          # tema conhecido (planilha + complemento) menos 40, até bem além. O
+          # disjuntor para sozinho ao bater no "vazio" depois do último tema.
+          MAX=$(grep -hoE 'stf-rg-[0-9]+' data/stf-rg.js data/stf-rg-novos.js | grep -oE '[0-9]+' | sort -n | tail -1)
+          MAX=${MAX:-1456}
+          START=$(( MAX > 40 ? MAX - 40 : 1 ))
+          END=$(( MAX + 200 ))
+          echo "Raspando a fronteira da RG: temas $START a $END (máx conhecido: $MAX)."
           : > stf-portal.html
           fails=0
-          for n in $(seq 1 1550); do
+          for n in $(seq "$START" "$END"); do
             resp=$(curl -s -k -m 8 --compressed -A "$UA" "${HDR[@]}" -e "$REF" \
               "https://portal.stf.jus.br/jurisprudenciaRepercussao/listarProcesso.asp?numeroTemaInicial=$n")
             printf '===TEMA %s===\n%s\n' "$n" "$resp" >> stf-portal.html
-            # DISJUNTOR: se o WAF rate-limita, as respostas vêm vazias/curtas.
-            # Após 20 seguidas assim, para a raspagem (não adianta insistir e o
-            # job não pode arrastar). A planilha oficial já deu a base da RG.
+            # DISJUNTOR duplo: respostas vazias/curtas indicam (a) tema ainda
+            # inexistente além da fronteira, ou (b) WAF rate-limitando. Em ambos
+            # os casos, após 25 seguidas não há o que ganhar — para. O parser
+            # incremental preserva tudo que já existe.
             if [ "${#resp}" -lt 400 ]; then
               fails=$((fails+1))
-              if [ "$fails" -ge 20 ]; then
-                echo "::warning::RG: 20 respostas vazias/bloqueadas seguidas (WAF) — interrompi a raspagem no tema $n."
+              if [ "$fails" -ge 25 ]; then
+                echo "Fronteira/limite atingido no tema $n (25 respostas vazias seguidas) — encerrando."
                 break
               fi
             else

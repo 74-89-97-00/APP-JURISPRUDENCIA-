@@ -1,7 +1,7 @@
 "use strict";
 
 // Troque a versão sempre que atualizar os dados/arquivos para forçar atualização.
-const CACHE = "juris-tjmg-tjes-202606272136";
+const CACHE = "juris-vigencia-202607101551";
 
 // Caminhos relativos ao escopo do service worker (funciona em subdiretório no GitHub Pages).
 const ASSETS = [
@@ -25,6 +25,8 @@ const ASSETS = [
   "data/tst-pn.js",
   "data/tjsp-sumulas.js",
   "data/tjrj-sumulas.js",
+  "data/tjmg-sumulas.js",
+  "data/tjes-sumulas.js",
 ];
 
 self.addEventListener("install", (event) => {

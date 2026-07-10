@@ -3,6 +3,7 @@
 // ---- Estado ----
 const ENTRIES = (window.ENTRIES || []).slice();
 const FAV_KEY = "juris.favoritos";
+const VIG_KEY = "juris.soVigentes";
 
 const state = {
   query: "",
@@ -10,9 +11,16 @@ const state = {
   tipos: new Set(),       // vazio = todos
   materias: new Set(),    // vazio = todas
   onlyFav: false,
+  onlyVigentes: loadSoVigentes(),  // LIGADO por padrão (ver naoVigente)
   sort: "tribunal",       // tribunal | numero | fav
   favoritos: new Set(loadFavoritos()),
 };
+
+// Um verbete sem vigência (cancelado, superado, revogado, suspenso) NÃO deve ser
+// citado como fundamento. Por isso o filtro "Só vigentes" nasce ligado: ~16% do
+// acervo está nessa situação e apareceria misturado na busca.
+const RE_NAO_VIGENTE = /cancel|superad|revogad|suspens|n[ãa]o\s*public/i;
+function naoVigente(e) { return RE_NAO_VIGENTE.test(e.situacao || ""); }
 
 const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES"];
 const TIPOS = [
@@ -30,6 +38,13 @@ const MATERIAS = ["Consumidor", "Trabalhista", "Outras"];
 function loadFavoritos() {
   try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; }
   catch { return []; }
+}
+function loadSoVigentes() {
+  try { const v = localStorage.getItem(VIG_KEY); return v === null ? true : v === "1"; }
+  catch { return true; }
+}
+function saveSoVigentes() {
+  try { localStorage.setItem(VIG_KEY, state.onlyVigentes ? "1" : "0"); } catch {}
 }
 function saveFavoritos() {
   localStorage.setItem(FAV_KEY, JSON.stringify([...state.favoritos]));
@@ -81,7 +96,8 @@ function materiaDe(e) {
 }
 
 // ---- Filtro ----
-function matches(e) {
+function matches(e, ignoreVig) {
+  if (!ignoreVig && state.onlyVigentes && naoVigente(e)) return false;
   if (state.onlyFav && !state.favoritos.has(e.id)) return false;
   if (state.tribunais.size && !state.tribunais.has(e.tribunal)) return false;
   if (state.tipos.size && !state.tipos.has(e.tipo)) return false;
@@ -119,7 +135,7 @@ function sortFn(a, b) {
 
 function anyFilterActive() {
   return state.tribunais.size || state.tipos.size || state.materias.size ||
-    state.onlyFav || state.query.trim();
+    state.onlyFav || !state.onlyVigentes || state.query.trim();
 }
 
 function citaLabel(e) {
@@ -157,9 +173,14 @@ function applyFilters(opts) {
   updateFiltersBadge();
 
   const n = currentList.length;
+  // Quantos não-vigentes casariam os demais filtros mas estão ocultos.
+  const ocultos = state.onlyVigentes
+    ? ENTRIES.reduce((acc, e) => acc + (naoVigente(e) && matches(e, true) ? 1 : 0), 0)
+    : 0;
   document.getElementById("count").textContent =
     `${n} ${n === 1 ? "resultado" : "resultados"}` +
-    (anyFilterActive() ? ` de ${ENTRIES.length}` : "");
+    (anyFilterActive() ? ` de ${ENTRIES.length}` : "") +
+    (ocultos ? ` · ${ocultos} não vigente${ocultos === 1 ? "" : "s"} oculto${ocultos === 1 ? "" : "s"}` : "");
 
   appendChunk();
   if (!opts || opts.scroll !== false) window.scrollTo({ top: 0 });
@@ -197,9 +218,9 @@ function buildCard(e) {
   li.dataset.tribunal = e.tribunal;
   li.dataset.id = e.id;
   const fav = state.favoritos.has(e.id);
-  const cancelada = /cancel/i.test(e.situacao || "");
-  const superada = /superad/i.test(e.situacao || "");
+  const alerta = naoVigente(e);
   const materia = materiaDe(e);
+  if (alerta) li.classList.add("card-alerta");
 
   li.innerHTML = `
     <div class="card-head">
@@ -207,8 +228,7 @@ function buildCard(e) {
         <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
         <span class="card-num">${escapeHtml(rotuloCard(e))}</span>
         ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
-        ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
-        ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
+        ${alerta ? `<span class="tag tag-alerta">${escapeHtml(e.situacao || "Não vigente")}</span>` : ""}
       </div>
       <button class="star ${fav ? "on" : ""}" title="Favoritar" aria-label="Favoritar">${fav ? "★" : "☆"}</button>
     </div>
@@ -305,12 +325,16 @@ function clearFilters() {
   state.tipos.clear();
   state.materias.clear();
   state.onlyFav = false;
+  state.onlyVigentes = true;   // volta ao padrão seguro
+  saveSoVigentes();
   state.query = "";
   const search = document.getElementById("search");
   if (search) search.value = "";
   document.querySelectorAll(".chip.active").forEach(c => c.classList.remove("active"));
   const favBtn = document.getElementById("fav-toggle");
   if (favBtn) { favBtn.classList.remove("active"); favBtn.setAttribute("aria-pressed", "false"); }
+  const vigBtn = document.getElementById("vig-toggle");
+  if (vigBtn) { vigBtn.classList.add("active"); vigBtn.setAttribute("aria-pressed", "true"); vigBtn.textContent = "✓ Só vigentes"; }
   const sc = document.getElementById("search-clear");
   if (sc) sc.hidden = true;
   applyFilters();
@@ -424,6 +448,22 @@ function init() {
     favBtn.setAttribute("aria-pressed", String(state.onlyFav));
     applyFilters();
   });
+
+  const vigBtn = document.getElementById("vig-toggle");
+  if (vigBtn) {
+    const syncVig = () => {
+      vigBtn.classList.toggle("active", state.onlyVigentes);
+      vigBtn.setAttribute("aria-pressed", String(state.onlyVigentes));
+      vigBtn.textContent = state.onlyVigentes ? "✓ Só vigentes" : "Incluir não vigentes";
+    };
+    syncVig();
+    vigBtn.addEventListener("click", () => {
+      state.onlyVigentes = !state.onlyVigentes;
+      saveSoVigentes();
+      syncVig();
+      applyFilters();
+    });
+  }
 
   const clearBtn = document.getElementById("clear-filters");
   if (clearBtn) clearBtn.addEventListener("click", clearFilters);

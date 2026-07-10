@@ -156,16 +156,15 @@ function render() {
 
   const favs = loadFav();
   const fav = favs.has(e.id);
-  const cancelada = /cancel/i.test(e.situacao || "");
-  const superada = /superad/i.test(e.situacao || "");
+  const alerta = /cancel|superad|revogad|suspens|n[ãa]o\s*public/i.test(e.situacao || "");
   const materia = materiaDe(e);
 
   root.innerHTML = `
+    ${alerta ? `<div class="sumula-alerta" role="alert">⚠ Verbete <strong>${escapeHtml(e.situacao)}</strong> — não utilize como fundamento vigente. Confira a situação atual no portal do tribunal.</div>` : ""}
     <div class="sumula-tags">
       <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
       ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
-      ${cancelada ? '<span class="tag tag-cancelada">Cancelada</span>' : ""}
-      ${superada && !cancelada ? '<span class="tag tag-superada">Superada</span>' : ""}
+      ${alerta ? `<span class="tag tag-alerta">${escapeHtml(e.situacao)}</span>` : ""}
     </div>
     <h1 class="sumula-num">${escapeHtml(citaLabel(e))}</h1>
     ${e.titulo ? `<p class="sumula-title">${escapeHtml(e.titulo)}</p>` : ""}

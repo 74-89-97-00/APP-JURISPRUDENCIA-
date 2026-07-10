@@ -21,6 +21,8 @@
   --tst: #c2683c;
   --tjsp: #8456b0;
   --tjrj: #b08a2e;
+  --tjmg: #2f8f9d;
+  --tjes: #b0576a;
 
   --mat-consumidor-bg: #f6ecda;
   --mat-consumidor-fg: #946517;
@@ -60,6 +62,8 @@ html[data-theme="dark"] {
   --tst: #e08a55;
   --tjsp: #b07ae0;
   --tjrj: #d8b24a;
+  --tjmg: #4bb3c2;
+  --tjes: #d0788c;
 
   --mat-consumidor-bg: rgba(224, 164, 88, 0.16);
   --mat-consumidor-fg: #e0a458;
@@ -340,6 +344,8 @@ main { max-width: 760px; margin: 0 auto; padding: 10px 22px 56px; }
 .tag-tribunal[data-t="TST"]::before { background: var(--tst); }
 .tag-tribunal[data-t="TJSP"]::before { background: var(--tjsp); }
 .tag-tribunal[data-t="TJRJ"]::before { background: var(--tjrj); }
+.tag-tribunal[data-t="TJMG"]::before { background: var(--tjmg); }
+.tag-tribunal[data-t="TJES"]::before { background: var(--tjes); }
 
 .tag-num { display: none; } /* substituída por .card-num */
 .tag-materia[data-m="Consumidor"] { background: var(--mat-consumidor-bg); color: var(--mat-consumidor-fg); }
@@ -347,6 +353,26 @@ main { max-width: 760px; margin: 0 auto; padding: 10px 22px 56px; }
 .tag-materia[data-m="Outras"] { background: var(--surface-2); color: var(--muted); }
 .tag-cancelada { background: rgba(178, 59, 48, 0.12); color: var(--danger); }
 .tag-superada { background: var(--surface-2); color: var(--muted); }
+/* Alerta unificado para qualquer verbete não vigente (cancelado/superado/revogado/suspenso). */
+.tag-alerta { background: rgba(178, 59, 48, 0.14); color: var(--danger); font-weight: 600; }
+.card-alerta { border-left: 3px solid var(--danger); }
+
+/* Toggle "Só vigentes": verde = estado seguro; vermelho quando inclui não vigentes. */
+.chip-vig.active { border-color: var(--stj); color: var(--stj); background: rgba(46, 139, 107, 0.10); }
+.chip-vig:not(.active) { border-color: var(--danger); color: var(--danger); background: rgba(178, 59, 48, 0.08); }
+
+/* Faixa de aviso na página de detalhe do verbete não vigente. */
+.sumula-alerta {
+  background: rgba(178, 59, 48, 0.10);
+  border: 1px solid rgba(178, 59, 48, 0.35);
+  border-left: 4px solid var(--danger);
+  color: var(--danger);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
 
 .star {
   background: none;

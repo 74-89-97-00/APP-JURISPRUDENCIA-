@@ -251,8 +251,16 @@ jobs:
             head -c4 rs.pdf 2>/dev/null | grep -q '%PDF' && { ok=1; break; }
             sleep 5
           done
-          if [ -z "$ok" ]; then echo "::warning::TJRS: PDF não obtido (bloqueio/proxy fora) — súmulas mantidas."; exit 0; fi
-          pdftotext -layout -enc UTF-8 rs.pdf rs.txt
+          # O tjrs.jus.br bloqueia nuvem (até o proxy do Google dá 408). Como o
+          # PDF é ESTÁVEL (2020), o texto oficial fica commitado em
+          # scripts/fontes/tjrs.txt e é usado como fallback determinístico —
+          # assim o passo nunca falha e o dado é mantido pela pipeline.
+          if [ -n "$ok" ]; then
+            pdftotext -layout -enc UTF-8 rs.pdf rs.txt
+          else
+            echo "TJRS: fonte online inacessível de nuvem; usando o texto oficial commitado."
+            cp scripts/fontes/tjrs.txt rs.txt
+          fi
           perl scripts/gerar_tjrs.pl rs.txt
 
       - name: Gerar página estática (dados.html)

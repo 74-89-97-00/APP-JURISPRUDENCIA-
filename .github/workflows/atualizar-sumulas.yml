@@ -286,6 +286,33 @@ jobs:
           fi
           perl scripts/gerar_tjsc.pl sc.html
 
+      - name: Atualizar Súmulas do TJDFT (páginas oficiais)
+        continue-on-error: true
+        run: |
+          # TJDFT: HTML inline (Plone), texto direto na página. Duas páginas:
+          # Pleno e Juizados Especiais. Tenta direto (headers+-k; o TJDFT não
+          # bloqueia nuvem) e, se falhar, usa o HTML oficial commitado.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          BASE='https://www.tjdft.jus.br/consultas/jurisprudencia/sumulas'
+          baixa () {
+            # $1=slug $2=arquivo $3=bytes-min
+            curl -sL -k -m 60 --compressed -A "$UA" \
+              -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+              -H 'Accept-Language: pt-BR,pt;q=0.9' \
+              "$BASE/$1" -o "$2" || true
+            local BYTES=$(stat -c%s "$2" 2>/dev/null || echo 0)
+            if grep -qiE 'mula n[º°.]?[[:space:]]*[0-9]' "$2" && [ "$BYTES" -gt "$3" ]; then
+              echo "TJDFT/$1: página oficial baixada ($BYTES bytes)."
+            else
+              echo "TJDFT/$1: inacessível ($BYTES bytes); usando HTML commitado."
+              cp "scripts/fontes/$4" "$2"
+            fi
+          }
+          baixa "sumulas-do-tjdft" pleno.html 100000 tjdft-pleno.html
+          baixa "sumulas-do-juizado-especial" je.html 100000 tjdft-je.html
+          perl scripts/gerar_tjdft.pl pleno.html data/tjdft-sumulas.js "$BASE/sumulas-do-tjdft" "tjdft-sumula" ""
+          perl scripts/gerar_tjdft.pl je.html data/tjdft-je-sumulas.js "$BASE/sumulas-do-juizado-especial" "tjdft-je-sumula" "Juizados Especiais"
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

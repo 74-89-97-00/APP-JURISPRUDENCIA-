@@ -332,6 +332,26 @@ jobs:
           fi
           perl scripts/gerar_tjms.pl ms.html
 
+      - name: Atualizar Súmulas do TJGO (tjdocs)
+        continue-on-error: true
+        run: |
+          # TJGO: a pasta 1474 do sistema tjdocs lista ~85 arquivos (ODT/PDF), um
+          # por súmula. Baixa a listagem, cada arquivo via URL pré-assinada (S3) e
+          # extrai (unzip p/ ODT, pdftotext p/ PDF). Se a API bloquear de nuvem, o
+          # parser aborta (guarda >= 60) e o data/tjgo-sumulas.js commitado fica.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          DIR=tjgo_files; mkdir -p "$DIR"
+          curl -s -k -m 60 -A "$UA" "https://tjdocs-backend.tjgo.jus.br/pastas/1474/documentos" -o go_list.json || true
+          perl -MJSON::PP -0777 -e 'local $/; my $d=eval{decode_json(<STDIN>)}||{}; for my $x (@{$d->{_embedded}{documentos}||[]}){ my $e=lc($x->{extensao}//""); next unless $e eq "odt"||$e eq "pdf"; print $x->{id}," ",$e,"\n"; }' < go_list.json > "$DIR/lista.txt" || true
+          echo "TJGO: $(wc -l < "$DIR/lista.txt" 2>/dev/null || echo 0) documentos na listagem."
+          while read id ext; do
+            [ -z "$id" ] && continue
+            u=$(curl -s -k -m 30 -A "$UA" "https://tjdocs-backend.tjgo.jus.br/documentos/$id/download" | perl -ne 'print $1 if /(https?:\/\/[^"]+)/')
+            [ -n "$u" ] && curl -s -k -m 60 -A "$UA" "$u" -o "$DIR/$id.$ext"
+          done < "$DIR/lista.txt"
+          echo "TJGO: baixados $(ls "$DIR"/*.odt "$DIR"/*.pdf 2>/dev/null | wc -l) arquivos."
+          perl scripts/gerar_tjgo.pl go_list.json "$DIR"
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

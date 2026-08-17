@@ -70,6 +70,9 @@ my @FONTES = (
   { path => "tjms-sumulas.js", mode => "arr",
     secao => "Súmulas do TJMS", anchor => "tjms", sigla => "TJMS", rotulo => "Súmula",
     cols => [qw(numero data situacao texto)] },
+  { path => "tjgo-sumulas.js", mode => "arr",
+    secao => "Súmulas do TJGO", anchor => "tjgo", sigla => "TJGO", rotulo => "Súmula",
+    cols => [qw(numero data situacao texto)] },
 );
 
 sub slurp {

@@ -67,6 +67,9 @@ my @FONTES = (
   { path => "tjdft-je-sumulas.js", mode => "arr",
     secao => "Súmulas dos Juizados Especiais do TJDFT", anchor => "tjdft-je", sigla => "TJDFT",
     rotulo => "Súmula", cols => [qw(numero situacao texto)] },
+  { path => "tjms-sumulas.js", mode => "arr",
+    secao => "Súmulas do TJMS", anchor => "tjms", sigla => "TJMS", rotulo => "Súmula",
+    cols => [qw(numero data situacao texto)] },
 );
 
 sub slurp {

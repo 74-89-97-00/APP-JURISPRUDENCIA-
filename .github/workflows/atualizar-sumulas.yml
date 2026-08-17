@@ -313,6 +313,25 @@ jobs:
           perl scripts/gerar_tjdft.pl pleno.html data/tjdft-sumulas.js "$BASE/sumulas-do-tjdft" "tjdft-sumula" ""
           perl scripts/gerar_tjdft.pl je.html data/tjdft-je-sumulas.js "$BASE/sumulas-do-juizado-especial" "tjdft-je-sumula" "Juizados Especiais"
 
+      - name: Atualizar Súmulas do TJMS (página oficial)
+        continue-on-error: true
+        run: |
+          # TJMS: HTML inline (uma tabela). Tenta direto (headers+-k; o TJMS não
+          # bloqueia nuvem) e, se falhar, usa o HTML oficial commitado.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          curl -sL -k -m 60 --compressed -A "$UA" \
+            -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+            -H 'Accept-Language: pt-BR,pt;q=0.9' \
+            "https://www.tjms.jus.br/sumulas" -o ms.html || true
+          BYTES=$(stat -c%s ms.html 2>/dev/null || echo 0)
+          if grep -qiE '<b>[[:space:]]*S[úu]mula[[:space:]]*[0-9]' ms.html && [ "$BYTES" -gt 40000 ]; then
+            echo "TJMS: página oficial baixada ($BYTES bytes)."
+          else
+            echo "TJMS: inacessível ($BYTES bytes); usando o HTML oficial commitado."
+            cp scripts/fontes/tjms.html ms.html
+          fi
+          perl scripts/gerar_tjms.pl ms.html
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

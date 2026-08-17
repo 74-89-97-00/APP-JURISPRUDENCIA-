@@ -1,0 +1,4995 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!DOCTYPE html>
+
+	<html class="tjsc  ltr" dir="ltr" lang="pt-BR">
+
+	<head>
+<script>
+	/* TJSC object (initial settings) */
+	tjsc = {
+		cookiePolicy: {
+			agree: function(){
+				this.setAgree(true);
+				this.hide();
+			},
+			getAgree: function(){
+				return (tjsc.localStorage.get("tjsc-cookie-policy-agree") === "true");
+			},
+			hide: function(){
+				$("#tjsc-cookie-policy").addClass("d-none");
+			},
+			init: function(){
+				(!this.getAgree()) ? this.show() : ""; 
+			},
+			setAgree: function(status){
+				tjsc.localStorage.add("tjsc-cookie-policy-agree", status);
+			},
+			show: function(){
+				$("#tjsc-cookie-policy").removeClass("d-none");
+			}
+		},
+		/* Stores data with no expiration date */
+		localStorage: {
+			add: function(key, value){
+				(tjsc.localStorage.isSupported()) ? localStorage.setItem(key, value) : "";
+			},
+			addObj: function(key, value){
+				(tjsc.localStorage.isSupported()) ? localStorage.setItem(key, JSON.stringify(value)) : "";
+			},
+			get: function(key){
+				return (tjsc.localStorage.isSupported()) ? localStorage.getItem(key) : null;
+			},
+			getObj: function(key){
+				try { return (tjsc.localStorage.isSupported()) ? JSON.parse(tjsc.localStorage.get(key)) : null } catch(err){ return null };
+			},
+			isSupported: function(){
+				return (typeof(localStorage) !== "undefined") ? true : false;
+			},
+			remove: function(key){
+				(tjsc.localStorage.isSupported()) ? localStorage.removeItem(key) : "";
+			},
+			set: function(key, value){
+				(tjsc.localStorage.isSupported()) ? ((tjsc.localStorage.get(key) !== null) ? localStorage.setItem(key, value) : "") : "";
+			},
+			setObj: function(key, objKey, objValue){
+				(tjsc.localStorage.isSupported()) ? tjsc.localStorage.set(key, JSON.stringify(tjsc.localStorage.getObj(key), (k, v) => { return (k == objKey) ? objValue : v; })) : "";
+			}
+		}
+	};
+
+	/* Server cluster node */
+	document.addEventListener("keydown", function(event){
+		if (event.ctrlKey && event.altKey && ((event.key == "n") || (event.code == "KeyN"))) {
+			alert(tjsc.n);
+		}
+	});
+	document.addEventListener("touchstart", function(event){
+		if (event.touches.length == 5) {
+			alert(tjsc.n);
+		}
+	});
+</script>
+
+<script data-senna-track="temporary">
+	/* Forces the page reload to ensure it works properly (e.g.: after returning from the Control Panel) */
+	if (typeof tjsc === "undefined") {
+		document.getElementsByTagName("html")[0].classList.add("hide");
+		window.location.reload();
+	}
+
+	tjsc.n = "7";
+
+	/* Rybená (init) */
+	if (typeof(RybenaApi) !== "undefined") {
+		RybenaApi.getInstance().closePlayer();
+	} else {
+		tjsc.localStorage.setObj("rybena-state-control", "openedPlayer", !1);
+	}
+</script>
+<title>Súmulas do TJSC - Jurisprudência - Poder Judiciário de Santa Catarina</title>
+
+<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="importmap">{"imports":{"react-dom":"/o/frontend-js-react-web/__liferay__/exports/react-dom.js","@clayui/breadcrumb":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$breadcrumb.js","@clayui/charts":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$charts.js","@clayui/empty-state":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$empty-state.js","react":"/o/frontend-js-react-web/__liferay__/exports/react.js","react-dom-16":"/o/frontend-js-react-web/__liferay__/exports/react-dom-16.js","@clayui/navigation-bar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$navigation-bar.js","@clayui/icon":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$icon.js","@clayui/table":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$table.js","@clayui/slider":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$slider.js","@clayui/multi-select":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$multi-select.js","@clayui/nav":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$nav.js","@clayui/provider":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$provider.js","@clayui/panel":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$panel.js","@clayui/list":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$list.js","@liferay/dynamic-data-mapping-form-field-type":"/o/dynamic-data-mapping-form-field-type/__liferay__/index.js","@clayui/date-picker":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$date-picker.js","@clayui/label":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$label.js","@liferay/frontend-js-api/data-set":"/o/frontend-js-dependencies-web/__liferay__/exports/@liferay$js-api$data-set.js","@clayui/core":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$core.js","@clayui/pagination-bar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$pagination-bar.js","@clayui/layout":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$layout.js","@clayui/multi-step-nav":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$multi-step-nav.js","@liferay/frontend-js-api":"/o/frontend-js-dependencies-web/__liferay__/exports/@liferay$js-api.js","@clayui/toolbar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$toolbar.js","@clayui/badge":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$badge.js","react-dom-18":"/o/frontend-js-react-web/__liferay__/exports/react-dom-18.js","@clayui/link":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$link.js","@clayui/card":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$card.js","@clayui/tooltip":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$tooltip.js","@clayui/button":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$button.js","@clayui/tabs":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$tabs.js","@clayui/sticker":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$sticker.js","@clayui/form":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$form.js","@clayui/popover":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$popover.js","@clayui/shared":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$shared.js","@clayui/localized-input":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$localized-input.js","@clayui/modal":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$modal.js","@clayui/color-picker":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$color-picker.js","@clayui/pagination":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$pagination.js","@clayui/autocomplete":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$autocomplete.js","@clayui/management-toolbar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$management-toolbar.js","@clayui/time-picker":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$time-picker.js","@clayui/upper-toolbar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$upper-toolbar.js","@clayui/loading-indicator":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$loading-indicator.js","@clayui/drop-down":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$drop-down.js","@clayui/data-provider":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$data-provider.js","@liferay/language/":"/o/js/language/","@clayui/css":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$css.js","@clayui/alert":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$alert.js","@clayui/progress-bar":"/o/frontend-taglib-clay/__liferay__/exports/@clayui$progress-bar.js","react-16":"/o/frontend-js-react-web/__liferay__/exports/react-16.js","react-18":"/o/frontend-js-react-web/__liferay__/exports/react-18.js"},"scopes":{}}</script><script data-senna-track="temporary">var Liferay = window.Liferay || {};Liferay.Icons = Liferay.Icons || {};Liferay.Icons.controlPanelSpritemap = 'https://www.tjsc.jus.br/o/admin-theme/images/clay/icons.svg'; Liferay.Icons.spritemap = 'https://www.tjsc.jus.br/o/tjsc-theme/images/clay/icons.svg';</script>
+<script data-senna-track="permanent" src="/combo?browserId=chrome&minifierType=js&languageId=pt_BR&t=1786538445537&/o/frontend-js-jquery-web/jquery/jquery.min.js&/o/frontend-js-jquery-web/jquery/init.js&/o/frontend-js-jquery-web/jquery/ajax.js&/o/frontend-js-jquery-web/jquery/bootstrap.bundle.min.js&/o/frontend-js-jquery-web/jquery/collapsible_search.js&/o/frontend-js-jquery-web/jquery/fm.js&/o/frontend-js-jquery-web/jquery/form.js&/o/frontend-js-jquery-web/jquery/popper.min.js&/o/frontend-js-jquery-web/jquery/side_navigation.js" type="text/javascript"></script>
+<script data-senna-track="permanent" type="text/javascript">window.Liferay = window.Liferay || {}; window.Liferay.CSP = {nonce: ''};</script>
+<link data-senna-track="temporary" href="https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc" rel="canonical" />
+<link data-senna-track="temporary" href="https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc" hreflang="pt-BR" rel="alternate" />
+<link data-senna-track="temporary" href="https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc" hreflang="x-default" rel="alternate" />
+
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:site_name" content="Jurisprudência">
+<meta property="og:title" content="Súmulas do TJSC - Jurisprudência - Poder Judiciário de Santa Catarina">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc">
+
+
+<link href="/o/tjsc-theme/images/tjsc/favicons/favicon.ico?t=1612236470036" rel="apple-touch-icon" />
+<link href="/o/tjsc-theme/images/tjsc/favicons/favicon.ico?t=1612236470036" rel="icon" />
+
+
+
+<link class="lfr-css-file" data-senna-track="temporary" href="https://www.tjsc.jus.br/o/tjsc-theme/css/clay.css?browserId=chrome&amp;themeId=tjsctheme_WAR_tjsctheme&amp;minifierType=css&amp;languageId=pt_BR&amp;t=1786538452000" id="liferayAUICSS" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+	<link href="/combo?browserId=chrome&amp;minifierType=css&amp;themeId=tjsctheme_WAR_tjsctheme&amp;languageId=pt_BR&amp;com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9:%2Fo%2Fjournal-content-web%2Fcss%2Fmain.css&amp;com_liferay_portal_search_web_search_bar_portlet_SearchBarPortlet_INSTANCE_templateSearch:%2Fo%2Fportal-search-web%2Fcss%2Fmain.css&amp;com_liferay_product_navigation_product_menu_web_portlet_ProductMenuPortlet:%2Fo%2Fproduct-navigation-product-menu-web%2Fcss%2Fmain.css&amp;com_liferay_product_navigation_user_personal_bar_web_portlet_ProductNavigationUserPersonalBarPortlet:%2Fo%2Fproduct-navigation-user-personal-bar-web%2Fcss%2Fmain.css&amp;com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet:%2Fo%2Fsite-navigation-menu-web%2Fcss%2Fmain.css&amp;t=1786538452000" rel="stylesheet" type="text/css"
+ data-senna-track="temporary" id="9d1f43fe" />
+
+
+
+
+
+
+
+
+<script type="text/javascript" data-senna-track="temporary">
+	// <![CDATA[
+		var Liferay = Liferay || {};
+
+		Liferay.Browser = {
+			acceptsGzip: function () {
+				return false;
+			},
+
+			
+
+			getMajorVersion: function () {
+				return 124;
+			},
+
+			getRevision: function () {
+				return '';
+			},
+			getVersion: function () {
+				return '124';
+			},
+
+			
+
+			isAir: function () {
+				return false;
+			},
+			isChrome: function () {
+				return true;
+			},
+			isEdge: function () {
+				return false;
+			},
+			isFirefox: function () {
+				return false;
+			},
+			isGecko: function () {
+				return false;
+			},
+			isIe: function () {
+				return false;
+			},
+			isIphone: function () {
+				return false;
+			},
+			isLinux: function () {
+				return false;
+			},
+			isMac: function () {
+				return false;
+			},
+			isMobile: function () {
+				return false;
+			},
+			isMozilla: function () {
+				return true;
+			},
+			isOpera: function () {
+				return false;
+			},
+			isRtf: function () {
+				return true;
+			},
+			isSafari: function () {
+				return false;
+			},
+			isSun: function () {
+				return false;
+			},
+			isWebKit: function () {
+				return false;
+			},
+			isWindows: function () {
+				return true;
+			}
+		};
+
+		Liferay.Data = Liferay.Data || {};
+
+		Liferay.Data.ICONS_INLINE_SVG = true;
+
+		Liferay.Data.NAV_SELECTOR = '#navigation';
+
+		Liferay.Data.NAV_SELECTOR_MOBILE = '#navigationCollapse';
+
+		Liferay.Data.isCustomizationView = function () {
+			return false;
+		};
+
+		Liferay.Data.notices = [
+			
+		];
+
+		(function () {
+			var available = {};
+
+			var direction = {};
+
+			
+
+				available['pt_BR'] = 'português\x20\x28Brasil\x29';
+				direction['pt_BR'] = 'ltr';
+
+			
+
+			let _cache = {};
+
+			if (Liferay && Liferay.Language && Liferay.Language._cache) {
+				_cache = Liferay.Language._cache;
+			}
+
+			Liferay.Language = {
+				_cache,
+				available,
+				direction,
+				get: function(key) {
+					let value = Liferay.Language._cache[key];
+
+					if (value === undefined) {
+						value = key;
+					}
+
+					return value;
+				}
+			};
+		})();
+
+		var featureFlags = {"LPD-10964":false,"LPD-37927":false,"LPD-10889":false,"LPS-193884":false,"LPD-30371":false,"LPD-11131":false,"LPS-178642":false,"LPS-193005":false,"LPD-31789":false,"LPD-10562":false,"LPD-11212":false,"COMMERCE-8087":false,"LPD-39304":true,"LPD-13311":true,"LRAC-10757":false,"LPD-35941":false,"LPS-180090":false,"LPS-178052":false,"LPD-21414":false,"LPS-185892":false,"LPS-186620":false,"LPD-40533":false,"LPD-40534":false,"LPS-184404":false,"LPD-40530":false,"LPD-20640":false,"LPS-198183":false,"LPD-38869":false,"LPD-35678":false,"LPD-6378":false,"LPS-153714":false,"LPD-11848":false,"LPS-170670":false,"LPD-7822":false,"LPS-169981":false,"LPD-21926":false,"LPS-177027":false,"LPD-37531":false,"LPD-11003":false,"LPD-36446":false,"LPD-39437":false,"LPS-135430":false,"LPD-20556":false,"LPD-45276":false,"LPS-134060":false,"LPS-164563":false,"LPD-32050":false,"LPS-122920":false,"LPS-199086":false,"LPD-35128":false,"LPD-10588":false,"LPD-13778":false,"LPD-11313":false,"LPD-6368":false,"LPD-34594":false,"LPS-202104":false,"LPD-19955":false,"LPD-35443":false,"LPD-39967":false,"LPD-11235":false,"LPD-11232":false,"LPS-196935":false,"LPD-43542":false,"LPS-176691":false,"LPS-197909":false,"LPD-29516":false,"COMMERCE-8949":false,"LPD-11228":false,"LPS-153813":false,"LPD-17809":false,"COMMERCE-13024":false,"LPS-165482":false,"LPS-193551":false,"LPS-197477":false,"LPS-174816":false,"LPS-186360":false,"LPD-30204":false,"LPD-32867":false,"LPS-153332":false,"LPD-35013":false,"LPS-179669":false,"LPS-174417":false,"LPD-44091":true,"LPD-31212":false,"LPD-18221":false,"LPS-155284":false,"LRAC-15017":false,"LPD-19870":false,"LPS-200108":false,"LPD-20131":false,"LPS-159643":false,"LPS-129412":false,"LPS-169837":false,"LPD-20379":false};
+
+		Liferay.FeatureFlags = Object.keys(featureFlags).reduce(
+			(acc, key) => ({
+				...acc, [key]: featureFlags[key] === 'true' || featureFlags[key] === true
+			}), {}
+		);
+
+		Liferay.PortletKeys = {
+			DOCUMENT_LIBRARY: 'com_liferay_document_library_web_portlet_DLPortlet',
+			DYNAMIC_DATA_MAPPING: 'com_liferay_dynamic_data_mapping_web_portlet_DDMPortlet',
+			ITEM_SELECTOR: 'com_liferay_item_selector_web_portlet_ItemSelectorPortlet'
+		};
+
+		Liferay.PropsValues = {
+			JAVASCRIPT_SINGLE_PAGE_APPLICATION_TIMEOUT: 0,
+			UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE: 104857600
+		};
+
+		Liferay.ThemeDisplay = {
+
+			
+
+			
+				getLayoutId: function () {
+					return '10';
+				},
+
+				
+
+				getLayoutRelativeControlPanelURL: function () {
+					return '/group/jurisprudencia/~/control_panel/manage';
+				},
+
+				getLayoutRelativeURL: function () {
+					return '/web/jurisprudencia/sumulas-do-tjsc';
+				},
+				getLayoutURL: function () {
+					return 'https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc';
+				},
+				getParentLayoutId: function () {
+					return '0';
+				},
+				isControlPanel: function () {
+					return false;
+				},
+				isPrivateLayout: function () {
+					return 'false';
+				},
+				isVirtualLayout: function () {
+					return false;
+				},
+			
+
+			getBCP47LanguageId: function () {
+				return 'pt-BR';
+			},
+			getCanonicalURL: function () {
+
+				
+
+				return 'https\x3a\x2f\x2fwww\x2etjsc\x2ejus\x2ebr\x2fweb\x2fjurisprudencia\x2fsumulas-do-tjsc';
+			},
+			getCDNBaseURL: function () {
+				return 'https://www.tjsc.jus.br';
+			},
+			getCDNDynamicResourcesHost: function () {
+				return '';
+			},
+			getCDNHost: function () {
+				return '';
+			},
+			getCompanyGroupId: function () {
+				return '10193';
+			},
+			getCompanyId: function () {
+				return '10155';
+			},
+			getDefaultLanguageId: function () {
+				return 'pt_BR';
+			},
+			getDoAsUserIdEncoded: function () {
+				return '';
+			},
+			getLanguageId: function () {
+				return 'pt_BR';
+			},
+			getParentGroupId: function () {
+				return '557855';
+			},
+			getPathContext: function () {
+				return '';
+			},
+			getPathImage: function () {
+				return '/image';
+			},
+			getPathJavaScript: function () {
+				return '/o/frontend-js-web';
+			},
+			getPathMain: function () {
+				return '/c';
+			},
+			getPathThemeImages: function () {
+				return 'https://www.tjsc.jus.br/o/tjsc-theme/images';
+			},
+			getPathThemeRoot: function () {
+				return '/o/tjsc-theme';
+			},
+			getPlid: function () {
+				return '580583';
+			},
+			getPortalURL: function () {
+				return 'https://www.tjsc.jus.br';
+			},
+			getRealUserId: function () {
+				return '10159';
+			},
+			getRemoteAddr: function () {
+				return '10.18.14.44';
+			},
+			getRemoteHost: function () {
+				return '10.18.14.44';
+			},
+			getScopeGroupId: function () {
+				return '557855';
+			},
+			getScopeGroupIdOrLiveGroupId: function () {
+				return '557855';
+			},
+			getSessionId: function () {
+				return '';
+			},
+			getSiteAdminURL: function () {
+				return 'https://www.tjsc.jus.br/group/jurisprudencia/~/control_panel/manage?p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view';
+			},
+			getSiteGroupId: function () {
+				return '557855';
+			},
+			getTimeZone: function() {
+				return 'America/Sao_Paulo';
+			},
+			getURLControlPanel: function() {
+				return '/group/control_panel?refererPlid=580583';
+			},
+			getURLHome: function () {
+				return 'https\x3a\x2f\x2fwww\x2etjsc\x2ejus\x2ebr\x2fweb\x2ftjsc\x2finicio';
+			},
+			getUserEmailAddress: function () {
+				return '';
+			},
+			getUserId: function () {
+				return '10159';
+			},
+			getUserName: function () {
+				return '';
+			},
+			isAddSessionIdToURL: function () {
+				return false;
+			},
+			isImpersonated: function () {
+				return false;
+			},
+			isSignedIn: function () {
+				return false;
+			},
+
+			isStagedPortlet: function () {
+				
+					
+						return false;
+					
+				
+			},
+
+			isStateExclusive: function () {
+				return false;
+			},
+			isStateMaximized: function () {
+				return false;
+			},
+			isStatePopUp: function () {
+				return false;
+			}
+		};
+
+		var themeDisplay = Liferay.ThemeDisplay;
+
+		Liferay.AUI = {
+
+			
+
+			getCombine: function () {
+				return true;
+			},
+			getComboPath: function () {
+				return '/combo/?browserId=chrome&minifierType=&languageId=pt_BR&t=1786538414759&';
+			},
+			getDateFormat: function () {
+				return '%d/%m/%Y';
+			},
+			getEditorCKEditorPath: function () {
+				return '/o/frontend-editor-ckeditor-web';
+			},
+			getFilter: function () {
+				var filter = 'raw';
+
+				
+					
+						filter = 'min';
+					
+					
+
+				return filter;
+			},
+			getFilterConfig: function () {
+				var instance = this;
+
+				var filterConfig = null;
+
+				if (!instance.getCombine()) {
+					filterConfig = {
+						replaceStr: '.js' + instance.getStaticResourceURLParams(),
+						searchExp: '\\.js$'
+					};
+				}
+
+				return filterConfig;
+			},
+			getJavaScriptRootPath: function () {
+				return '/o/frontend-js-web';
+			},
+			getPortletRootPath: function () {
+				return '/html/portlet';
+			},
+			getStaticResourceURLParams: function () {
+				return '?browserId=chrome&minifierType=&languageId=pt_BR&t=1786538414759';
+			}
+		};
+
+		Liferay.authToken = 'BFgcPZH0';
+
+		
+
+		Liferay.currentURL = '\x2fweb\x2fjurisprudencia\x2fsumulas-do-tjsc';
+		Liferay.currentURLEncoded = '\x252Fweb\x252Fjurisprudencia\x252Fsumulas-do-tjsc';
+	// ]]>
+</script>
+
+<script data-senna-track="temporary" type="text/javascript">window.__CONFIG__= {basePath: '',combine: true, defaultURLParams: null, explainResolutions: false, exposeGlobal: false, logLevel: 'warn', moduleType: 'module', namespace:'Liferay', nonce: '', reportMismatchedAnonymousModules: 'warn', resolvePath: '/o/js_resolve_modules', url: '/combo/?browserId=chrome&minifierType=js&languageId=pt_BR&t=1786538414759&', waitTimeout: 60000};</script><script data-senna-track="permanent" src="/o/frontend-js-loader-modules-extender/loader.js?&mac=9WaMmhziBCkScHZwrrVcOR7VZF4=&browserId=chrome&languageId=pt_BR&minifierType=js" type="text/javascript"></script><script data-senna-track="permanent" src="/combo?browserId=chrome&minifierType=js&languageId=pt_BR&t=1786538414759&/o/frontend-js-aui-web/aui/aui/aui-min.js&/o/frontend-js-aui-web/liferay/modules.js&/o/frontend-js-aui-web/liferay/aui_sandbox.js&/o/frontend-js-aui-web/aui/attribute-base/attribute-base-min.js&/o/frontend-js-aui-web/aui/attribute-complex/attribute-complex-min.js&/o/frontend-js-aui-web/aui/attribute-core/attribute-core-min.js&/o/frontend-js-aui-web/aui/attribute-observable/attribute-observable-min.js&/o/frontend-js-aui-web/aui/attribute-extras/attribute-extras-min.js&/o/frontend-js-aui-web/aui/event-custom-base/event-custom-base-min.js&/o/frontend-js-aui-web/aui/event-custom-complex/event-custom-complex-min.js&/o/frontend-js-aui-web/aui/oop/oop-min.js&/o/frontend-js-aui-web/aui/aui-base-lang/aui-base-lang-min.js&/o/frontend-js-aui-web/liferay/dependency.js&/o/frontend-js-aui-web/liferay/util.js&/o/oauth2-provider-web/js/liferay.js&/o/frontend-js-web/liferay/dom_task_runner.js&/o/frontend-js-web/liferay/events.js&/o/frontend-js-web/liferay/lazy_load.js&/o/frontend-js-web/liferay/liferay.js&/o/frontend-js-web/liferay/global.bundle.js&/o/frontend-js-web/liferay/portlet.js&/o/frontend-js-web/liferay/workflow.js" type="text/javascript"></script>
+<script data-senna-track="temporary" type="text/javascript">window.Liferay = Liferay || {}; window.Liferay.OAuth2 = {getAuthorizeURL: function() {return 'https://www.tjsc.jus.br/o/oauth2/authorize';}, getBuiltInRedirectURL: function() {return 'https://www.tjsc.jus.br/o/oauth2/redirect';}, getIntrospectURL: function() { return 'https://www.tjsc.jus.br/o/oauth2/introspect';}, getTokenURL: function() {return 'https://www.tjsc.jus.br/o/oauth2/token';}, getUserAgentApplication: function(externalReferenceCode) {return Liferay.OAuth2._userAgentApplications[externalReferenceCode];}, _userAgentApplications: {}}</script><script data-senna-track="temporary" type="text/javascript">try {var MODULE_MAIN='staging-processes-web@5.0.65/index';var MODULE_PATH='/o/staging-processes-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			stagingprocessesweb: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-staging-processes-export-import': {
+						path: 'main.js',
+						requires: [
+							'aui-datatype',
+							'aui-dialog-iframe-deprecated',
+							'aui-modal',
+							'aui-parse-content',
+							'aui-toggler',
+							'liferay-portlet-base',
+							'liferay-util-window',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='exportimport-web@5.0.100/index';var MODULE_PATH='/o/exportimport-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			exportimportweb: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-export-import-export-import': {
+						path: 'main.js',
+						requires: [
+							'aui-datatype',
+							'aui-dialog-iframe-deprecated',
+							'aui-modal',
+							'aui-parse-content',
+							'aui-toggler',
+							'liferay-portlet-base',
+							'liferay-util-window',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='dynamic-data-mapping-web@5.0.115/index';var MODULE_PATH='/o/dynamic-data-mapping-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	const LiferayAUI = Liferay.AUI;
+
+	AUI().applyConfig({
+		groups: {
+			ddm: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: LiferayAUI.getFilterConfig(),
+				modules: {
+					'liferay-ddm-form': {
+						path: 'ddm_form.js',
+						requires: [
+							'aui-base',
+							'aui-datatable',
+							'aui-datatype',
+							'aui-image-viewer',
+							'aui-parse-content',
+							'aui-set',
+							'aui-sortable-list',
+							'json',
+							'liferay-form',
+							'liferay-map-base',
+							'liferay-translation-manager',
+							'liferay-util-window',
+						],
+					},
+					'liferay-portlet-dynamic-data-mapping': {
+						condition: {
+							trigger: 'liferay-document-library',
+						},
+						path: 'main.js',
+						requires: [
+							'arraysort',
+							'aui-form-builder-deprecated',
+							'aui-form-validator',
+							'aui-map',
+							'aui-text-unicode',
+							'json',
+							'liferay-menu',
+							'liferay-translation-manager',
+							'liferay-util-window',
+							'text',
+						],
+					},
+					'liferay-portlet-dynamic-data-mapping-custom-fields': {
+						condition: {
+							trigger: 'liferay-document-library',
+						},
+						path: 'custom_fields.js',
+						requires: ['liferay-portlet-dynamic-data-mapping'],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='portal-workflow-kaleo-designer-web@5.0.146/index';var MODULE_PATH='/o/portal-workflow-kaleo-designer-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			'kaleo-designer': {
+				base: MODULE_PATH + '/designer/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-kaleo-designer-autocomplete-util': {
+						path: 'autocomplete_util.js',
+						requires: ['autocomplete', 'autocomplete-highlighters'],
+					},
+					'liferay-kaleo-designer-definition-diagram-controller': {
+						path: 'definition_diagram_controller.js',
+						requires: [
+							'liferay-kaleo-designer-field-normalizer',
+							'liferay-kaleo-designer-utils',
+						],
+					},
+					'liferay-kaleo-designer-dialogs': {
+						path: 'dialogs.js',
+						requires: ['liferay-util-window'],
+					},
+					'liferay-kaleo-designer-editors': {
+						path: 'editors.js',
+						requires: [
+							'aui-ace-editor',
+							'aui-ace-editor-mode-xml',
+							'aui-base',
+							'aui-datatype',
+							'aui-node',
+							'liferay-kaleo-designer-autocomplete-util',
+							'liferay-kaleo-designer-utils',
+						],
+					},
+					'liferay-kaleo-designer-field-normalizer': {
+						path: 'field_normalizer.js',
+						requires: ['liferay-kaleo-designer-remote-services'],
+					},
+					'liferay-kaleo-designer-nodes': {
+						path: 'nodes.js',
+						requires: [
+							'aui-datatable',
+							'aui-datatype',
+							'aui-diagram-builder',
+							'liferay-kaleo-designer-editors',
+							'liferay-kaleo-designer-utils',
+						],
+					},
+					'liferay-kaleo-designer-remote-services': {
+						path: 'remote_services.js',
+						requires: ['aui-io'],
+					},
+					'liferay-kaleo-designer-templates': {
+						path: 'templates.js',
+						requires: ['aui-tpl-snippets-deprecated'],
+					},
+					'liferay-kaleo-designer-utils': {
+						path: 'utils.js',
+						requires: [],
+					},
+					'liferay-kaleo-designer-xml-definition': {
+						path: 'xml_definition.js',
+						requires: [
+							'aui-base',
+							'aui-component',
+							'dataschema-xml',
+							'datatype-xml',
+						],
+					},
+					'liferay-kaleo-designer-xml-definition-serializer': {
+						path: 'xml_definition_serializer.js',
+						requires: ['escape', 'liferay-kaleo-designer-xml-util'],
+					},
+					'liferay-kaleo-designer-xml-util': {
+						path: 'xml_util.js',
+						requires: ['aui-base'],
+					},
+					'liferay-portlet-kaleo-designer': {
+						path: 'main.js',
+						requires: [
+							'aui-ace-editor',
+							'aui-ace-editor-mode-xml',
+							'aui-tpl-snippets-deprecated',
+							'dataschema-xml',
+							'datasource',
+							'datatype-xml',
+							'event-valuechange',
+							'io-form',
+							'liferay-kaleo-designer-autocomplete-util',
+							'liferay-kaleo-designer-editors',
+							'liferay-kaleo-designer-nodes',
+							'liferay-kaleo-designer-remote-services',
+							'liferay-kaleo-designer-utils',
+							'liferay-kaleo-designer-xml-util',
+							'liferay-util-window',
+						],
+					},
+				},
+				root: MODULE_PATH + '/designer/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='@liferay/frontend-js-react-web@5.0.54/index';var MODULE_PATH='/o/frontend-js-react-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			react: {
+
+				// eslint-disable-next-line
+				mainModule: MODULE_MAIN,
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='@liferay/frontend-js-state-web@1.0.30/index';var MODULE_PATH='/o/frontend-js-state-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			state: {
+
+				// eslint-disable-next-line
+				mainModule: MODULE_MAIN,
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='contacts-web@5.0.65/index';var MODULE_PATH='/o/contacts-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			contactscenter: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-contacts-center': {
+						path: 'main.js',
+						requires: [
+							'aui-io-plugin-deprecated',
+							'aui-toolbar',
+							'autocomplete-base',
+							'datasource-io',
+							'json-parse',
+							'liferay-portlet-base',
+							'liferay-util-window',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='frontend-editor-alloyeditor-web@5.0.56/index';var MODULE_PATH='/o/frontend-editor-alloyeditor-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			alloyeditor: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-alloy-editor': {
+						path: 'alloyeditor.js',
+						requires: [
+							'aui-component',
+							'liferay-portlet-base',
+							'timers',
+						],
+					},
+					'liferay-alloy-editor-source': {
+						path: 'alloyeditor_source.js',
+						requires: [
+							'aui-debounce',
+							'liferay-fullscreen-source-editor',
+							'liferay-source-editor',
+							'plugin',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='frontend-js-components-web@2.0.80/index';var MODULE_PATH='/o/frontend-js-components-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			components: {
+
+				// eslint-disable-next-line
+				mainModule: MODULE_MAIN,
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='portal-search-web@6.0.148/index';var MODULE_PATH='/o/portal-search-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			search: {
+				base: MODULE_PATH + '/js/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-search-custom-range-facet': {
+						path: 'custom_range_facet.js',
+						requires: ['aui-form-validator'],
+					},
+				},
+				root: MODULE_PATH + '/js/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='calendar-web@5.0.105/index';var MODULE_PATH='/o/calendar-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			calendar: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'liferay-calendar-a11y': {
+						path: 'calendar_a11y.js',
+						requires: ['calendar'],
+					},
+					'liferay-calendar-container': {
+						path: 'calendar_container.js',
+						requires: [
+							'aui-alert',
+							'aui-base',
+							'aui-component',
+							'liferay-portlet-base',
+						],
+					},
+					'liferay-calendar-date-picker-sanitizer': {
+						path: 'date_picker_sanitizer.js',
+						requires: ['aui-base'],
+					},
+					'liferay-calendar-interval-selector': {
+						path: 'interval_selector.js',
+						requires: ['aui-base', 'liferay-portlet-base'],
+					},
+					'liferay-calendar-interval-selector-scheduler-event-link': {
+						path: 'interval_selector_scheduler_event_link.js',
+						requires: ['aui-base', 'liferay-portlet-base'],
+					},
+					'liferay-calendar-list': {
+						path: 'calendar_list.js',
+						requires: [
+							'aui-template-deprecated',
+							'liferay-scheduler',
+						],
+					},
+					'liferay-calendar-message-util': {
+						path: 'message_util.js',
+						requires: ['liferay-util-window'],
+					},
+					'liferay-calendar-recurrence-converter': {
+						path: 'recurrence_converter.js',
+						requires: [],
+					},
+					'liferay-calendar-recurrence-dialog': {
+						path: 'recurrence.js',
+						requires: [
+							'aui-base',
+							'liferay-calendar-recurrence-util',
+						],
+					},
+					'liferay-calendar-recurrence-util': {
+						path: 'recurrence_util.js',
+						requires: ['aui-base', 'liferay-util-window'],
+					},
+					'liferay-calendar-reminders': {
+						path: 'calendar_reminders.js',
+						requires: ['aui-base'],
+					},
+					'liferay-calendar-remote-services': {
+						path: 'remote_services.js',
+						requires: [
+							'aui-base',
+							'aui-component',
+							'liferay-calendar-util',
+							'liferay-portlet-base',
+						],
+					},
+					'liferay-calendar-session-listener': {
+						path: 'session_listener.js',
+						requires: ['aui-base', 'liferay-scheduler'],
+					},
+					'liferay-calendar-simple-color-picker': {
+						path: 'simple_color_picker.js',
+						requires: ['aui-base', 'aui-template-deprecated'],
+					},
+					'liferay-calendar-simple-menu': {
+						path: 'simple_menu.js',
+						requires: [
+							'aui-base',
+							'aui-template-deprecated',
+							'event-outside',
+							'event-touch',
+							'widget-modality',
+							'widget-position',
+							'widget-position-align',
+							'widget-position-constrain',
+							'widget-stack',
+							'widget-stdmod',
+						],
+					},
+					'liferay-calendar-util': {
+						path: 'calendar_util.js',
+						requires: [
+							'aui-datatype',
+							'aui-io',
+							'aui-scheduler',
+							'aui-toolbar',
+							'autocomplete',
+							'autocomplete-highlighters',
+						],
+					},
+					'liferay-scheduler': {
+						path: 'scheduler.js',
+						requires: [
+							'async-queue',
+							'aui-datatype',
+							'aui-scheduler',
+							'dd-plugin',
+							'liferay-calendar-a11y',
+							'liferay-calendar-message-util',
+							'liferay-calendar-recurrence-converter',
+							'liferay-calendar-recurrence-util',
+							'liferay-calendar-util',
+							'liferay-scheduler-event-recorder',
+							'liferay-scheduler-models',
+							'promise',
+							'resize-plugin',
+						],
+					},
+					'liferay-scheduler-event-recorder': {
+						path: 'scheduler_event_recorder.js',
+						requires: [
+							'dd-plugin',
+							'liferay-calendar-util',
+							'resize-plugin',
+						],
+					},
+					'liferay-scheduler-models': {
+						path: 'scheduler_models.js',
+						requires: [
+							'aui-datatype',
+							'dd-plugin',
+							'liferay-calendar-util',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}try {var MODULE_MAIN='@liferay/document-library-web@6.0.198/index';var MODULE_PATH='/o/document-library-web';/**
+ * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+(function () {
+	AUI().applyConfig({
+		groups: {
+			dl: {
+				base: MODULE_PATH + '/js/legacy/',
+				combine: Liferay.AUI.getCombine(),
+				filter: Liferay.AUI.getFilterConfig(),
+				modules: {
+					'document-library-upload-component': {
+						path: 'DocumentLibraryUpload.js',
+						requires: [
+							'aui-component',
+							'aui-data-set-deprecated',
+							'aui-overlay-manager-deprecated',
+							'aui-overlay-mask-deprecated',
+							'aui-parse-content',
+							'aui-progressbar',
+							'aui-template-deprecated',
+							'liferay-search-container',
+							'querystring-parse-simple',
+							'uploader',
+						],
+					},
+				},
+				root: MODULE_PATH + '/js/legacy/',
+			},
+		},
+	});
+})();
+} catch(error) {console.error(error);}</script>
+
+
+
+
+<script type="text/javascript" data-senna-track="temporary">
+	// <![CDATA[
+		
+			
+				
+		
+
+		
+	// ]]>
+</script>
+
+
+
+
+
+	
+		
+
+			
+
+			
+		
+		
+
+
+
+	
+		
+
+			
+
+			
+		
+	
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link class="lfr-css-file" data-senna-track="temporary" href="https://www.tjsc.jus.br/o/tjsc-theme/css/main.css?browserId=chrome&amp;themeId=tjsctheme_WAR_tjsctheme&amp;minifierType=css&amp;languageId=pt_BR&amp;t=1786538452000" id="liferayThemeCSS" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+	<style data-senna-track="temporary" type="text/css">
+
+		
+
+			
+
+		
+
+			
+
+		
+
+			
+
+		
+
+			
+
+		
+
+			
+
+		
+
+			
+
+		
+
+			
+
+				
+
+					
+
+#p_p_id_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH_ > .portlet > .portlet-content {
+
+}
+
+
+
+
+				
+
+			
+
+		
+
+	</style>
+
+
+<style data-senna-track="temporary" type="text/css">
+</style>
+<link data-senna-track="permanent" href="/o/frontend-js-aui-web/alloy_ui.css?&mac=favIEq7hPo8AEd6k+N5OVADEEls=&browserId=chrome&languageId=pt_BR&minifierType=css&themeId=tjsctheme_WAR_tjsctheme" rel="stylesheet"></link>
+<link data-senna-track="permanent" href="https://www.tjsc.jus.br/combo?browserId=chrome&minifierType=css&languageId=pt_BR&t=1786538452239&/o/tjsc-theme-contributor/css/tjsc-theme-contributor.css" rel="stylesheet" type = "text/css" />
+<script data-senna-track="permanent" src="https://www.tjsc.jus.br/combo?browserId=chrome&minifierType=js&languageId=pt_BR&t=1786538452239&/o/tjsc-theme-contributor/js/tjsc-theme-contributor.js" type = "text/javascript"></script>
+<script type="module">
+import {init} from '/o/frontend-js-spa-web/__liferay__/index.js';
+{
+init({"navigationExceptionSelectors":":not([target=\"_blank\"]):not([data-senna-off]):not([data-resource-href]):not([data-cke-saved-href]):not([data-cke-saved-href])","cacheExpirationTime":-1,"clearScreensCache":false,"portletsBlacklist":["com_liferay_login_web_portlet_CreateAccountPortlet","com_liferay_nested_portlets_web_portlet_NestedPortletsPortlet","com_liferay_site_navigation_directory_web_portlet_SitesDirectoryPortlet","com_liferay_questions_web_internal_portlet_QuestionsPortlet","com_liferay_account_admin_web_internal_portlet_AccountUsersRegistrationPortlet","com_liferay_login_web_portlet_ForgotPasswordPortlet","com_liferay_portal_language_override_web_internal_portlet_PLOPortlet","com_liferay_login_web_portlet_LoginPortlet","com_liferay_login_web_portlet_FastLoginPortlet"],"excludedTargetPortlets":["com_liferay_users_admin_web_portlet_UsersAdminPortlet","com_liferay_server_admin_web_portlet_ServerAdminPortlet"],"validStatusCodes":[221,490,494,499,491,496,492,493,495,220],"debugEnabled":false,"loginRedirect":"","excludedPaths":["/c/document_library","/documents","/image"],"preloadCSS":false,"userNotification":{"message":"Parece que isso está demorando mais do que o esperado.","title":"Opa","timeout":30000},"requestTimeout":0});
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" data-senna-track="temporary">
+	if (window.Analytics) {
+		window._com_liferay_document_library_analytics_isViewFileEntry = false;
+	}
+</script>
+
+<script type="text/javascript">
+Liferay.on(
+	'ddmFieldBlur', function(event) {
+		if (window.Analytics) {
+			Analytics.send(
+				'fieldBlurred',
+				'Form',
+				{
+					fieldName: event.fieldName,
+					focusDuration: event.focusDuration,
+					formId: event.formId,
+					formPageTitle: event.formPageTitle,
+					page: event.page,
+					title: event.title
+				}
+			);
+		}
+	}
+);
+
+Liferay.on(
+	'ddmFieldFocus', function(event) {
+		if (window.Analytics) {
+			Analytics.send(
+				'fieldFocused',
+				'Form',
+				{
+					fieldName: event.fieldName,
+					formId: event.formId,
+					formPageTitle: event.formPageTitle,
+					page: event.page,
+					title:event.title
+				}
+			);
+		}
+	}
+);
+
+Liferay.on(
+	'ddmFormPageShow', function(event) {
+		if (window.Analytics) {
+			Analytics.send(
+				'pageViewed',
+				'Form',
+				{
+					formId: event.formId,
+					formPageTitle: event.formPageTitle,
+					page: event.page,
+					title: event.title
+				}
+			);
+		}
+	}
+);
+
+Liferay.on(
+	'ddmFormSubmit', function(event) {
+		if (window.Analytics) {
+			Analytics.send(
+				'formSubmitted',
+				'Form',
+				{
+					formId: event.formId,
+					title: event.title
+				}
+			);
+		}
+	}
+);
+
+Liferay.on(
+	'ddmFormView', function(event) {
+		if (window.Analytics) {
+			Analytics.send(
+				'formViewed',
+				'Form',
+				{
+					formId: event.formId,
+					title: event.title
+				}
+			);
+		}
+	}
+);
+
+</script><script>
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/o/tjsc-theme/images/tjsc/favicons/apple-touch-icon.png?t=1612236470036">
+<link rel="icon" type="image/png" sizes="32x32" href="/o/tjsc-theme/images/tjsc/favicons/favicon-32x32.png?t=1612236470036">
+<link rel="icon" type="image/png" sizes="16x16" href="/o/tjsc-theme/images/tjsc/favicons/favicon-16x16.png?t=1612236470036">
+<link rel="manifest" href="/o/tjsc-theme/images/tjsc/favicons/site.webmanifest?t=1612236470036">
+<link rel="mask-icon" href="/o/tjsc-theme/images/tjsc/favicons/safari-pinned-tab.svg?t=1612236470036" color="#333333">
+<link rel="shortcut icon" href="/o/tjsc-theme/images/tjsc/favicons/favicon.ico?t=1612236470036">
+<meta name="apple-mobile-web-app-title" content="PJSC">
+<meta name="application-name" content="PJSC">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-config" content="/o/tjsc-theme/images/tjsc/favicons/browserconfig.xml?t=1612236470036">
+<meta name="theme-color" content="#ffffff">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M10DPR56QV"></script>
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-M10DPR56QV');
+</script>
+
+<script src="https://cdn.rybena.com.br/dom/master/latest/rybena.js?renderTimeout=300&positionBar=right&positionPlayer=right&positionPlayerMobile=right"></script>
+
+<script>
+	AUI().ready(function(){
+		RybenaDOM.prototype.tjscPersistVisualPerspective = (function(){
+			return function(){
+				RybenaContrastLight.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaContrastLight.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": (RybenaContrastLight.getInstance().factory.isActive ? "light" : ""),
+							"saturation": ""
+						});
+					}
+				});
+
+				RybenaContrastDark.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaContrastDark.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": (RybenaContrastDark.getInstance().factory.isActive ? "dark" : ""),
+							"saturation": ""
+						});
+					}
+				});
+
+				RybenaContrastInverted.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaContrastInverted.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": (RybenaContrastInverted.getInstance().factory.isActive ? "inverted" : ""),
+							"saturation": ""
+						});
+					}
+				});
+
+				RybenaHighSaturation.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaHighSaturation.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": "",
+							"saturation": (RybenaHighSaturation.getInstance().factory.isActive ? "high" : "")
+						});
+					}
+				});
+
+				RybenaLowSaturation.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaLowSaturation.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": "",
+							"saturation": (RybenaLowSaturation.getInstance().factory.isActive ? "low" : "")
+						});
+					}
+				});
+
+				RybenaMonocromatic.getInstance().factory.dom.addEventListener("click", () => {
+					if (!RybenaMonocromatic.getInstance().factory.tutorial.isActive) {
+						tjsc.localStorage.addObj("tjsc-rybena-visual-perspective", {
+							"contrast": "",
+							"saturation": (RybenaMonocromatic.getInstance().factory.isActive ? "monocromatic" : "")
+						});
+					}
+				});
+			}
+		})();
+
+		RybenaDOM.prototype.tjscStartVisualPerspective = (function(){
+			return function(){
+				var tjscVisualPerspective = tjsc.localStorage.getObj("tjsc-rybena-visual-perspective");
+
+				if (tjscVisualPerspective && (tjscVisualPerspective["contrast"] || tjscVisualPerspective["saturation"])) {
+					if (typeof(RybenaApi) !== "undefined") {
+						if (tjscVisualPerspective["contrast"] == "light") {
+							RybenaApi.getInstance().startLightContrast();
+						} else if (tjscVisualPerspective["contrast"] == "dark") {
+							RybenaApi.getInstance().startDarkContrast();
+						} else if (tjscVisualPerspective["contrast"] == "inverted") {
+							RybenaApi.getInstance().startInvertedContrast();
+						} else if (tjscVisualPerspective["saturation"] == "high") {
+							RybenaApi.getInstance().startHighSaturation();
+						} else if (tjscVisualPerspective["saturation"] == "low") {
+							RybenaApi.getInstance().startLowSaturation();
+						} else if (tjscVisualPerspective["saturation"] == "monocromatic") {
+							RybenaApi.getInstance().startNoSaturation();
+						}
+					} else {
+						this.getRybenaScripts("hidden");
+					}
+				}
+			}
+		})();
+
+		RybenaDOM.prototype.getRybenaScripts = (function(t){
+			let originalFn = RybenaDOM.prototype.getRybenaScripts;
+
+			return function(t){
+				originalFn.apply(this, arguments);
+
+				var tjscScriptReady = function(e){
+					if (t == "hidden") {
+						// Forces the "player close", because it starts translation automatically after 10s
+						RybenaApi.getInstance().closePlayer();
+					}
+
+					e.tjscPersistVisualPerspective();
+					e.tjscStartVisualPerspective();
+				};
+
+				this.script.addEventListener("load", () => {
+					tjscScriptReady(this);
+				});
+
+				this.script.addEventListener("readystatechange", () => {
+					if ("complete" === this.readyState) {
+						tjscScriptReady(this);
+					}
+				});
+			};
+		})();
+
+		RybenaDOM.getInstance().tjscStartVisualPerspective();
+	});
+
+	Liferay.on("endNavigate", function(event){
+		RybenaDOM.getInstance().tjscStartVisualPerspective();
+	});
+</script>	</head>
+
+	<body class="chrome controls-visible  yui3-skin-sam signed-out public-page site">
+<noscript>
+	<div class="tjsc-theme-alert alert alert-danger rounded-0" role="alert">
+		<strong>ATENÇÃO</strong>: Seu navegador não possui suporte para JavaScript ou então está desabilitado, isto impede o funcionamento correto da página.
+	</div>
+</noscript>
+
+<nav id="rnut_quickAccessNav" class="quick-access-nav w-100 tjsc-style-background-color-palette-primary-dark-gray tjsc-style-color-palette-secondary-white text-center" aria-label="Links rápidos">
+	<a accesskey="1" class="d-block m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#main-content"><span class="label label-light mr-2">1</span>Ir para o conteúdo</a>
+	<a accesskey="2" class="d-none m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#"><span class="label label-light mr-2">2</span>Ir para a ferramenta de acessibilidade - Rybená</a>
+</nav>
+
+<div id="tjsc-cookie-policy" class="d-none fixed-bottom tjsc-style-background-color-palette-primary-light-gray border-top tjsc-style-border-color-palette-primary-dark-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="d-sm-flex align-items-center">
+					<div class="px-0 px-sm-3 py-3 tjsc-style-text-link">
+						O TJSC utiliza cookies para melhorar sua experiência de navegação. Ao utilizar nossos serviços, você concorda com esse procedimento. Para mais informações leia nossa <a href="/politica-de-privacidade-e-protecao-de-dados-pessoais">Política de Privacidade e Proteção de Dados Pessoais</a>.
+					</div>
+					<div class="px-0 px-sm-3 pt-0 pt-sm-3 pb-3 text-center">
+						<button class="btn btn-sm btn-primary" type="button" onclick="javascript: tjsc.cookiePolicy.agree();"><strong>Ciente</strong></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="d-flex flex-column min-vh-100">
+
+	<div class="d-flex flex-column flex-fill position-relative" id="wrapper">
+
+
+<header id="tjsc-header">
+	<style>
+		@media (max-width: 767.98px) {
+			#tjsc-header-main {
+				background-color: var(--tjsc-palette-secondary-white);
+			}
+		}
+
+		#tjsc-header-main #tjsc-header-main-content {
+			padding: 15px 0;
+		}
+
+		@media (min-width: 992px) {
+			#tjsc-header-main #tjsc-header-main-content {
+				background-image: url("/documents/d/global/tjsc-theme-imagens-vector");
+				background-position: right 232px center;
+				background-repeat: no-repeat;
+				background-size: contain;
+			}
+		}
+	</style>
+
+	<nav id="tjsc-header-mobile" class="d-block d-sm-none navbar navbar-dark p-0">
+		<div class="container d-flex tjsc-style-background-color-palette-primary-dim-green-important py-2">
+			<button id="tjsc-header-mobile-main-menu-toggler" class="navbar-toggler btn btn-monospaced btn-sm text-3 tjsc-line-height-base border-0 ml-n1" type="button" data-toggle="collapse" data-target="#tjsc-header-mobile-main-menu" aria-controls="tjsc-header-mobile-main-menu" aria-expanded="false" aria-label="Menu principal">
+				<span class="navbar-toggler-icon align-baseline w-100 h-100 tjsc-background-image-none">
+					<i class="fa-xl fa fa-bars" aria-hidden="true"></i>
+				</span>
+			</button>
+			<a class="navbar-brand py-0" href="https://www.tjsc.jus.br">
+				<img style="height: 34px;" alt="Logo do Poder Judiciário de Santa Catarina" src="/documents/d/global/tjsc-theme-imagens-logo-xs" />
+				<span class="sr-only">Página inicial</span>
+			</a>
+
+				<a class="navbar-toggler btn btn-monospaced btn-sm text-3 tjsc-line-height-base border-0 mr-n1" href="/c/portal/login?p_l_id=580583&amp;redirect=%2Fentrar%2Frestrito%2F%3Fportal%3Dhttps%3A%2F%2Fwww.tjsc.jus.br%2Fweb%2Fjurisprudencia%2Fsumulas-do-tjsc"  rel="nofollow" aria-label="Acesso restrito">
+					<span class="navbar-toggler-icon align-baseline w-100 h-100 tjsc-background-image-none">
+						<i class="fa-xl fa fa-sign-in" aria-hidden="true"></i>
+					</span>
+					<span class="sr-only">Acesso restrito</span>
+				</a>
+		</div>
+		<div class="container d-flex tjsc-style-background-color-palette-primary-green-important">
+			<div id="tjsc-header-mobile-main-menu" class="collapse navbar-collapse tjsc-style-color-palette-secondary-white">
+					<div class="my-3" role="navigation">
+
+		<div id="tjsc-header-mobile-main-menu-collapse-0" class="pb-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-0-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-0-collapse"><strong>Institucional<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-0-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/calendario-institucional"  role="menuitem">Calendário e Feriados Locais</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/certidoes"  role="menuitem">Certidões</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/concursos"  role="menuitem">Concursos e Estágio</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/destinacao-de-verbas-pecuniarias"  role="menuitem">Destinação de Verbas Pecuniárias</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/diario-da-justica-eletronico"  role="menuitem">Diário da Justiça Eletrônico</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/documentacao"  role="menuitem">Documentação</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/estrutura-judiciaria"  role="menuitem">Estrutura Judiciária</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/galeria-de-presidentes"  role="menuitem">Galeria de Presidentes</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/identidade-e-comunicacao-visual"  role="menuitem">Identidade e Comunicação Visual</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/missao-e-visao"  role="menuitem">Missão e Visão</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/organograma"  role="menuitem">Organograma</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/visite-o-tjsc"  role="menuitem">Visite o TJSC</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="tjsc-header-mobile-main-menu-collapse-1" class="py-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-1-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-1-collapse"><strong>Tribunal de Justiça<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-1-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/composicao"  role="menuitem">Composição</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/diretorias"  role="menuitem">Diretorias</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/dirigentes"  role="menuitem">Dirigentes</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/nucleo-de-gerenciamento-de-precedentes-e-acoes-coletivas"  role="menuitem">Núcleo de Gerenciamento de Precedentes e Ações Coletivas</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/orgaos-administrativos"  role="menuitem">Órgãos Administrativos</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/orgaos-julgadores"  role="menuitem">Órgãos Julgadores</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/presidencia"  role="menuitem">Presidência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/primeira-vice-presidencia"  role="menuitem">Primeira Vice-Presidência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/segunda-vice-presidencia"  role="menuitem">Segunda Vice-Presidência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/judicial/sessoes-do-tribunal-de-justica"  role="menuitem">Sessões de Julgamento</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/suspensao-de-prazos-e-expediente"  role="menuitem">Suspensão de Prazos e Expediente</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/terceira-vice-presidencia"  role="menuitem">Terceira Vice-Presidência</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="tjsc-header-mobile-main-menu-collapse-2" class="py-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-2-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-2-collapse"><strong>Comarcas<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-2-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/atos-normativos"  role="menuitem">Atos Normativos</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/circunscricoes"  role="menuitem">Circunscrições</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/lotacao-de-magistrados"  role="menuitem">Lotação de Magistrados</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/paginas-das-comarcas"  role="menuitem">Páginas das Comarcas</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/pauta-de-audiencia"  role="menuitem">Pauta de Audiência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/pontos-de-inclusao-digital"  role="menuitem">Pontos de Inclusão Digital</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/suspensao-de-prazos-e-expediente"  role="menuitem">Suspensão de Prazos e Expediente</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/unidade-das-questoes-agrarias"  role="menuitem">Unidade das Questões Agrárias</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="tjsc-header-mobile-main-menu-collapse-3" class="py-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-3-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-3-collapse"><strong>Juizados e Turmas<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-3-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/juizados-especiais"  role="menuitem">Juizados Especiais</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/pautas-das-sessoes-da-turma-uniformizacao"  role="menuitem">Pautas das Sessões da Turma de Uniformização</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/pautas-das-sessoes-das-turmas-recursais"  role="menuitem">Pautas das Sessões das Turmas Recursais</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/turmas-de-recursos-e-de-uniformizacao"  role="menuitem">Turmas de Recursos e de Uniformização</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="tjsc-header-mobile-main-menu-collapse-4" class="py-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-4-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-4-collapse"><strong>Legislação<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-4-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/legislacao/externa"  role="menuitem">Externa</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/legislacao/interna"  role="menuitem">Interna</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="tjsc-header-mobile-main-menu-collapse-5" class="pt-1">
+			<a class="tjsc-fa-toggle-caret-down-up-control tjsc-style-text-decoration font-weight-normal" href="#tjsc-header-mobile-main-menu-collapse-5-collapse" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tjsc-header-mobile-main-menu-collapse-5-collapse"><strong>Portais PJSC<i class="fa tjsc-fa-toggle-caret-down-up-element pl-1" aria-hidden="true"></i></strong></a>
+			<div id="tjsc-header-mobile-main-menu-collapse-5-collapse" class="collapse">
+				<ul class="list-unstyled mb-0 pl-3" role="menu">
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/academia-judicial"  role="menuitem">Academia Judicial</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/acessibilidade-e-inclusao"  role="menuitem">Acessibilidade e Inclusão</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/biblioteca"  role="menuitem">Biblioteca</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/conciliacao-e-mediacao"  role="menuitem">Conciliação e Mediação</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/corregedoria-geral-da-justica"  role="menuitem">Corregedoria-Geral da Justiça</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/extrajudicial"  role="menuitem">Corregedoria-Geral do Foro Extrajudicial</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/eproc"  role="menuitem">eproc - Processo Judicial</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/estatistica"  role="menuitem">Estatística</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/gestao-estrategica"  role="menuitem">Gestão Estratégica</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/gestao-socioambiental"  role="menuitem">Gestão Socioambiental</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/imprensa"  role="menuitem">Imprensa</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/infancia-e-juventude"  role="menuitem">Infância e Juventude</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/jurisprudencia"  role="menuitem">Jurisprudência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/justica-restaurativa"  role="menuitem">Justiça Restaurativa</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/lei-geral-de-protecao-de-dados-pessoais"  role="menuitem">Lei Geral de Proteção de Dados Pessoais</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/licitacoes-contratos-e-patrimonio"  role="menuitem">Licitações, Contratos e Patrimônio</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/magistrado"  role="menuitem">Magistrado</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/memoria"  role="menuitem">Memória</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/orcamento-e-financas"  role="menuitem">Orçamento e Finanças</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/ouvidoria"  role="menuitem">Ouvidoria</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/ouvidoria-da-mulher"  role="menuitem">Ouvidoria da Mulher</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/seeu"  role="menuitem">SEEU - Execução Penal</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/sei"  role="menuitem">SEI - Processo Administrativo</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/servico-de-informacao-ao-cidadao"  role="menuitem">Serviço de Informação ao Cidadão</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/servidor"  role="menuitem">Servidor</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/sistemas-prisional-e-socioeducativo"  role="menuitem">Sistemas Prisional e Socioeducativo</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/tecnologia-da-informacao"  role="menuitem">Tecnologia da Informação</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/transparencia"  role="menuitem">Transparência</a>
+						</li>
+						<li role="presentation">
+							<a class="tjsc-style-text-decoration font-weight-normal" href="/web/violencia-contra-a-mulher"  role="menuitem">Violência contra a Mulher</a>
+						</li>
+				</ul>
+			</div>
+		</div>
+					</div>
+				<hr class="tjsc-style-border-color-palette-secondary-white" />
+				<div class="mb-3">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/transparencia" >
+						<i class="fa-xl fa fa-eye pr-2" aria-hidden="true"></i><strong>Transparência</strong>
+					</a>
+				</div>
+				<div class="mb-3">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/atendimento-e-contatos" >
+						<i class="fa-xl fa fa-comment pr-2" aria-hidden="true"></i><strong>Atendimento e Contatos</strong>
+					</a>
+				</div>
+				<hr class="tjsc-style-border-color-palette-secondary-white" />
+				<div class="mb-3">
+					
+		<p class="d-block d-sm-none mb-1"><strong>Nossas Redes Sociais</strong></p>
+		<ul class="list-inline mb-0" aria-label="Nossas Redes Sociais">
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/instagram" target="_blank" title="Instagram" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-instagram" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Instagram</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/whatsapp" target="_blank" title="WhatsApp" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-whatsapp" aria-hidden="true"></i>
+					<span class="sr-only">Acessar WhatsApp</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/x" target="_blank" title="X" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-x-twitter" aria-hidden="true"></i>
+					<span class="sr-only">Acessar X</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/threads" target="_blank" title="Threads" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-threads" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Threads</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/facebook" target="_blank" title="Facebook" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-facebook-f" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Facebook</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/youtube" target="_blank" title="YouTube" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-youtube" aria-hidden="true"></i>
+					<span class="sr-only">Acessar YouTube</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/flickr" target="_blank" title="Flickr" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-flickr" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Flickr</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/soundcloud" target="_blank" title="SoundCloud" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-soundcloud" aria-hidden="true"></i>
+					<span class="sr-only">Acessar SoundCloud</span>
+				</a>
+			</li>
+		</ul>
+	
+				</div>
+			</div>
+
+		</div>
+	</nav>
+
+	<div id="tjsc-header-bar-menu" class="d-none d-sm-block py-3 tjsc-style-background-color-palette-primary-dim-green text-2" role="navigation">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="d-flex justify-content-between align-items-center" role="menubar" aria-label="Menu superior">
+							<a class="tjsc-style-text-decoration font-weight-normal tjsc-style-color-palette-secondary-white-important text-uppercase" href="/c/portal/login?p_l_id=580583&amp;redirect=%2Fentrar%2Frestrito%2F%3Fportal%3Dhttps%3A%2F%2Fwww.tjsc.jus.br%2Fweb%2Fjurisprudencia%2Fsumulas-do-tjsc"  rel="nofollow">
+								<i class="fa-xl fa fa-sign-in pr-2" aria-hidden="true"></i><strong>Acesso restrito</strong>
+							</a>
+						<ul class="list-inline mb-0 tjsc-style-color-palette-secondary-white" role="menu">
+							<li class="list-inline-item text-uppercase mr-0" role="presentation">
+								<a class="tjsc-style-text-decoration font-weight-normal" href="/transparencia" >
+									<i class="fa-xl fa fa-eye pr-2" aria-hidden="true"></i><strong>Transparência</strong>
+								</a>
+							</li>
+							<li class="list-inline-item text-uppercase border-left tjsc-style-border-color-palette-secondary-white ml-3 mr-0 pl-4" role="presentation">
+								<a class="tjsc-style-text-decoration font-weight-normal" href="/atendimento-e-contatos" >
+									<i class="fa-xl fa fa-comment pr-2" aria-hidden="true"></i><strong>Atendimento e Contatos</strong>
+								</a>
+							</li>
+							<li class="list-inline-item d-sm-none d-md-inline-block border-left tjsc-style-border-color-palette-secondary-white ml-3 mr-0 pl-4" role="presentation">
+								
+		<p class="d-block d-sm-none mb-1"><strong>Nossas Redes Sociais</strong></p>
+		<ul class="list-inline mb-0" aria-label="Nossas Redes Sociais">
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/instagram" target="_blank" title="Instagram" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-instagram" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Instagram</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/whatsapp" target="_blank" title="WhatsApp" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-whatsapp" aria-hidden="true"></i>
+					<span class="sr-only">Acessar WhatsApp</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/x" target="_blank" title="X" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-x-twitter" aria-hidden="true"></i>
+					<span class="sr-only">Acessar X</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/threads" target="_blank" title="Threads" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-threads" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Threads</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/facebook" target="_blank" title="Facebook" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-facebook-f" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Facebook</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/youtube" target="_blank" title="YouTube" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-youtube" aria-hidden="true"></i>
+					<span class="sr-only">Acessar YouTube</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/flickr" target="_blank" title="Flickr" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-flickr" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Flickr</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/soundcloud" target="_blank" title="SoundCloud" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-soundcloud" aria-hidden="true"></i>
+					<span class="sr-only">Acessar SoundCloud</span>
+				</a>
+			</li>
+		</ul>
+	
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="tjsc-header-main" class="tjsc-style-background-color-palette-primary-light-gray">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="tjsc-header-main-content" class="d-flex justify-content-between align-items-start">
+						<div class="d-none d-sm-block">
+							<a class="d-inline-block" href="https://www.tjsc.jus.br">
+								<img style="height: 80px;" alt="Logo do Poder Judiciário de Santa Catarina" src="/documents/d/global/tjsc-theme-imagens-logo" />
+								<span class="sr-only">Página inicial</span>
+							</a>
+						</div>
+						<div id="tjsc-header-main-search" class="col-xs-12 col-sm-auto px-0" style="width: 437px;">
+							<form class="d-flex align-items-center" action="/pesquisa" method="get">
+								<fieldset class="w-100">
+									<legend class="sr-only">Pesquisar no portal</legend>
+									<div class="input-group">
+										<div class="input-group-item input-group-prepend">
+											<input id="tjsc-header-main-search-text" class="form-control" type="text" name="q" value="" placeholder="O que você está procurando?" aria-label="O que você está procurando?" aria-describedby="tjsc-header-main-search-submit" />
+										</div>
+										<div class="input-group-item input-group-append input-group-item-shrink">
+											<button id="tjsc-header-main-search-submit" class="btn border tjsc-style-background-color-palette-secondary-white tjsc-style-color-palette-primary-dark-gray" type="submit">
+												<span class="sr-only">Pesquisar</span>
+												<i class="fa-lg fas fa-magnifying-glass" aria-hidden="true"></i>
+											</button>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="tjsc-header-main-menu" class="d-none d-sm-block tjsc-style-background-color-palette-primary-green" role="navigation">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+						<ul class="nav nav-pills nav-justified" role="menubar" aria-label="Menu principal">
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-0" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Institucional<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu " role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-0">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/calendario-institucional"  role="menuitem">Calendário e Feriados Locais</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/certidoes"  role="menuitem">Certidões</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/concursos"  role="menuitem">Concursos e Estágio</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/destinacao-de-verbas-pecuniarias"  role="menuitem">Destinação de Verbas Pecuniárias</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/diario-da-justica-eletronico"  role="menuitem">Diário da Justiça Eletrônico</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/documentacao"  role="menuitem">Documentação</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/estrutura-judiciaria"  role="menuitem">Estrutura Judiciária</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/galeria-de-presidentes"  role="menuitem">Galeria de Presidentes</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/identidade-e-comunicacao-visual"  role="menuitem">Identidade e Comunicação Visual</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/missao-e-visao"  role="menuitem">Missão e Visão</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/organograma"  role="menuitem">Organograma</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/visite-o-tjsc"  role="menuitem">Visite o TJSC</a>
+					</li>
+			</ul>
+		</li>
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-1" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Tribunal de Justiça<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu " role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-1">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/composicao"  role="menuitem">Composição</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/diretorias"  role="menuitem">Diretorias</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/dirigentes"  role="menuitem">Dirigentes</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/nucleo-de-gerenciamento-de-precedentes-e-acoes-coletivas"  role="menuitem">Núcleo de Gerenciamento de Precedentes e Ações Coletivas</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/orgaos-administrativos"  role="menuitem">Órgãos Administrativos</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/orgaos-julgadores"  role="menuitem">Órgãos Julgadores</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/presidencia"  role="menuitem">Presidência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/primeira-vice-presidencia"  role="menuitem">Primeira Vice-Presidência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/segunda-vice-presidencia"  role="menuitem">Segunda Vice-Presidência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/judicial/sessoes-do-tribunal-de-justica"  role="menuitem">Sessões de Julgamento</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/suspensao-de-prazos-e-expediente"  role="menuitem">Suspensão de Prazos e Expediente</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/terceira-vice-presidencia"  role="menuitem">Terceira Vice-Presidência</a>
+					</li>
+			</ul>
+		</li>
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-2" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Comarcas<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu " role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-2">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/atos-normativos"  role="menuitem">Atos Normativos</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/circunscricoes"  role="menuitem">Circunscrições</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/lotacao-de-magistrados"  role="menuitem">Lotação de Magistrados</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/paginas-das-comarcas"  role="menuitem">Páginas das Comarcas</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/pauta-de-audiencia"  role="menuitem">Pauta de Audiência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/pontos-de-inclusao-digital"  role="menuitem">Pontos de Inclusão Digital</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/suspensao-de-prazos-e-expediente"  role="menuitem">Suspensão de Prazos e Expediente</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/unidade-das-questoes-agrarias"  role="menuitem">Unidade das Questões Agrárias</a>
+					</li>
+			</ul>
+		</li>
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-3" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Juizados e Turmas<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-3">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/juizados-especiais"  role="menuitem">Juizados Especiais</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/pautas-das-sessoes-da-turma-uniformizacao"  role="menuitem">Pautas das Sessões da Turma de Uniformização</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/pautas-das-sessoes-das-turmas-recursais"  role="menuitem">Pautas das Sessões das Turmas Recursais</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/turmas-de-recursos-e-de-uniformizacao"  role="menuitem">Turmas de Recursos e de Uniformização</a>
+					</li>
+			</ul>
+		</li>
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-4" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Legislação<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-4">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/legislacao/externa"  role="menuitem">Externa</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/legislacao/interna"  role="menuitem">Interna</a>
+					</li>
+			</ul>
+		</li>
+
+		<li class="nav-item dropdown" role="presentation">
+			<a id="tjsc-header-main-menu-dropdown-toggle-5" class="nav-link btn dropdown-toggle tjsc-fa-toggle-caret-down-up-control rounded-0 tjsc-text-3-5 font-weight-normal tjsc-style-color-palette-secondary-white-important" href="javascript:;" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Portais PJSC<i class="fa tjsc-fa-toggle-caret-down-up-element text-2 pl-1" aria-hidden="true"></i>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="tjsc-header-main-menu-dropdown-toggle-5">
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/academia-judicial"  role="menuitem">Academia Judicial</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/acessibilidade-e-inclusao"  role="menuitem">Acessibilidade e Inclusão</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/biblioteca"  role="menuitem">Biblioteca</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/conciliacao-e-mediacao"  role="menuitem">Conciliação e Mediação</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/corregedoria-geral-da-justica"  role="menuitem">Corregedoria-Geral da Justiça</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/extrajudicial"  role="menuitem">Corregedoria-Geral do Foro Extrajudicial</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/eproc"  role="menuitem">eproc - Processo Judicial</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/estatistica"  role="menuitem">Estatística</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/gestao-estrategica"  role="menuitem">Gestão Estratégica</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/gestao-socioambiental"  role="menuitem">Gestão Socioambiental</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/imprensa"  role="menuitem">Imprensa</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/infancia-e-juventude"  role="menuitem">Infância e Juventude</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/jurisprudencia"  role="menuitem">Jurisprudência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/justica-restaurativa"  role="menuitem">Justiça Restaurativa</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/lei-geral-de-protecao-de-dados-pessoais"  role="menuitem">Lei Geral de Proteção de Dados Pessoais</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/licitacoes-contratos-e-patrimonio"  role="menuitem">Licitações, Contratos e Patrimônio</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/magistrado"  role="menuitem">Magistrado</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/memoria"  role="menuitem">Memória</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/orcamento-e-financas"  role="menuitem">Orçamento e Finanças</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/ouvidoria"  role="menuitem">Ouvidoria</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/ouvidoria-da-mulher"  role="menuitem">Ouvidoria da Mulher</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/seeu"  role="menuitem">SEEU - Execução Penal</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/sei"  role="menuitem">SEI - Processo Administrativo</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/servico-de-informacao-ao-cidadao"  role="menuitem">Serviço de Informação ao Cidadão</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/servidor"  role="menuitem">Servidor</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/sistemas-prisional-e-socioeducativo"  role="menuitem">Sistemas Prisional e Socioeducativo</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/tecnologia-da-informacao"  role="menuitem">Tecnologia da Informação</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/transparencia"  role="menuitem">Transparência</a>
+					</li>
+					<li role="presentation">
+						<a class="dropdown-item px-3 py-1" href="/web/violencia-contra-a-mulher"  role="menuitem">Violência contra a Mulher</a>
+					</li>
+			</ul>
+		</li>
+						</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function(){
+			$('#tjsc-header-mobile button[data-target="#tjsc-header-mobile-main-menu"]').on("click", function(){
+				$(this).blur();
+
+				if (!$("#tjsc-header-mobile-main-menu").hasClass("show")) {
+					$("#tjsc-header-mobile-main-menu").css("display", "block").attr("tabindex", "-1").focus().removeAttr("tabindex");
+				} else {
+					$("#tjsc-header-mobile-main-menu").css("display", "");
+				}
+			});
+			$('#tjsc-header-mobile button[data-target="#tjsc-header-mobile-user-menu"]').on("click", function(){
+				$(this).blur();
+
+				if (!$("#tjsc-header-mobile-user-menu").hasClass("show")) {
+					$("#tjsc-header-mobile-user-menu").css("display", "block").attr("tabindex", "-1").focus().removeAttr("tabindex");
+				} else {
+					$("#tjsc-header-mobile-user-menu").css("display", "");
+				}
+			});
+
+			$("#tjsc-header-main-search > form").on("submit", function(event){
+				$("#tjsc-header-main-search-text").prop("readonly", true);
+				$("#tjsc-header-main-search-submit").prop("disabled", true);
+				$("#tjsc-header-main-search-submit > i").attr("class", "fa-fw fas fa-spinner fa-spin-pulse");
+			});
+		});
+	</script>
+</header>
+		<main class=" flex-fill" id="content">
+
+
+<div id="tjsc-content-breadcrumb" class="mb-3">
+			<div class="container d-none d-sm-block">
+			<div class="row">
+				<div class="col-sm-12">
+					<ol class="breadcrumb mb-0" aria-label="Você está em">
+						<li class="breadcrumb-item">
+							<a class="breadcrumb-link" href="https://www.tjsc.jus.br"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">Página inicial</span></a>
+						</li>
+
+							<li class="breadcrumb-item ">
+									<a class="breadcrumb-link" href="/web/jurisprudencia">
+								Jurisprudência
+									</a>
+							</li>
+							<li class="breadcrumb-item active" aria-current="page">
+									<a class="breadcrumb-link" href="/web/jurisprudencia/sumulas-do-tjsc">
+								Súmulas do TJSC
+									</a>
+							</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+</div>
+			<h1 class="sr-only">Súmulas do TJSC - Jurisprudência - Poder Judiciário de Santa Catarina</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+		<style type="text/css">
+			.master-layout-fragment .portlet-header {
+				display: none;
+			}
+		</style>
+
+		
+
+		<div class="bootstrap-sm3-sm9-layouttpl container" id="main-content">
+	<div class="portlet-layout row">
+		<div class="col-sm-3 portlet-column portlet-column-first" id="column-1">
+			<div class="portlet-dropzone portlet-column-content portlet-column-content-first" id="layout-column_column-1">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	<div class="portlet-boundary portlet-boundary_com_liferay_journal_content_web_portlet_JournalContentPortlet_  portlet-static portlet-static-end tjsc-portlet-only-content portlet-journal-content " id="p_p_id_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9_">
+		<span id="p_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9"></span>
+
+
+
+
+	
+
+	
+		
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+
+<section class="portlet" id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9">
+
+
+	<div class="portlet-content">
+
+			<div class="autofit-float autofit-row portlet-header">
+
+
+					<div class="autofit-col autofit-col-end">
+						<div class="autofit-section">
+							<div class="visible-interaction">
+
+	
+
+	
+</div>
+						</div>
+					</div>
+			</div>
+
+		
+			<div class=" portlet-content-container">
+				
+
+
+	<div class="portlet-body">
+
+
+
+	
+		
+			
+				
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+
+
+
+
+
+
+
+
+	
+
+				
+
+				
+					
+						
+
+
+	
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+		
+			
+			
+				
+					
+					
+					
+					
+
+						
+
+						
+
+							
+
+							<div class="" data-fragments-editor-item-id="10108-15428804" data-fragments-editor-item-type="fragments-editor-mapped-item" >
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+		<div class="journal-content-article " data-analytics-asset-id="15428802" data-analytics-asset-title="Título do portal" data-analytics-asset-type="web-content" data-analytics-web-content-resource-pk="15428804">
+			
+
+			
+
+<style>
+	#tjsc-portal-title_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_69noLssUAMX2_ > a {
+		background-color: var(--tjsc-palette-primary-light-gray);
+		color: var(--tjsc-palette-primary-darker-gray);
+		min-height: 90px;
+		font-size: 1.25rem;
+	}
+
+	@media (min-width: 992px) {
+		.tjsc-page-home #tjsc-portal-title_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_69noLssUAMX2_ > a {
+			font-size: 1.625rem;
+		}
+	}
+</style>
+
+<div id="tjsc-portal-title_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_69noLssUAMX2_">
+	<a class="d-flex justify-content-center align-items-center mb-3 p-3 rounded text-center" href="/web/jurisprudencia"><strong class="tjsc-text-break">Jurisprudência</strong></a>
+</div>
+
+			
+		</div>
+
+		
+
+	
+
+
+
+							</div>
+						
+					
+				
+			
+		
+	
+
+
+
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+	
+					
+				
+			
+		
+	
+	
+
+
+	</div>
+
+			</div>
+		
+	</div>
+</section>
+	
+
+		
+		
+
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	<div class="portlet-boundary portlet-boundary_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_  portlet-static portlet-static-end tjsc-portlet-only-content portlet-navigation " id="p_p_id_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH_">
+		<span id="p_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH"></span>
+
+
+
+
+	
+
+	
+		
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+
+<section class="portlet" id="portlet_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH">
+
+
+	<div class="portlet-content">
+
+			<div class="autofit-float autofit-row portlet-header">
+
+
+			</div>
+
+		
+			<div class=" portlet-content-container">
+				
+
+
+	<div class="portlet-body">
+
+
+
+	
+		
+			
+				
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+
+
+
+
+
+
+
+
+	
+
+				
+
+				
+					
+						
+
+
+	
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+		
+
+		
+
+		
+
+
+
+
+	<div class="list-menu">
+		<ul class="layouts level-1" aria-label="Páginas do site">
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="https://www.tjsc.jus.br/web/jurisprudencia/anuario-das-turmas-de-recursos" >Anuário das Turmas de Recursos</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="https://www.tjsc.jus.br/web/jurisprudencia/diretrizes-do-tjsc" >Diretrizes do TJSC</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="https://www.tjsc.jus.br/web/jurisprudencia/enunciados-do-tjsc" >Enunciados do TJSC</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="http://busca.tjsc.jus.br/juris-teses" target="_blank">Jurisprudência em Teses</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="https://jurisprudencia.stf.jus.br/pages/search" >STF - Consulta à Jurisprudência</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="https://portal.stf.jus.br/repercussaogeral/" >STF - Repercussão geral</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="http://www.stj.jus.br/SCON/" >STJ - Consulta à Jurisprudência</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item">
+						<a class="lfr-nav-item" href="http://www.stj.jus.br/repetitivos/temas_repetitivos/" >STJ - Recursos Repetitivos</a>
+
+				</li>
+
+
+
+				<li class="lfr-nav-item open selected active">
+						<a class="lfr-nav-item open selected active" href="https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc" >Súmulas do TJSC</a>
+
+				</li>
+		</ul>
+	</div>
+
+	
+	
+	
+
+
+	
+	
+					
+				
+			
+		
+	
+	
+
+
+	</div>
+
+			</div>
+		
+	</div>
+</section>
+	
+
+		
+		
+
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+
+</div>
+		</div>
+		<div class="col-sm-9 portlet-column portlet-column-last" id="column-2">
+			<div class="portlet-dropzone portlet-column-content portlet-column-content-last" id="layout-column_column-2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	<div class="portlet-boundary portlet-boundary_com_liferay_journal_content_web_portlet_JournalContentPortlet_  portlet-static portlet-static-end tjsc-portlet-only-content portlet-journal-content " id="p_p_id_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk_">
+		<span id="p_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk"></span>
+
+
+
+
+	
+
+	
+		
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+
+<section class="portlet" id="portlet_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk">
+
+
+	<div class="portlet-content">
+
+			<div class="autofit-float autofit-row portlet-header">
+
+
+					<div class="autofit-col autofit-col-end">
+						<div class="autofit-section">
+							<div class="visible-interaction">
+
+	
+
+	
+</div>
+						</div>
+					</div>
+			</div>
+
+		
+			<div class=" portlet-content-container">
+				
+
+
+	<div class="portlet-body">
+
+
+
+	
+		
+			
+				
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+
+
+
+
+
+
+
+
+	
+
+				
+
+				
+					
+						
+
+
+	
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+		
+			
+			
+				
+					
+					
+					
+					
+
+						
+
+						
+
+							
+
+							<div class="" data-fragments-editor-item-id="10108-592534" data-fragments-editor-item-type="fragments-editor-mapped-item" >
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+		<div class="journal-content-article " data-analytics-asset-id="592532" data-analytics-asset-title="Súmulas" data-analytics-asset-type="web-content" data-analytics-web-content-resource-pk="592534">
+			
+
+			<h2 class="tjsc-style-page-header">Súmulas</h2>
+
+<table border="0" cellpadding="0" cellspacing="0" class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th scope="col" width="15%">Súmula</th>
+			<th scope="col">Teor</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+68.pdf/878d3a5a-9342-57f6-0491-cf54e03f0ef6?t=1692624189820" rel="noopener noreferrer" target="_blank">Súmula 68</a></td>
+			<td>
+			<div align="justify">Para fins do art. 117 do RITJSC, considera-se prevento para determinada ação ou recurso o desembargador, ou quem o tenha sucedido na respectiva vaga, que tenha atuado preteritamente em ação ou recurso conexo, sempre que, na forma do art. 55 do CPC, haja identidade de pedido ou de causa de pedir (remota ou próxima), sendo irrelevante se a ação ou recurso que originaram a prevenção já tenham sido julgados definitivamente.</div>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+67_GRUPO+CIVIL.pdf/ea796f3a-f082-5cb5-0fd3-fb075809ace5?t=1687363844810" rel="noopener noreferrer" target="_blank">Súmula 67</a></td>
+			<td>O débito correspondente à dívida prescrita, embora judicialmente inexigível, continua a existir como obrigação natural. Seu registro em plataformas virtuais de negociação, que não exponham publicamente o nome do consumidor, não configura ato ilícito causador de dano moral indenizável.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+66.pdf/5fc7d577-b9f5-5740-56dc-34b4dfd1b890?t=1668624314300" rel="noopener noreferrer" target="_blank">Súmula 66 (Revogada)</a></td>
+			<td>A cobrança abusiva de encargos no período da normalidade contratual (juros&nbsp;remuneratórios e capitalização) não basta para a descaracterização da mora&nbsp;quando não efetuado o depósito da parte incontroversa do débito.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+65.pdf/aeb23438-9d7b-52f7-f490-f313a93df030?t=1668624301292" rel="noopener noreferrer" target="_blank">Súmula 65</a></td>
+			<td>A cláusula que estipula o Certificado de Depósito Interbancário - CDI como&nbsp;encargo financeiro não é potestativa, por não sujeitar o devedor ao arbítrio do&nbsp;credor, visto que esse indexador é definido pelo mercado, a partir de oscilações&nbsp;econômico-financeiras, o que afasta a incidência da Súmula 176 do STJ.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+64.pdf/11c5cd31-d420-a8f5-3c7c-29720ca20895?t=1668624281849" rel="noopener noreferrer" target="_blank">Súmula 64</a></td>
+			<td>A mera renovação de diligências inexitosas ou rejeitadas sem a efetiva constrição&nbsp;patrimonial, ainda que antes das alterações promovidas pela Lei n. 14.195/2021,&nbsp;não interrompe o curso do prazo da prescrição&nbsp;intercorrente.&nbsp;</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+63.pdf/2bf980cb-f6a9-5d33-69f4-a74ef86812fd?t=1668624188504" rel="noopener noreferrer" target="_blank">Súmula 63</a></td>
+			<td>O artigo 833, inciso X, do Código de Processo Civil alcança valores encontrados em&nbsp;caderneta de poupança e, também, em fundos de investimento, conta bancária ou&nbsp;dinheiro em espécie, até o limite de 40 (quarenta) salários mínimos, ressalvado eventual&nbsp;abuso, má-fé ou fraude.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+62.pdf/90bccc87-d3af-cc34-125f-42cec2754bca?t=1668624100010" rel="noopener noreferrer" target="_blank">Súmula 62</a></td>
+			<td>Não é recorrível, por meio de agravo de instrumento, a decisão de emenda da&nbsp;petição inicial, ainda que sob pena de extinção do feito.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+61.pdf/5b365e88-9606-b57b-0a3a-7668bf35220b?t=1668624058367" rel="noopener noreferrer" target="_blank">Súmula 61</a></td>
+			<td>O decurso de prazo inferior a 30 (trinta) dias úteis entre o recebimento da notificação&nbsp;extrajudicial e o&nbsp;ajuizamento da ação de produção antecipada da prova não se mostra&nbsp;razoável, o que afasta o interesse&nbsp;processual por ausência de pretensão resistida.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/0/S%C3%9AMULA+60.pdf/9e677938-3f76-c92b-80ef-89b495281b0d?t=1668624017147" rel="noopener noreferrer" target="_blank">Súmula 60</a></td>
+			<td>Em ação de produção antecipada da prova, não se revela apto a configurar o interesse&nbsp;de agir o requerimento administrativo genérico, que deixa de individualizar a parte e&nbsp;especificar os documentos e contratos&nbsp;reclamados.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/0/S%C3%9AMULA+59.pdf/83b48cb1-7b02-3b48-b995-76db74c307cb?t=1668623969298" rel="noopener noreferrer" target="_blank">Súmula 59</a></td>
+			<td>Na ação de produção antecipada da prova, somente são devidos honorários advocatícios&nbsp;quando demonstrada a recusa administrativa na exibição do documento e, ainda, a&nbsp;resistência à pretensão em juízo.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+58.pdf/a9a5e618-9b5c-9806-b2fb-9e17ab48a034?t=1668623909030" rel="noopener noreferrer" target="_blank">Súmula 58 (Revogada)</a></td>
+			<td>Em alienação fiduciária ou arrendamento mercantil, a correspondência&nbsp;encaminhada para o endereço do contrato que tenha sido devolvida com a&nbsp;informação “ausente” ou “não procurado” mostra-se insuficiente para a&nbsp;constituição do devedor em mora.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+57/ad41c473-1305-7087-8786-c5683401fcf4" target="_blank">Súmula 57</a></td>
+			<td>
+			<p>Disponível em sítio eletrônico o documento pretendido, carece de interesse processual a produção antecipada de provas ou a pretensão de sua exibição.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+56/7d2ddb4e-224f-55e8-d857-b22da7823427" target="_blank">Súmula 56</a></td>
+			<td>
+			<p>A contradição que enseja a oposição de embargos de declaração deve estar presente internamente na decisão atacada, ou seja, quando os fundamentos são incompatíveis com a sua conclusão.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+55/be18007f-136a-c9d1-13f4-45f8aad21030" target="_blank">Súmula 55</a></td>
+			<td>
+			<p>A inversão do ônus da prova não exime o consumidor de trazer aos autos indícios mínimos do direito alegado na inicial quando a prova lhe diga respeito.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="https://www.tjsc.jus.br/documents/557855/3390160/S%C3%BAmula+54/67c72963-7cee-e002-14bf-68aa2ad66400" target="_blank">Súmula 54</a></td>
+			<td>
+			<p>Indeferida a petição inicial ou julgado liminarmente improcedente o pedido e interposta apelação, o juiz deve retratar-se ou manter a decisão (art. 331, § 1º e art. 332, § 4º do Código de Processo Civil), caso em que a parte ré deve ser citada para, querendo, apresentar resposta ao recurso. Não observada essa regra, o julgamento será convertido em diligência.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+53/d68e82cb-a48e-0f8b-8995-0f61778bfbfa" target="_blank">Súmula 53</a></td>
+			<td>
+			<p>Indeferido o pleito de concessão da justiça gratuita, a realização de novo pedido pressupõe demonstração de mudança da condição financeira anteriormente apresentada.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+52/26c9da5f-21bc-1953-8dcb-8e490450c084" target="_blank">Súmula 52</a></td>
+			<td>
+			<p>É cabível a majoração dos honorários recursais anteriormente fixados, na forma do artigo 85, § 11, do Código de Processo Civil, ainda que não sejam apresentadas contrarrazões ao recurso interposto ou que não seja realizado trabalho adicional em segundo grau.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+51/1b2c003e-3963-81a0-4334-93e1c1034f05" target="_blank">Súmula 51</a></td>
+			<td>
+			<p>O pedido de justiça gratuita seguido do pagamento do preparo pelo recorrente é considerado ato incompatível com o interesse de recorrer, impossibilitando o conhecimento do recurso no ponto.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+50/d6110d37-7d79-4205-d908-a1e6c8ec0655" target="_blank">Súmula 50</a></td>
+			<td>
+			<p>A comprovação de despesas de assistência médica e suplementares (DAMS), decorrentes de acidente automobilístico, garante o direito à cobertura do Seguro DPVAT ainda que a dívida correspondente não tenha sido paga.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+49/7c76cb18-ec30-f5e4-cbfb-aa51d3197a24" target="_blank">Súmula 49</a></td>
+			<td>
+			<p>A negativa de pagamento de indenização do Seguro DPVAT na via administrativa, por si só, não enseja abalo anímico à parte segurada.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+48/06339392-1cb2-c79a-1a89-9b8d5a07fe67" target="_blank">Súmula 48</a></td>
+			<td>
+			<p>Para o pagamento integral do valor do seguro DPVAT é necessário que a prova pericial demonstre o comprometimento completo do membro afetado. Do contrário, aplica-se o redutor previsto no inciso II do § 1º do artigo 3º da Lei n. 6.194/1974.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+47/12b85c7b-4e98-cd70-e417-31be9cca6e7d" target="_blank">Súmula 47</a></td>
+			<td>Nos termos da Súmula n. 580 do STJ, apenas incidirá correção monetária na indenização do Seguro DPVAT, cujo termo a quo é o evento danoso, se a seguradora não cumprir a obrigação no prazo de trinta dias, a contar da data de entrega da documentação, conforme previsto nos §§ 1º e 7º do artigo 5º da Lei n. 6.194/1974.</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+46/68ac1102-94fd-75b3-f4ae-872d8527f5af" target="_blank">Súmula 46</a></td>
+			<td>
+			<p>Tratando-se de Seguro DPVAT, é válida como prova a avaliação médica deduzida em formulário padrão utilizado em audiência, quando especifica a lesão física e fornece dados que permitam classificar a invalidez dentro dos parâmetros definidos em lei.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+45/9c4398f4-cda9-0dc4-15dc-77bd410365c7" target="_blank">Súmula 45</a></td>
+			<td>
+			<p>Para fins de configuração do direito à indenização do Seguro DPVAT, suficiente que o veículo automotor seja o elemento ativo causador do dano físico no segurado, ainda que não esteja em movimento.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+44/93ead20e-4a9d-51bd-d077-ed8bbf510f24" target="_blank">Súmula 44</a></td>
+			<td>
+			<p>Se a perícia judicial conclui que do acidente automobilístico não resultou deformidade ou invalidez permanente, não só a indenização securitária DPVAT não é devida como também não o é a atualização de eventual valor pago por mera liberalidade da seguradora no âmbito administrativo.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+43/03627599-8ed5-0a67-d9f8-cf026aebe8ac" target="_blank">Súmula 43</a></td>
+			<td>
+			<p>Nas ações de Seguro DPVAT, a documentação de internação médica do segurado, isoladamente, não derrui o resultado da perícia judicial, mormente quando a impugnação não for realizada por laudo técnico particular que aponte os equívocos cometidos pelo perito judicial.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+42/eeb6119f-c1f9-d894-ba32-1547edf5ce30" target="_blank">Súmula 42</a></td>
+			<td>
+			<p>O laudo pericial nos processos de Seguro DPVAT, confeccionado em observância às diretrizes do artigo 3º da Lei n. 6.194/1974 e não infirmado, constitui elemento hábil à definição do grau de invalidez do segurado.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+41/f00d865d-27c6-d213-ec88-3a18be4b6baa" target="_blank">Súmula 41</a></td>
+			<td>
+			<p>Na ação referente a Seguro DPVAT postulando à complementação ou à correção monetária do valor da indenização já paga pela seguradora, o requerimento administrativo não é condição de procedibilidade.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+40/0f711d21-c702-31fd-d485-cc8500b91657" target="_blank">Súmula 40</a></td>
+			<td>
+			<p>Nas ações de cobrança de complementação do Seguro DPVAT, mesmo aplicando o princípio da causalidade, deve a parte segurada ser encarregada do pagamento dos ônus da sucumbência em razão do êxito mínimo na lide.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+39/59de9a0b-7611-e0ad-fdbc-f9472f405854" target="_blank">Súmula 39</a></td>
+			<td>
+			<p>A indenização do Seguro DPVAT não é definida pelas repercussões físicas da invalidez no corpo do segurado, mas do próprio segmento corporal que se tornou inválido total ou parcialmente, em conformidade com os termos da Lei n. 11.945/2009.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+38/49b44c7a-451a-9f74-54ad-7d9ea54a6a82" target="_blank">Súmula 38</a></td>
+			<td>
+			<p>Inexiste cerceamento de defesa se o segurado do DPVAT, considerado intimado na forma do artigo 274 do Código de Processo Civil para comparecer ao exame pericial, ignora a ordem judicial e se recusa tacitamente a se submeter à realização da prova.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+37/eb8b8a08-51c8-83b4-bc17-8c2298f7d335" target="_blank">Súmula 37</a></td>
+			<td>
+			<p>Em analogia ao que ficou definido pelo Supremo Tribunal Federal no Recurso Extraordinário n. 631.240, nas ações de cobrança ajuizadas após o respectivo julgamento (3.9.2014), faz-se necessário prévio requerimento administrativo de pagamento do Seguro DPVAT, sem o que não se faz presente o interesse processual.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+36/afa40554-db0f-5a4e-39fd-73e33e6d6e86" target="_blank">Súmula 36</a></td>
+			<td>
+			<p>Não obsta a aquisição originária da propriedade por usucapião o fato de a área usucapienda ser inferior ao módulo rural.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+35/e0c8d414-c618-2f17-3651-6f7e69ea2c83" target="_blank">Súmula 35</a></td>
+			<td>
+			<p>A contratação fraudulenta de serviços por terceiro de má-fé não exime o fornecedor pelo fato do serviço, objetivamente responsável pelos danos causados a consumidor em caso de indevida inscrição, influindo, todavia, a qualidade da fraude e as cautelas por ele adotadas na valoração do quantum indenizatório.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="https://www.tjsc.jus.br/documents/557855/3390160/S%C3%BAmula+34/46171fe9-90e7-cfb4-348d-9ccc92b44564" target="_blank">Súmula 34</a></td>
+			<td>
+			<p>A alegação de modificação da situação econômica do alimentante, ou da necessidade do alimentado, deve vir acompanhada de elementos que permitam a verificação da alteração das circunstâncias fáticas anteriormente apuradas, sob pena de rejeição do pleito.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+33/ba969fb0-133e-90d2-86bf-98675c3e5368" target="_blank">Súmula 33</a></td>
+			<td>
+			<p>A ocorrência de intempéries climáticas causadoras de danos em rede elétrica, porque evento previsível e ínsito à atividade, não configura caso fortuito ou de força maior capaz de afastar a responsabilidade civil da concessionária de energia elétrica por danos decorrentes da demora no restabelecimento do fornecimento do serviço.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+32/5e9be938-92e8-e4b6-e7b1-62028fd54735" target="_blank">Súmula 32</a></td>
+			<td>
+			<p>O documento interno produzido pela concessionária de energia elétrica em conformidade com as normativas da ANEEL é considerado início de prova da regularidade na prestação de serviço de fornecimento de energia elétrica e transfere à seguradora sub-rogada nos direitos do consumidor o ônus de demonstrar a falha alegada e ou eventual divergência nos registros.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+31/48d1e99a-b4b6-b483-3124-b5467914538d" target="_blank">Súmula 31</a></td>
+			<td>
+			<p>É dever do fornecedor de produtos ou serviços demonstrar documentalmente, estreme de dúvidas, a efetiva contratação do produto/serviço pelo consumidor, com o fito de afastar eventual ação ilícita de terceiros, sob pena de responder objetivamente pelos danos oriundos da contratação fraudulenta.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+30/98f0baa8-9ded-0b97-dd60-911df38ee2f2" target="_blank">Súmula 30</a></td>
+			<td>
+			<p>É presumido o dano moral decorrente da inscrição ou manutenção irregular do nome da pessoa física ou jurídica no rol de inadimplentes, sendo despicienda a discussão acerca da comprovação dos aludidos danos.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+29/a8dbb601-bd7c-26fb-a996-0990c8862fff" target="_blank">Súmula 29</a></td>
+			<td>
+			<p>O descumprimento contratual não configura dano moral indenizável, salvo se as circunstâncias ou as evidências do caso concreto demonstrarem a lesão extrapatrimonial.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%BAmula+28/38c5a25b-0c34-73d3-3326-f77e8e48688d" target="_blank">Súmula 28</a></td>
+			<td>
+			<p>A ocorrência de intempéries climáticas ordinárias não justifica o descumprimento do prazo contratual assumido pelo fornecedor para entrega da obra, porque é circunstância previsível, inserida no risco da atividade e deve compor o planejamento do empreendedor, sendo ônus dele a comprovação de fenômeno climático extraordinário.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+27.pdf/f61a2387-f7c1-21b9-7809-0fe48f5e5f15" target="_blank">Súmula 27</a></td>
+			<td>
+			<p>A sub-rogação de crédito relacionado a contrato tipicamente bancário, em favor de entidade securitizadora ou fundo de investimento, não afasta a competência das unidades de direito bancário para processar e julgar ações fundadas em contrato dessa natureza.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+26.pdf/6a1c4fe5-06f2-45f9-a0c3-39e740007792" target="_blank">Súmula 26</a></td>
+			<td>
+			<p>Nas demandas de competência civil-consumerista, sendo o autor beneficiário da justiça gratuita, deve o réu arcar com o pagamento prévio de metade do valor dos honorários periciais nas hipóteses em que a produção da prova técnica for requerida por ambos os litigantes ou exclusivamente pelo autor, ou, ainda, determinada de ofício pelo juiz.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+25.pdf/24df8618-e684-015c-0f08-64951b577915" target="_blank">Súmula 25 (Revogada)</a></td>
+			<td>
+			<p>É&nbsp;devida a correção monetária plena da reserva de poupança dos participantes da fundação codesc de seguridade social (fusesc) que optaram pela migração para o plano de benefícios multifuturo.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+24.pdf/13742a61-2688-5bd7-b299-236627459dcb" target="_blank">Súmula 24 (Revogada)</a></td>
+			<td>
+			<p>O requisito previsto no art. 11 da Lei n. 6.218/83, referente a idade para o ingresso na Polícia Militar e Corpo de Bombeiro Militar do Estado de Santa Catarina, pode ser regulamentado pelo edital do concurso, tendo como marco referencial a data da inscrição.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+23.pdf/964c5eb6-3e9f-d5a9-eee1-86363a7f4f51" target="_blank">Súmula 23 (Revogada)&nbsp;</a></td>
+			<td>
+			<p>Nas ações aforadas em desfavor do Estado e/ou dos Municípios para obtenção de medicamentos, afigura-se plausível o pedido de chamamento ao processo da União Federal pelos coobrigados, o que torna, de rigor, a remessa do feito à Justiça Federal, órgão jurisdicional competente para apreciação do incidente processual.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+22.pdf/5714f9f6-39e4-a8a9-c9ff-a663639405e9" target="_blank">Súmula 22</a></td>
+			<td>
+			<p>A desproporção entre a despesa pública realizada para a propositura e tramitação da execução fiscal, quando o crédito tributário for inferior a um salário mínimo, acarreta a sua extinção por ausência de interesse de agir, sem prejuízo do protesto da certidão de dívida ativa (Prov. CGJ/SC n. 67/99) e da renovação do pleito se a reunião com outros débitos contemporâneos ou posteriores justificar a demanda.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+21.pdf/30bff302-24d3-6cbe-a341-d822e6c988d6" target="_blank">Súmula 21</a></td>
+			<td>
+			<p>Incide ICMS tão-somente sobre os valores referentes à energia elétrica consumida (kWh) e à demanda de potência efetivamente utilizada (kW), aferidas nos respectivos medidores, independentemente do quantitativo contratado.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+20.pdf/ebe39c8c-76c2-de49-85be-630af1c74d87" target="_blank">Súmula 20</a></td>
+			<td>
+			<p>Nas ações de repetição de indébito referente aos valores cobrados mensalmente pelos cursos de pedagogia à distância ministrados pela UDESC, esta e os Municípios conveniados têm legitimidade para figurar no pólo passivo da demanda na condição de responsáveis solidários, afastada a imposição da devolução em dobro.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+19.pdf/9cf9ef62-f5a3-db8a-b467-d630494c7419" target="_blank">Súmula 19</a></td>
+			<td>
+			<p>Nos termos das competências específicas estabelecidas pela Resolução n. 06/05 do Tribunal de Jus-tiça do Estado de Santa Catarina, uma vez fixada a natureza jurídica do serviço prestado pela con-cessionária - tarifa ou preço público - e, portanto, sem caráter tributário, é competente para o julga-mento da demanda a Vara Cível da Comarca.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+18.pdf/ac04d777-0103-a83e-d9cd-3f86052ff2a9" target="_blank">Súmula 18</a></td>
+			<td>
+			<p>O ISS incide na operação de arrendamento mercantil de coisas móveis.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+17.pdf/9d1ea5dc-1ff3-9f6f-0016-a35f7a67278e" target="_blank">Súmula 17</a></td>
+			<td>
+			<p>A decisão que declara a inconstitucionalidade de uma norma porque nula ex tunc, alcança todos os atributos que uma lei constitucional seria capaz de congregar, inclusive torna ineficaz a cláusula expressa ou implícita de revogação da disposição aparentemente substituída, mantendo vigente, como se alteração não tivesse havido, a legislação anterior, à qual se confere efeitos repristinatórios.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+16.pdf/5ef7aa61-f0f6-0c76-2c7c-303f7e18ff00" target="_blank">Súmula 16</a></td>
+			<td>
+			<p>A multa cominatória a que se referiam os artigos 916 e seguintes do Código Civil revogado (objeto dos artigos 408 e seguintes do Novo Código Civil), incide sobre o valor da obrigação principal, corrigido, acrescido dos juros impostos na sentença, quando o litígio versar sobre seguro habitacional.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+15.pdf/638b14fe-f863-52e5-e284-04beb7238c78" target="_blank">Súmula 15</a></td>
+			<td>
+			<p>Não constituindo o documento essencial a propositura da execução fiscal (CPC. 183; Lei 6.830/80, art. 6º, § 1º), não é lícito ao juiz determinar, de ofício, que o credor comprove ter notificado o devedor do lançamento do tributo.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+14.pdf/6f276625-be70-7ff2-8b68-9670e5510d4d" target="_blank">Súmula 14</a></td>
+			<td>
+			<p>O contrato bancário de abertura de crédito rotativo em conta corrente, ainda que acompanhado dos respectivos extratos de movimentação da conta corrente e assinado pelo devedor e duas testemunhas, não é título executivo extrajudicial.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+13.pdf/efc480a3-201e-4325-7bdd-a47c91225957" target="_blank">Súmula 13</a></td>
+			<td>
+			<p>As ações anulatórias de lançamento e declaratórias de inexistência de relação jurídico-tributária devem ser propostas no juízo do foro competente para conhecimento da execução fiscal pertinente, por força de conexão por prejudicialidade.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+12.pdf/bd4e2e4d-cd4d-806d-5319-1041cfddd643" target="_blank">Súmula 12</a></td>
+			<td>
+			<p>A competência para o julgamento das ações decorrentes da união estável entre o homem e a mulher é da vara da família, órfãos e sucessões, onde houver.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+11.pdf/66b10b48-57ba-f5a0-8984-a3fda2620d4c" target="_blank">Súmula 11</a></td>
+			<td>
+			<p>Arbitrados os honorários advocatícios em percentual sobre o valor da causa, a correção monetária incide a partir do ajuizamento da ação.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+10.pdf/8285af32-5c72-3819-fcc9-91b120b89d02" target="_blank">Súmula 10&nbsp;(Revogada)&nbsp;</a></td>
+			<td>
+			<p>Ação executiva. Agente financeiro do BNH. Competência da justiça local. Para as execuções especiais, movidas por agentes financeiros do bnh, ainda que delas decorra eventual reflexo sobre os recursos do sistema financeiro da habitação, competente é a justiça estadual, por não figurar a união, entidade autárquica ou empresa pública federal, interessadas na condição de autoras, rés, assistentes ou oponentes.&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+9.pdf/603c2096-d3bc-8c5d-e8d5-4c858d6c40fe" target="_blank">Súmula 9</a></td>
+			<td>
+			<p>É admissível, na ação de consignação em pagamento, a discussão sobre o quantum da dívida.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+8.pdf/24591e50-4070-ad95-8636-a80ce967be28" target="_blank">Súmula 8</a></td>
+			<td>
+			<p>A correção monetária incide sobre os créditos habilitados em concordata preventiva, nos termos da lei nº 6.899, de 8.4.81.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+7.pdf/27ddc577-47be-a8a8-ee15-21aad8d285cf" target="_blank">Súmula 7</a></td>
+			<td>
+			<p>A ação declaratória é meio processual hábil para se obter a declaração de nulidade do processo que tiver corrido à revelia do réu por ausência de citação ou por citação nulamente feita.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+6.pdf/ce288f60-4f9f-00cb-0042-bb56e79a9d2b" target="_blank">Súmula 6</a></td>
+			<td>
+			<p>A prescrição decorrente da relação de emprego de natureza estatutária abrange apenas as prestações anteriores não compreendidas no qüinqüênio previsto na lei, salvo se, negado, pela administração, o direito que se insere na relação jurídica, antes daquele prazo, Hipótese em que a prescrição atinge o próprio direito postulado.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+5.pdf/5a6b2b5b-1d40-6542-371b-0b9205f09b92" target="_blank">Súmula 5</a></td>
+			<td>
+			<p>Renovada a alegação de prescrição no recurso de apelação, a matéria é devolvida ao tribunal, ainda que a sentença não a tenha enfrentado.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+4.pdf/2de8ea7c-088b-0825-17ae-b3139a6d54b3" target="_blank">Súmula 4&nbsp;(Revogada)&nbsp;</a></td>
+			<td>
+			<p>Competência. Feito concluído. O juiz que iniciou a audiência e concluiu a instrução, com o encerramento dos debates, mesmo transferido por promoção ou remoção, será o competente para julgar a lide.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+3.pdf/fdc5c15a-5b82-1b16-4252-642a69fe8aae" target="_blank">Súmula 3</a></td>
+			<td>
+			<p>Agravo de instrumento interposto contra decisão proferida por juiz de primeiro grau. Peças que devem ser obrigatoriamente trasladadas. Deficiência no traslado. Conversão do agravo em diligência. Serão obrigatoriamente trasladadas as peças consideradas necessárias. A simples falta de alguma das peças indispensáveis à formação do agravo não importa no não conhecimento do recurso, podendo o relator, por despacho, convertê-lo em diligência.&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+2.pdf/19f09234-7fd8-ba26-2856-c129e071a6c2" target="_blank">Súmula 2</a></td>
+			<td>
+			<p>Responsabilidade civil. Acidente de trânsito. Ilegitimidade de causa. Inocorrência. Comprovada induvidosamente a compra e venda do veículo, ainda que não efetuada a transferência do certificado de registro na repartição competente, responde o novo proprietário pelos danos causados a terceiro.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/documents/557855/3390160/S%C3%9AMULA+1.pdf/0c7e150b-21e9-f4ba-79a7-9cee47beb374" target="_blank">Súmula 1</a></td>
+			<td>
+			<p>Alienação fiduciária em garantia. Se, vendida a coisa garantida fiduciariamente, há saldo devedor, pode o credor, por ele, executar o avalista do título emitido em garantia do pagamento da quantia mutuada.</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+			
+		</div>
+
+		
+
+	
+
+
+
+							</div>
+						
+					
+				
+			
+		
+	
+
+
+
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+	
+	
+					
+				
+			
+		
+	
+	
+
+
+	</div>
+
+			</div>
+		
+	</div>
+</section>
+	
+
+		
+		
+
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+
+</div>
+		</div>
+	</div>
+</div>
+	
+
+
+<form action="#" aria-hidden="true" class="hide" id="hrefFm" method="post" name="hrefFm"><span></span><button hidden type="submit">Oculto</button></form>
+
+	
+
+		</main>
+
+
+
+<footer id="tjsc-footer">
+	<div class="tjsc-style-background-color-palette-primary-light-gray tjsc-style-color-palette-primary-dark-green-important text-center" role="navigation">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-xs-12 col-sm-4 col-md-3 py-2">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/atendimento-e-contatos" >
+						<i class="fa-xl fa fa-comment pr-2" aria-hidden="true"></i><strong>Atendimento e Contatos</strong>
+					</a>
+				</div>
+				<div class="col-xs-12 d-sm-none pt-1 tjsc-style-background-color-palette-secondary-white"></div>
+				<div class="col-xs-12 col-sm-4 col-md-3 py-2">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/mapa-do-site" >
+						<i class="fa-xl fa fa-sitemap pr-2" aria-hidden="true"></i><strong>Mapa do Site</strong>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="d-none d-sm-block tjsc-style-background-color-palette-primary-dim-green tjsc-style-color-palette-secondary-white py-3" role="navigation">
+		<div class="container">
+			<div class="row">
+					<div class="col-sm-6 col-md-3">
+	<strong>Institucional</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Institucional">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/calendario-institucional" >Calendário e Feriados Locais</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/certidoes" >Certidões</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/concursos" >Concursos e Estágio</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/destinacao-de-verbas-pecuniarias" >Destinação de Verbas Pecuniárias</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/diario-da-justica-eletronico" >Diário da Justiça Eletrônico</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/documentacao" >Documentação</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/estrutura-judiciaria" >Estrutura Judiciária</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/galeria-de-presidentes" >Galeria de Presidentes</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/identidade-e-comunicacao-visual" >Identidade e Comunicação Visual</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/missao-e-visao" >Missão e Visão</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/organograma" >Organograma</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/visite-o-tjsc" >Visite o TJSC</a>
+				</li>
+		</ul>
+					</div>
+					<div class="col-sm-6 col-md-3">
+	<strong>Tribunal de Justiça</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Tribunal de Justiça">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/composicao" >Composição</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/diretorias" >Diretorias</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/dirigentes" >Dirigentes</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/nucleo-de-gerenciamento-de-precedentes-e-acoes-coletivas" >Núcleo de Gerenciamento de Precedentes e Ações Coletivas</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/orgaos-administrativos" >Órgãos Administrativos</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/orgaos-julgadores" >Órgãos Julgadores</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/presidencia" >Presidência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/primeira-vice-presidencia" >Primeira Vice-Presidência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/segunda-vice-presidencia" >Segunda Vice-Presidência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/judicial/sessoes-do-tribunal-de-justica" >Sessões de Julgamento</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/suspensao-de-prazos-e-expediente" >Suspensão de Prazos e Expediente</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/terceira-vice-presidencia" >Terceira Vice-Presidência</a>
+				</li>
+		</ul>
+					</div>
+					<div class="col-sm-6 col-md-3 mt-sm-3 mt-md-0">
+	<strong>Comarcas</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Comarcas">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/atos-normativos" >Atos Normativos</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/circunscricoes" >Circunscrições</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/lotacao-de-magistrados" >Lotação de Magistrados</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/paginas-das-comarcas" >Páginas das Comarcas</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/pauta-de-audiencia" >Pauta de Audiência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/pontos-de-inclusao-digital" >Pontos de Inclusão Digital</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/suspensao-de-prazos-e-expediente" >Suspensão de Prazos e Expediente</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/unidade-das-questoes-agrarias" >Unidade das Questões Agrárias</a>
+				</li>
+		</ul>
+						<br /><br />
+	<strong>Juizados e Turmas</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Juizados e Turmas">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/juizados-especiais" >Juizados Especiais</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/pautas-das-sessoes-da-turma-uniformizacao" >Pautas das Sessões da Turma de Uniformização</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/pautas-das-sessoes-das-turmas-recursais" >Pautas das Sessões das Turmas Recursais</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/turmas-de-recursos-e-de-uniformizacao" >Turmas de Recursos e de Uniformização</a>
+				</li>
+		</ul>
+						<br /><br />
+	<strong>Legislação</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Legislação">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/legislacao/externa" >Externa</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/legislacao/interna" >Interna</a>
+				</li>
+		</ul>
+					</div>
+					<div class="col-sm-6 col-md-3 mt-sm-3 mt-md-0">
+	<strong>Portais PJSC</strong>
+
+		<ul class="list-unstyled mb-0 text-2" aria-label="Portais PJSC">
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/academia-judicial" >Academia Judicial</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/acessibilidade-e-inclusao" >Acessibilidade e Inclusão</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/biblioteca" >Biblioteca</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/conciliacao-e-mediacao" >Conciliação e Mediação</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/corregedoria-geral-da-justica" >Corregedoria-Geral da Justiça</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/extrajudicial" >Corregedoria-Geral do Foro Extrajudicial</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/eproc" >eproc - Processo Judicial</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/estatistica" >Estatística</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/gestao-estrategica" >Gestão Estratégica</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/gestao-socioambiental" >Gestão Socioambiental</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/imprensa" >Imprensa</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/infancia-e-juventude" >Infância e Juventude</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/jurisprudencia" >Jurisprudência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/justica-restaurativa" >Justiça Restaurativa</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/lei-geral-de-protecao-de-dados-pessoais" >Lei Geral de Proteção de Dados Pessoais</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/licitacoes-contratos-e-patrimonio" >Licitações, Contratos e Patrimônio</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/magistrado" >Magistrado</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/memoria" >Memória</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/orcamento-e-financas" >Orçamento e Finanças</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/ouvidoria" >Ouvidoria</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/ouvidoria-da-mulher" >Ouvidoria da Mulher</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/seeu" >SEEU - Execução Penal</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/sei" >SEI - Processo Administrativo</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/servico-de-informacao-ao-cidadao" >Serviço de Informação ao Cidadão</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/servidor" >Servidor</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/sistemas-prisional-e-socioeducativo" >Sistemas Prisional e Socioeducativo</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/tecnologia-da-informacao" >Tecnologia da Informação</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/transparencia" >Transparência</a>
+				</li>
+				<li class="mt-1" role="presentation">
+					<a class="tjsc-style-text-decoration font-weight-normal" href="/web/violencia-contra-a-mulher" >Violência contra a Mulher</a>
+				</li>
+		</ul>
+					</div>
+				<div class="col-xs-12 mt-3 pt-3 border-top tjsc-style-border-color-palette-secondary-white text-center">
+					<div class="d-md-none mt-1 mb-3">
+						
+		<p class="d-block d-sm-none mb-1"><strong>Nossas Redes Sociais</strong></p>
+		<ul class="list-inline mb-0" aria-label="Nossas Redes Sociais">
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/instagram" target="_blank" title="Instagram" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-instagram" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Instagram</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/whatsapp" target="_blank" title="WhatsApp" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-whatsapp" aria-hidden="true"></i>
+					<span class="sr-only">Acessar WhatsApp</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/x" target="_blank" title="X" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-x-twitter" aria-hidden="true"></i>
+					<span class="sr-only">Acessar X</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/threads" target="_blank" title="Threads" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-threads" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Threads</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/facebook" target="_blank" title="Facebook" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-facebook-f" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Facebook</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/youtube" target="_blank" title="YouTube" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-youtube" aria-hidden="true"></i>
+					<span class="sr-only">Acessar YouTube</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/flickr" target="_blank" title="Flickr" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-flickr" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Flickr</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/soundcloud" target="_blank" title="SoundCloud" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-soundcloud" aria-hidden="true"></i>
+					<span class="sr-only">Acessar SoundCloud</span>
+				</a>
+			</li>
+		</ul>
+	
+					</div>
+					<address class="d-inline mb-0">Rua Álvaro Millen da Silveira, n. 208 - Florianópolis/SC - CEP: 88020-901</address>
+					<span class="d-none d-md-inline"> | </span>
+					<span class="d-block d-md-inline">(48) 3287-1000 | Segunda a sexta das 12h às 19h</span>
+				</div>
+				<div class="col-xs-12 mt-3 text-center">
+					<a class="d-inline-block" href="/premios-conquistados">
+						<img style="height: 116px;" src="/documents/d/global/tjsc-theme-imagens-premios-conquistados" alt="Selos de Qualidade em Transparência Pública e Prêmios CNJ de Qualidade - 2020 a 2025" title="Prêmios conquistados pelo TJSC" data-toggle="tooltip" data-placement="bottom" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="d-sm-none tjsc-style-background-color-palette-primary-dim-green tjsc-style-color-palette-secondary-white py-3" role="navigation">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					
+		<p class="d-block d-sm-none mb-1"><strong>Nossas Redes Sociais</strong></p>
+		<ul class="list-inline mb-0" aria-label="Nossas Redes Sociais">
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/instagram" target="_blank" title="Instagram" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-instagram" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Instagram</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/whatsapp" target="_blank" title="WhatsApp" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-whatsapp" aria-hidden="true"></i>
+					<span class="sr-only">Acessar WhatsApp</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/x" target="_blank" title="X" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-x-twitter" aria-hidden="true"></i>
+					<span class="sr-only">Acessar X</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/threads" target="_blank" title="Threads" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-threads" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Threads</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/facebook" target="_blank" title="Facebook" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-facebook-f" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Facebook</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/youtube" target="_blank" title="YouTube" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-youtube" aria-hidden="true"></i>
+					<span class="sr-only">Acessar YouTube</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/flickr" target="_blank" title="Flickr" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-flickr" aria-hidden="true"></i>
+					<span class="sr-only">Acessar Flickr</span>
+				</a>
+			</li>
+			<li class="list-inline-item">
+				<a class="font-weight-normal" href="/redes-sociais/soundcloud" target="_blank" title="SoundCloud" data-toggle="tooltip" data-placement="bottom">
+					<i class="fa-xl fa-brands fa-soundcloud" aria-hidden="true"></i>
+					<span class="sr-only">Acessar SoundCloud</span>
+				</a>
+			</li>
+		</ul>
+	
+					<hr class="tjsc-style-border-color-palette-secondary-white" />
+					<address class="mb-0">Rua Álvaro Millen da Silveira, n. 208<br />Florianópolis/SC - CEP: 88020-901</address>
+					<p class="my-2">(48) 3287-1000</p>
+					<p class="mb-0">Segunda a sexta das 12h às 19h</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function(){
+			$("body:not(.portal-popup) .quick-access-nav")
+				.append('<a accesskey="3" class="d-none d-sm-block m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#tjsc-header-main-menu"><span class="label label-light mr-2">3</span>Ir para o menu principal</a>')
+				.append('<a accesskey="4" class="d-block d-sm-none m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#tjsc-header-mobile-main-menu-toggler"><span class="label label-light mr-2">4</span>Ir para o menu principal</a>')
+				.append('<a accesskey="5" class="d-block m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#tjsc-header-main-search-text"><span class="label label-light mr-2">5</span>Ir para a pesquisa</a>')
+				.append('<a accesskey="6" class="d-block m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="#tjsc-footer"><span class="label label-light mr-2">6</span>Ir para o rodapé</a>')
+				.append('<a accesskey="7" class="d-block m-1 p-2 sr-only sr-only-focusable font-weight-normal" href="https://www.tjsc.jus.br"><span class="label label-light mr-2">7</span>Ir para a página inicial</a>');
+		});
+	</script>
+</footer>	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+	
+		
+
+			
+
+			
+		
+	
+
+
+</script><script>
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+<script type="text/javascript">
+
+	function getValueByAttribute(node, attr) {
+		return (
+			node.dataset[attr] ||
+			(node.parentElement && node.parentElement.dataset[attr])
+		);
+	}
+
+	function sendDocumentDownloadedAnalyticsEvent(anchor) {
+		var fileEntryId = getValueByAttribute(
+			anchor,
+			'analyticsFileEntryId'
+		);
+		var title = getValueByAttribute(
+			anchor,
+			'analyticsFileEntryTitle'
+		);
+		var version = getValueByAttribute(
+			anchor,
+			'analyticsFileEntryVersion'
+		);
+
+		if (fileEntryId) {
+			Analytics.send('documentDownloaded', 'Document', {
+				groupId: themeDisplay.getScopeGroupId(),
+				fileEntryId,
+				preview:
+					!!window._com_liferay_document_library_analytics_isViewFileEntry,
+				title,
+				version,
+			});
+		}
+	}
+
+	function handleDownloadClick(event) {
+		if (window.Analytics) {
+			if (event.target.nodeName.toLowerCase() === 'a') {
+				sendDocumentDownloadedAnalyticsEvent(
+					event.target
+				);
+			}
+			else if (
+				event.target.parentNode &&
+				event.target.parentNode.nodeName.toLowerCase() === 'a'
+			) {
+				sendDocumentDownloadedAnalyticsEvent(
+					event.target.parentNode
+				);
+			}
+			else {
+				var target = event.target;
+				var matchTextContent =
+					target.textContent &&
+					target.textContent.toLowerCase() ===
+						'baixar';
+				var matchTitle =
+					target.title && target.title.toLowerCase() === 'download';
+				var matchAction = target.action === 'download';
+				var matchLexiconIcon = !!target.querySelector(
+					'.lexicon-icon-download'
+				);
+				var matchLexiconClassName = target.classList.contains(
+					'lexicon-icon-download'
+				);
+				var matchParentTitle =
+					target.parentNode &&
+					target.parentNode.title &&
+					target.parentNode.title.toLowerCase() === 'download';
+				var matchParentLexiconClassName =
+					target.parentNode &&
+					target.parentNode.classList.contains('lexicon-icon-download');
+
+				if (
+					matchTextContent ||
+					matchTitle ||
+					matchParentTitle ||
+					matchAction ||
+					matchLexiconIcon ||
+					matchLexiconClassName ||
+					matchParentLexiconClassName
+				) {
+					var selectedFiles = document.querySelectorAll(
+						'.form .custom-control-input:checked'
+					);
+
+					selectedFiles.forEach(({value}) => {
+						var selectedFile = document.querySelector(
+							'[data-analytics-file-entry-id="' + value + '"]'
+						);
+
+						sendDocumentDownloadedAnalyticsEvent(
+							selectedFile
+						);
+					});
+				}
+			}
+		}
+	}
+
+	Liferay.once('destroyPortlet', () => {
+		document.body.removeEventListener(
+			'click',
+			handleDownloadClick
+		);
+	});
+
+	Liferay.once('portletReady', () => {
+		document.body.addEventListener(
+			'click',
+			handleDownloadClick
+		);
+	});
+
+(function() {var $ = AUI.$;var _ = AUI._;
+	var onVote = function (event) {
+		if (window.Analytics) {
+			let title = event.contentTitle;
+
+			if (!title) {
+				const dmNode = document.querySelector(
+					'[data-analytics-file-entry-id="' + event.classPK + '"]'
+				);
+
+				if (dmNode) {
+					title = dmNode.dataset.analyticsFileEntryTitle;
+				}
+			}
+
+			Analytics.send('VOTE', 'Ratings', {
+				className: event.className,
+				classPK: event.classPK,
+				ratingType: event.ratingType,
+				score: event.score,
+				title,
+			});
+		}
+	};
+
+	var onDestroyPortlet = function () {
+		Liferay.detach('ratings:vote', onVote);
+		Liferay.detach('destroyPortlet', onDestroyPortlet);
+	};
+
+	Liferay.on('ratings:vote', onVote);
+	Liferay.on('destroyPortlet', onDestroyPortlet);
+})();
+(function() {var $ = AUI.$;var _ = AUI._;
+	var onDestroyPortlet = function () {
+		Liferay.detach('messagePosted', onMessagePosted);
+		Liferay.detach('destroyPortlet', onDestroyPortlet);
+	};
+
+	Liferay.on('destroyPortlet', onDestroyPortlet);
+
+	var onMessagePosted = function (event) {
+		if (window.Analytics) {
+			const eventProperties = {
+				className: event.className,
+				classPK: event.classPK,
+				commentId: event.commentId,
+				text: event.text,
+			};
+
+			const blogNode = document.querySelector(
+				'[data-analytics-asset-id="' + event.classPK + '"]'
+			);
+
+			const dmNode = document.querySelector(
+				'[data-analytics-file-entry-id="' + event.classPK + '"]'
+			);
+
+			if (blogNode) {
+				eventProperties.title = blogNode.dataset.analyticsAssetTitle;
+			}
+			else if (dmNode) {
+				eventProperties.title = dmNode.dataset.analyticsFileEntryTitle;
+			}
+
+			Analytics.send('posted', 'Comment', eventProperties);
+		}
+	};
+
+	Liferay.on('messagePosted', onMessagePosted);
+})();
+(function() {var $ = AUI.$;var _ = AUI._;
+	var onShare = function (data) {
+		if (window.Analytics) {
+			Analytics.send('shared', 'SocialBookmarks', {
+				className: data.className,
+				classPK: data.classPK,
+				type: data.type,
+				url: data.url,
+			});
+		}
+	};
+
+	var onDestroyPortlet = function () {
+		Liferay.detach('socialBookmarks:share', onShare);
+		Liferay.detach('destroyPortlet', onDestroyPortlet);
+	};
+
+	Liferay.on('socialBookmarks:share', onShare);
+	Liferay.on('destroyPortlet', onDestroyPortlet);
+})();
+
+	if (window.svg4everybody && Liferay.Data.ICONS_INLINE_SVG) {
+		svg4everybody(
+			{
+				polyfill: true,
+				validate: function (src, svg, use) {
+					return !src || !src.startsWith('#');
+				}
+			}
+		);
+	}
+
+(function() {var $ = AUI.$;var _ = AUI._;
+	Liferay.Util.delegate(
+		document,
+		'focusin',
+		'.portlet',
+		function(event) {
+			event.delegateTarget.closest('.portlet').classList.add('open');
+		}
+	);
+
+	Liferay.Util.delegate(
+		document,
+		'focusout',
+		'.portlet',
+		function(event) {
+			event.delegateTarget.closest('.portlet').classList.remove('open');
+		}
+	);
+})();
+
+	// <![CDATA[
+
+		
+
+		Liferay.currentURL = '\x2fweb\x2fjurisprudencia\x2fsumulas-do-tjsc';
+		Liferay.currentURLEncoded = '\x252Fweb\x252Fjurisprudencia\x252Fsumulas-do-tjsc';
+
+	// ]]>
+
+(function() {var $ = AUI.$;var _ = AUI._;
+		import(Liferay.ThemeDisplay.getPathContext() + '/o/frontend-js-web/__liferay__/index.js').then(
+			({openToast}) => {
+				AUI().use(
+					'liferay-session',
+					function () {
+						Liferay.Session = new Liferay.SessionBase(
+							{
+								autoExtend: true,
+								redirectOnExpire: false,
+								redirectUrl: 'https\x3a\x2f\x2fwww\x2etjsc\x2ejus\x2ebr\x2fweb\x2ftjsc\x2finicio',
+								sessionLength: 14400,
+								sessionTimeoutOffset: 70,
+								warningLength: 1200
+							}
+						);
+
+						
+					}
+				);
+			}
+		)
+	})();
+
+	
+		Liferay.Portlet.register('com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9');
+	
+
+	Liferay.Portlet.onLoad(
+		{
+			canEditTitle: false,
+			columnPos: 0,
+			isStatic: 'end',
+			namespacedId: 'p_p_id_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9_',
+			portletId: 'com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9',
+			refreshURL: '\x2fc\x2fportal\x2frender_portlet\x3fp_l_id\x3d580583\x26p_p_id\x3dcom_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_Qvevq9oYSUR9\x26p_p_lifecycle\x3d0\x26p_t_lifecycle\x3d0\x26p_p_state\x3dnormal\x26p_p_mode\x3dview\x26p_p_col_id\x3dcolumn-1\x26p_p_col_pos\x3d0\x26p_p_col_count\x3d2\x26p_p_isolated\x3d1\x26currentURL\x3d\x252Fweb\x252Fjurisprudencia\x252Fsumulas-do-tjsc',
+			refreshURLData: {}
+		}
+	);
+
+
+	
+		Liferay.Portlet.register('com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH');
+	
+
+	Liferay.Portlet.onLoad(
+		{
+			canEditTitle: false,
+			columnPos: 1,
+			isStatic: 'end',
+			namespacedId: 'p_p_id_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH_',
+			portletId: 'com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH',
+			refreshURL: '\x2fc\x2fportal\x2frender_portlet\x3fp_l_id\x3d580583\x26p_p_id\x3dcom_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_INSTANCE_mMFv9cBeAFsH\x26p_p_lifecycle\x3d0\x26p_t_lifecycle\x3d0\x26p_p_state\x3dnormal\x26p_p_mode\x3dview\x26p_p_col_id\x3dcolumn-1\x26p_p_col_pos\x3d1\x26p_p_col_count\x3d2\x26p_p_isolated\x3d1\x26currentURL\x3d\x252Fweb\x252Fjurisprudencia\x252Fsumulas-do-tjsc',
+			refreshURLData: {}
+		}
+	);
+
+
+	
+		Liferay.Portlet.register('com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk');
+	
+
+	Liferay.Portlet.onLoad(
+		{
+			canEditTitle: false,
+			columnPos: 0,
+			isStatic: 'end',
+			namespacedId: 'p_p_id_com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk_',
+			portletId: 'com_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk',
+			refreshURL: '\x2fc\x2fportal\x2frender_portlet\x3fp_l_id\x3d580583\x26p_p_id\x3dcom_liferay_journal_content_web_portlet_JournalContentPortlet_INSTANCE_iiSlPKuFzCbk\x26p_p_lifecycle\x3d0\x26p_t_lifecycle\x3d0\x26p_p_state\x3dnormal\x26p_p_mode\x3dview\x26p_p_col_id\x3dcolumn-2\x26p_p_col_pos\x3d0\x26p_p_col_count\x3d1\x26p_p_isolated\x3d1\x26currentURL\x3d\x252Fweb\x252Fjurisprudencia\x252Fsumulas-do-tjsc',
+			refreshURLData: {}
+		}
+	);
+
+
+</script><script type="module">
+import {InfoItemActionHandler as ComponentModule} from '/o/layout-taglib/__liferay__/index.js';
+AUI().use(
+  'liferay-menu',
+function(A) {
+{
+Liferay.component('infoItemActionComponent', new ComponentModule({"executeInfoItemActionURL":"https:\/\/www.tjsc.jus.br\/c\/portal\/execute_info_item_action?p_l_mode=view&plid=580583","namespace":"","spritemap":"https:\/\/www.tjsc.jus.br\/o\/tjsc-theme\/images\/clay\/icons.svg"}), { destroyOnNavigate: true, portletId: ''});
+}
+(function() {
+var $ = AUI.$;var _ = AUI._;
+	new Liferay.Menu();
+
+	var liferayNotices = Liferay.Data.notices;
+
+	for (var i = 0; i < liferayNotices.length; i++) {
+		Liferay.Util.openToast(liferayNotices[i]);
+	}
+
+})();
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+<script src="https://www.tjsc.jus.br/o/tjsc-theme/js/main.js?browserId=chrome&amp;minifierType=js&amp;languageId=pt_BR&amp;t=1786538452000" type="text/javascript"></script>
+
+
+
+
+<script type="module">
+import {main} from '/o/frontend-js-dropdown-support-web/__liferay__/index.js';
+{
+main();
+}
+
+</script><script type="module">
+import {main} from '/o/frontend-js-tabs-support-web/__liferay__/index.js';
+{
+main();
+}
+
+</script><script type="module">
+import {main} from '/o/frontend-js-tooltip-support-web/__liferay__/index.js';
+{
+main();
+}
+
+</script><script type="module">
+import {main} from '/o/frontend-js-alert-support-web/__liferay__/index.js';
+{
+main();
+}
+
+</script><script type="module">
+import {main} from '/o/frontend-js-collapse-support-web/__liferay__/index.js';
+{
+main();
+}
+
+</script><script type="module">
+import {runThirdPartyCookiesInterval} from '/o/cookies-banner-web/__liferay__/index.js';
+{
+runThirdPartyCookiesInterval();
+}
+
+</script><script type="text/javascript">
+Liferay.CustomDialogs = {enabled: false};
+
+</script><script>
+
+</script>	</body>
+
+	</html>
+
+		
+	
+

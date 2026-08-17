@@ -263,6 +263,29 @@ jobs:
           fi
           perl scripts/gerar_tjrs.pl rs.txt
 
+      - name: Atualizar Súmulas do TJSC (página oficial)
+        continue-on-error: true
+        run: |
+          # Súmulas do TJSC são HTML inline (o proxy do Google traduziria o texto
+          # p/ inglês, então NÃO serve). Tenta direto (headers+-k; o TJSC pode
+          # não bloquear nuvem) e, se falhar, usa o HTML oficial commitado.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
+          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "https://www.tjsc.jus.br/web/jurisprudencia/sumulas-do-tjsc" -o sc.html || true
+          BYTES=$(stat -c%s sc.html 2>/dev/null || echo 0)
+          if grep -qiE '>S[úu]mula [0-9]+<' sc.html && [ "$BYTES" -gt 80000 ]; then
+            echo "TJSC: página oficial baixada ($BYTES bytes)."
+          else
+            echo "TJSC: página inacessível de nuvem ($BYTES bytes); usando o HTML oficial commitado."
+            cp scripts/fontes/tjsc.html sc.html
+          fi
+          perl scripts/gerar_tjsc.pl sc.html
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

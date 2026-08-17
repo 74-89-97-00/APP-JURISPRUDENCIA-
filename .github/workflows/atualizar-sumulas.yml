@@ -223,6 +223,38 @@ jobs:
           # parser é INCREMENTAL: se o proxy derrubar um post, preserva o que já existe.
           perl scripts/gerar_tjes.pl tjes-posts.json
 
+      - name: Atualizar Súmulas do TJRS (PDF oficial)
+        continue-on-error: true
+        run: |
+          # Súmulas do TJ do RS num PDF fixo (estável desde 2020). Tenta direto
+          # (headers+-k; o TJRS pode não bloquear nuvem) e, se falhar, via proxy
+          # do Google. Descobre a URL atual do PDF pela página de súmulas.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          HDR=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+               -H 'Accept-Language: pt-BR,pt;q=0.9,en;q=0.8'
+               -H 'sec-ch-ua: "Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"'
+               -H 'sec-ch-ua-mobile: ?0' -H 'sec-ch-ua-platform: "Windows"'
+               -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate'
+               -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1')
+          PG="jurisprudencia-e-legislacao/jurisprudencia/sumulas/"
+          curl -sL -k -m 60 --compressed -A "$UA" "${HDR[@]}" "https://www.tjrs.jus.br/novo/$PG" -o rs.html || true
+          grep -qiE 'Sumulas_TJ[^"]*\.pdf' rs.html || curl -sL -m 90 --compressed -A "$UA" "https://www-tjrs-jus-br.translate.goog/novo/$PG?_x_tr_sl=pt&_x_tr_tl=en&_x_tr_hl=en" -o rs.html || true
+          REL=$(grep -oiE 'href="[^"]*Sumulas_TJ[^"]*\.pdf[^"]*"' rs.html | head -1 | sed -E 's/.*href="//; s/"$//; s/&amp;/\&/g; s#^https://www-tjrs-jus-br\.translate\.goog/#https://www.tjrs.jus.br/#')
+          PDFURL="${REL:-https://www.tjrs.jus.br/static/2020/08/Sumulas_TJ_atual_12_08_2020.pdf}"
+          echo "PDF TJRS: $PDFURL"
+          TRPDF=$(printf '%s' "$PDFURL" | sed -E 's#^https://www\.tjrs\.jus\.br/#https://www-tjrs-jus-br.translate.goog/#')
+          ok=""
+          for try in 1 2 3; do
+            curl -sL -k -m 90 --compressed -A "$UA" "${HDR[@]}" "$PDFURL" -o rs.pdf || true
+            head -c4 rs.pdf 2>/dev/null | grep -q '%PDF' && { ok=1; break; }
+            curl -sL -m 120 --compressed -A "$UA" "$TRPDF?_x_tr_sl=pt&_x_tr_tl=en" -o rs.pdf || true
+            head -c4 rs.pdf 2>/dev/null | grep -q '%PDF' && { ok=1; break; }
+            sleep 5
+          done
+          if [ -z "$ok" ]; then echo "::warning::TJRS: PDF não obtido (bloqueio/proxy fora) — súmulas mantidas."; exit 0; fi
+          pdftotext -layout -enc UTF-8 rs.pdf rs.txt
+          perl scripts/gerar_tjrs.pl rs.txt
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

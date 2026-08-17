@@ -19,10 +19,10 @@ const state = {
 // Um verbete sem vigência (cancelado, superado, revogado, suspenso) NÃO deve ser
 // citado como fundamento. Por isso o filtro "Só vigentes" nasce ligado: ~16% do
 // acervo está nessa situação e apareceria misturado na busca.
-const RE_NAO_VIGENTE = /cancel|superad|revogad|suspens|n[ãa]o\s*public/i;
+const RE_NAO_VIGENTE = /cancel|superad|revogad|substitu|prejudicad|suspens|n[ãa]o\s*public/i;
 function naoVigente(e) { return RE_NAO_VIGENTE.test(e.situacao || ""); }
 
-const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES"];
+const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES", "TJRS"];
 const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },

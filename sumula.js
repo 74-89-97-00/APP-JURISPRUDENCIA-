@@ -156,7 +156,7 @@ function render() {
 
   const favs = loadFav();
   const fav = favs.has(e.id);
-  const alerta = /cancel|superad|revogad|suspens|n[ãa]o\s*public/i.test(e.situacao || "");
+  const alerta = /cancel|superad|revogad|substitu|prejudicad|suspens|n[ãa]o\s*public/i.test(e.situacao || "");
   const materia = materiaDe(e);
 
   root.innerHTML = `

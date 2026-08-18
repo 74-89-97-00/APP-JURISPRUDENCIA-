@@ -352,6 +352,35 @@ jobs:
           echo "TJGO: baixados $(ls "$DIR"/*.odt "$DIR"/*.pdf 2>/dev/null | wc -l) arquivos."
           perl scripts/gerar_tjgo.pl go_list.json "$DIR"
 
+      - name: Atualizar Súmulas do TJMT (bundle JS)
+        continue-on-error: true
+        run: |
+          # TJMT: as 2 súmulas do Pleno estão "chumbadas" num chunk JS do portal
+          # de jurisprudência (nome com hash que muda a cada deploy). Descobre o
+          # chunk dinamicamente: página -> runtime inline -> mapa de chunks -> o
+          # que contém "this.texto1". Fallback: o chunk oficial commitado.
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          B='https://jurisprudencia.tjmt.jus.br'
+          rm -f mt_chunk.js; mkdir -p mtchunks
+          curl -s -k -m 40 -A "$UA" "$B/sumulas" -o mt_page.html || true
+          INLINE=$(grep -aoE 'inline\.[a-f0-9]+\.bundle\.js' mt_page.html | head -1)
+          if [ -n "$INLINE" ]; then
+            curl -s -k -m 40 -A "$UA" "$B/$INLINE" -o mt_inline.js || true
+            for pair in $(grep -aoE '[0-9]+:"[a-f0-9]+"' mt_inline.js); do
+              n=${pair%%:*}; h=$(echo "$pair" | grep -oE '[a-f0-9]{16,}')
+              [ -z "$h" ] && continue
+              curl -s -k -m 30 -A "$UA" "$B/$n.$h.chunk.js" -o "mtchunks/$n.js" || true
+              if grep -q 'this\.texto1' "mtchunks/$n.js" 2>/dev/null; then cp "mtchunks/$n.js" mt_chunk.js; fi
+            done
+          fi
+          if [ -s mt_chunk.js ] && grep -q 'this\.texto1' mt_chunk.js; then
+            echo "TJMT: chunk localizado no portal ($(wc -c < mt_chunk.js) bytes)."
+          else
+            echo "TJMT: chunk não localizado; usando o commitado."
+            cp scripts/fontes/tjmt.chunk.js mt_chunk.js
+          fi
+          perl scripts/gerar_tjmt.pl mt_chunk.js
+
       - name: Gerar página estática (dados.html)
         run: perl scripts/gerar_estatico.pl
 

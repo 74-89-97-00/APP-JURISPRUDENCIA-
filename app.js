@@ -22,7 +22,7 @@ const state = {
 const RE_NAO_VIGENTE = /cancel|superad|revogad|substitu|prejudicad|suspens|n[ãa]o\s*public/i;
 function naoVigente(e) { return RE_NAO_VIGENTE.test(e.situacao || ""); }
 
-const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES", "TJRS", "TJSC", "TJDFT", "TJMS", "TJGO"];
+const TRIBUNAIS = ["STF", "STJ", "TST", "TJSP", "TJRJ", "TJMG", "TJES", "TJRS", "TJSC", "TJDFT", "TJMS", "TJGO", "TJMT"];
 const TIPOS = [
   { id: "Súmula Vinculante", label: "Vinculante" },
   { id: "Súmula", label: "Súmula" },

@@ -28,6 +28,7 @@
   --tjdft: #8455ad;
   --tjms: #b06a2f;
   --tjgo: #3d8b5f;
+  --tjmt: #a84a86;
 
   --mat-consumidor-bg: #f6ecda;
   --mat-consumidor-fg: #946517;
@@ -74,6 +75,7 @@ html[data-theme="dark"] {
   --tjdft: #b394de;
   --tjms: #d89a5b;
   --tjgo: #5fbf8a;
+  --tjmt: #d47ab5;
 
   --mat-consumidor-bg: rgba(224, 164, 88, 0.16);
   --mat-consumidor-fg: #e0a458;
@@ -361,6 +363,7 @@ main { max-width: 760px; margin: 0 auto; padding: 10px 22px 56px; }
 .tag-tribunal[data-t="TJDFT"]::before { background: var(--tjdft); }
 .tag-tribunal[data-t="TJMS"]::before { background: var(--tjms); }
 .tag-tribunal[data-t="TJGO"]::before { background: var(--tjgo); }
+.tag-tribunal[data-t="TJMT"]::before { background: var(--tjmt); }
 
 .tag-num { display: none; } /* substituída por .card-num */
 .tag-materia[data-m="Consumidor"] { background: var(--mat-consumidor-bg); color: var(--mat-consumidor-fg); }

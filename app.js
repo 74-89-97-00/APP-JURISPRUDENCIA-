@@ -2,6 +2,10 @@
 
 // ---- Estado ----
 const ENTRIES = (window.ENTRIES || []).slice();
+// Camada curada de ressalvas (data/ressalvas.js): avisos de conteúdo superado
+// por tribunal superior/lei, sem cancelamento formal. Não altera a situação.
+const RESSALVAS = window.RESSALVAS || {};
+for (const e of ENTRIES) { if (RESSALVAS[e.id]) e.ressalva = RESSALVAS[e.id]; }
 const FAV_KEY = "juris.favoritos";
 const VIG_KEY = "juris.soVigentes";
 
@@ -221,6 +225,7 @@ function buildCard(e) {
   const alerta = naoVigente(e);
   const materia = materiaDe(e);
   if (alerta) li.classList.add("card-alerta");
+  if (e.ressalva) li.classList.add("card-ressalva");
 
   li.innerHTML = `
     <div class="card-head">
@@ -229,6 +234,7 @@ function buildCard(e) {
         <span class="card-num">${escapeHtml(rotuloCard(e))}</span>
         ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
         ${alerta ? `<span class="tag tag-alerta">${escapeHtml(e.situacao || "Não vigente")}</span>` : ""}
+        ${e.ressalva ? `<span class="tag tag-ressalva" title="${escapeHtml(e.ressalva)}">⚠ ressalva</span>` : ""}
       </div>
       <button class="star ${fav ? "on" : ""}" title="Favoritar" aria-label="Favoritar">${fav ? "★" : "☆"}</button>
     </div>

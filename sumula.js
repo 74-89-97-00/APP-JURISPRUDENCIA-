@@ -157,10 +157,12 @@ function render() {
   const favs = loadFav();
   const fav = favs.has(e.id);
   const alerta = /cancel|superad|revogad|substitu|prejudicad|suspens|n[ãa]o\s*public/i.test(e.situacao || "");
+  const ressalva = (window.RESSALVAS || {})[e.id] || "";
   const materia = materiaDe(e);
 
   root.innerHTML = `
     ${alerta ? `<div class="sumula-alerta" role="alert">⚠ Verbete <strong>${escapeHtml(e.situacao)}</strong> — não utilize como fundamento vigente. Confira a situação atual no portal do tribunal.</div>` : ""}
+    ${ressalva ? `<div class="sumula-ressalva" role="alert">⚠ <strong>Ressalva:</strong> ${escapeHtml(ressalva)}</div>` : ""}
     <div class="sumula-tags">
       <span class="tag tag-tribunal" data-t="${e.tribunal}">${e.tribunal}</span>
       ${materia !== "Outras" ? `<span class="tag tag-materia" data-m="${materia}">${materia}</span>` : ""}
